@@ -15,7 +15,7 @@ def raiser(e: Exception | str) -> NoReturn:
 
 
 def log(*text) -> None:
-    if settings.VERBOSE:
+    if settings.DEBUG:
         print(*text)
 
 
