@@ -1,0 +1,34 @@
+[tool.poetry]
+name = "funcchain"
+version = "0.0.1"
+description = "🔖 write langchain prompts as python functions"
+authors = ["Shroominic <contact@shroominic.com>"]
+license = "MIT License"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+langchain = ">=0.0.277"
+pydantic = ">=2.3.0"
+python-dotenv = "^1.0.0"
+pydantic-settings = "^2.0.3"
+tiktoken = "^0.4.0"
+
+
+[tool.poetry.group.dev.dependencies]
+mypy = "^1.5.1"
+flake8 = "^6.1.0"
+black = "^23.7.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.isort]
+multi_line_output = 3
+include_trailing_comma = true
+force_grid_wrap = 0
+line_length = 120
+
+[tool.flake8]
+max-line-length = 120
