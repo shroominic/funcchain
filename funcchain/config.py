@@ -11,10 +11,10 @@ load_dotenv("./.env")
 
 class FuncchainSettings(BaseSettings):
     # General
-    DEBUG: bool = False
+    VERBOSE: bool = True
 
     # Prompt
-    MAX_TOKENS: int = 4096
+    MAX_TOKENS: int = 32768 - 8192  # choose dynamically based on model
     DEFAULT_SYSTEM_PROMPT: str = (
         "You are a professional assistant solving tasks for entrepreneurs. "
         "You are very good and passionate about your job!"
@@ -25,6 +25,7 @@ class FuncchainSettings(BaseSettings):
     AZURE_API_KEY: str = ""
     AZURE_API_BASE: str = ""
     AZURE_DEPLOYMENT_NAME: str = ""
+    AZURE_DEPLOYMENT_NAME_LONG: str = ""
     AZURE_API_VERSION: str = ""
 
 
