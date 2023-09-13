@@ -4,22 +4,23 @@ from typing import NoReturn
 
 from langchain.schema import OutputParserException
 from tiktoken import encoding_for_model
+from rich import print
 from funcchain import settings
 
 
 def raiser(e: Exception | str) -> NoReturn:
-    if isinstance(e, Exception):
-        raise e
-    else:
-        raise Exception(e)
+    raise e if isinstance(e, Exception) else Exception(e)
 
 
 def log(*text) -> None:
-    if settings.DEBUG:
-        print(*text)
+    settings.VERBOSE and print("[grey]" + " ".join(map(str, text)) + "[/grey]")
 
 
-def retry(retry: int):
+def count_tokens(text: str, model: str = "gpt-4") -> int:
+    return len(encoding_for_model(model).encode(text))
+
+
+def retry_parse(retry: int):
     def decorator(fn):
         if asyncio.iscoroutinefunction(fn):
 
@@ -34,6 +35,7 @@ def retry(retry: int):
                         await asyncio.sleep(1)
 
             return async_wrapper
+
         else:
 
             @wraps(fn)
@@ -48,7 +50,3 @@ def retry(retry: int):
             return sync_wrapper
 
     return decorator
-
-
-def count_tokens(text: str, model: str = "gpt-4") -> int:
-    return len(encoding_for_model(model).encode(text))
