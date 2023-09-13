@@ -11,39 +11,41 @@ from langchain.schema import (
     SystemMessage,
 )
 from langchain.schema.runnable import RunnableWithFallbacks
+from langchain.callbacks import get_openai_callback
 from pydantic import BaseModel
 
 from funcchain import settings
 from funcchain.parser import ParserBaseModel
-from funcchain.utils import count_tokens, retry
+from funcchain.utils import count_tokens, retry_parse, log
 
 T = TypeVar("T")
 
 
 def _get_llm() -> RunnableWithFallbacks:
-    short_llm = ChatOpenAI(
+    model_kwargs = {
+        "temperature": settings.TEMPERATURE,
+        "request_timeout": settings.REQUEST_TIMEOUT,
+        "verbose": settings.VERBOSE,
+        "openai_api_type": "azure",
+        "openai_api_key": settings.AZURE_API_KEY,
+        "openai_api_base": settings.AZURE_API_BASE,
+        "openai_api_version": settings.AZURE_API_VERSION
+    }
+    short_llm = AzureChatOpenAI(
         model="gpt-4",
-        temperature=0.01,
-        request_timeout=60 * 5,
-        verbose=settings.DEBUG,
-        openai_api_key=settings.OPENAI_API_KEY,
+        deployment_name=settings.AZURE_DEPLOYMENT_NAME,
+        **model_kwargs
     )
     long_llm = AzureChatOpenAI(
-        temperature=0.01,
         model="gpt-4-32k",
-        request_timeout=60 * 5,
-        verbose=settings.DEBUG,
-        openai_api_type="azure",
-        deployment_name=settings.AZURE_DEPLOYMENT_NAME,
-        openai_api_key=settings.AZURE_API_KEY,
-        openai_api_base=settings.AZURE_API_BASE,
-        openai_api_version=settings.AZURE_API_VERSION,
+        deployment_name=settings.AZURE_DEPLOYMENT_NAME_LONG,
+        **model_kwargs
     )
     return short_llm.with_fallbacks([long_llm])
 
 
-def _get_parent_frame() -> inspect.FrameInfo:
-    return inspect.getouterframes(inspect.currentframe())[4]
+def _get_parent_frame(depth: int = 4) -> inspect.FrameInfo:
+    return inspect.getouterframes(inspect.currentframe())[depth]
 
 
 def _from_docstring() -> str:
@@ -89,7 +91,6 @@ def _kwargs_from_parent() -> dict[str, str]:
 def _create_prompt(
     instruction: str,
     system: str,
-    parser: BaseOutputParser,
     context: list[BaseMessage] = [],
     **input_kwargs,
 ) -> ChatPromptTemplate:
@@ -97,10 +98,8 @@ def _create_prompt(
     for k, v in input_kwargs.copy().items():
         if isinstance(v, str):
             content_tokens = count_tokens(v)
-            print("Tokens: ", content_tokens + base_tokens)
             if base_tokens + content_tokens > settings.MAX_TOKENS:
-                tokens = settings.MAX_TOKENS - base_tokens
-                input_kwargs[k] = v[: (tokens) * 2 // 3]
+                input_kwargs[k] = v[: (settings.MAX_TOKENS - base_tokens) * 2 // 3]
                 print("Truncated: ", len(input_kwargs[k]))
 
     return ChatPromptTemplate.from_messages(
@@ -114,7 +113,7 @@ def _create_prompt(
     )
 
 
-@retry(3)
+@retry_parse(3)
 def funcchain(
     instruction: str | None = None,
     system: str = settings.DEFAULT_SYSTEM_PROMPT,
@@ -131,6 +130,7 @@ def funcchain(
     if parser is None:
         parser = _parser_from_type()
     input_kwargs.update(_kwargs_from_parent())
+    chain_name = _get_parent_frame(3).function
 
     try:
         if format_instructions := parser.get_format_instructions():
@@ -139,14 +139,16 @@ def funcchain(
     except NotImplementedError:
         pass
 
-    return (
-        _create_prompt(instruction, system, parser, context, **input_kwargs)
-        | _get_llm()
-        | parser
-    ).invoke(input_kwargs)
+    prompt = _create_prompt(instruction, system, context, **input_kwargs)
+    llm = _get_llm()
+
+    with get_openai_callback() as cb:
+        result = (prompt | llm | parser).invoke(input_kwargs)
+        log(f"{cb.total_tokens:05}T / {cb.total_cost:.3f}$ - {chain_name}")
+    return result
 
 
-@retry(3)
+@retry_parse(3)
 async def afuncchain(
     instruction: str | None = None,
     system: str = settings.DEFAULT_SYSTEM_PROMPT,
@@ -163,6 +165,7 @@ async def afuncchain(
     if parser is None:
         parser = _parser_from_type()
     input_kwargs.update(_kwargs_from_parent())
+    chain_name = _get_parent_frame(3).function
 
     try:
         if format_instructions := parser.get_format_instructions():
@@ -171,8 +174,10 @@ async def afuncchain(
     except NotImplementedError:
         pass
 
-    return await (
-        _create_prompt(instruction, system, parser, context, **input_kwargs)
-        | _get_llm()
-        | parser
-    ).ainvoke(input_kwargs)
+    prompt = _create_prompt(instruction, system, context, **input_kwargs)
+    llm = _get_llm()
+
+    with get_openai_callback() as cb:
+        result = await (prompt | llm | parser).ainvoke(input_kwargs)
+        log(f"{cb.total_tokens:05}T / {cb.total_cost:.3f}$ - {chain_name}")
+    return result
