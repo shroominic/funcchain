@@ -24,7 +24,11 @@ def main():
 
     task = gather_infos(task_input)
 
-    print("\nTASK:\n", task.model_dump_json(indent=2))
+    print("\nTASK\n")
+    print("NAME:", task.name)
+    print("DESCRIPTION:", task.description)
+    print("DIFFICULTY:", task.difficulty)
+    print("KEYWORDS:", task.keywords)
 
 
 if __name__ == "__main__":
