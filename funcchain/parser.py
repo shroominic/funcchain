@@ -1,19 +1,17 @@
 import json
 import re
-from typing import Awaitable, Callable, Optional, Type, TypeVar
+from typing import Callable, Optional, Type, TypeVar
 
+from langchain.output_parsers.format_instructions import PYDANTIC_FORMAT_INSTRUCTIONS
 from langchain.pydantic_v1 import BaseModel, ValidationError
 from langchain.schema import BaseOutputParser, OutputParserException
 from typing_extensions import Self
-
-from funcchain.utils import raiser
 
 T = TypeVar("T")
 
 
 class LambdaOutputParser(BaseOutputParser[T]):
     _parse: Optional[Callable[[str], T]] = None
-    _aparse: Optional[Callable[[str], Awaitable[T]]] = None
 
     def parse(self, text: str) -> T:
         if self._parse is None:
@@ -22,12 +20,9 @@ class LambdaOutputParser(BaseOutputParser[T]):
             )
         return self._parse(text)
 
-    async def aparse(self, text: str) -> T:
-        if self._aparse is None:
-            raise NotImplementedError(
-                "LambdaOutputParser.lambda_aparse() is not implemented"
-            )
-        return await self._aparse(text)
+    @property
+    def _type(self) -> str:
+        return "lambda"
 
 
 class ParserBaseModel(BaseModel):
@@ -49,10 +44,6 @@ class ParserBaseModel(BaseModel):
 
     @staticmethod
     def format_instructions() -> str:
-        from langchain.output_parsers.format_instructions import (
-            PYDANTIC_FORMAT_INSTRUCTIONS,
-        )
-
         return PYDANTIC_FORMAT_INSTRUCTIONS
 
 
@@ -66,9 +57,10 @@ class CustomPydanticOutputParser(BaseOutputParser[P]):
         try:
             return self.pydantic_object.parse(text)
         except (json.JSONDecodeError, ValidationError) as e:
-            name = self.pydantic_object.__name__
-            msg = f"Failed to parse {name} from completion {text}. Got: {e}"
-            raise OutputParserException(msg, llm_output=text)
+            raise OutputParserException(
+                f"Failed to parse {self.pydantic_object.__name__} from completion {text}. Got: {e}",
+                llm_output=text,
+            )
 
     def get_format_instructions(self) -> str:
         reduced_schema = self.pydantic_object.schema()
@@ -93,11 +85,13 @@ class CodeBlock(ParserBaseModel):
     @classmethod
     def parse(cls, text: str) -> "CodeBlock":
         matches = re.finditer(
-            r"```(?P<language>\w+)\n(?P<code>.*?)```", text, re.DOTALL
+            r"```(?P<language>\w+)?\n?(?P<code>.*?)```", text, re.DOTALL
         )
         for match in matches:
-            return cls(**match.groupdict())
-        raiser(OutputParserException("Invalid codeblock"))
+            groupdict = match.groupdict()
+            groupdict["language"] = groupdict.get("language", "")
+            return cls(**groupdict)
+        raise OutputParserException("Invalid codeblock")
 
     @staticmethod
     def format_instructions() -> str:
