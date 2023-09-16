@@ -25,6 +25,18 @@ class LambdaOutputParser(BaseOutputParser[T]):
         return "lambda"
 
 
+class BoolOutputParser(BaseOutputParser[bool]):
+    def parse(self, text: str) -> bool:
+        return text.strip()[:1].lower() == "y"
+
+    def get_format_instructions(self) -> str:
+        return "\nAnswer only with 'Yes' or 'No'."
+
+    @property
+    def _type(self) -> str:
+        return "bool"
+
+
 class ParserBaseModel(BaseModel):
     @classmethod
     def output_parser(cls) -> BaseOutputParser[Self]:  # type: ignore
