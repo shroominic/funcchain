@@ -1,5 +1,5 @@
-from funcchain import settings, funcchain
-
+import asyncio
+from funcchain import chain, settings
 
 settings.OPENAI_API_KEY = "sk-******************"
 
@@ -11,7 +11,7 @@ def summary(file_content: str) -> str:
 
     Summarize the file content.
     """
-    return funcchain()
+    return chain()
 
 
 def main():
