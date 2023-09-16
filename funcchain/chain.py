@@ -34,13 +34,13 @@ def chain(
     """
     Get response from chatgpt for provided instructions.
     """
+    output_type = get_output_type()
+    chain_name = get_parent_frame(3).function
     if instruction is None:
         instruction = from_docstring()
     if parser is None:
-        output_type = get_output_type()
         parser = parser_for(output_type)
     input_kwargs.update(kwargs_from_parent())
-    chain_name = get_parent_frame(3).function
 
     try:
         if format_instructions := parser.get_format_instructions():
@@ -98,17 +98,17 @@ async def achain(
     """
     Get response from chatgpt for provided instructions.
     """
+    output_type = get_output_type()
+    chain_name = get_parent_frame(3).function
     if instruction is None:
         instruction = from_docstring()
     if parser is None:
-        output_type = get_output_type()
         parser = parser_for(output_type)
     input_kwargs.update(kwargs_from_parent())
-    chain_name = get_parent_frame(3).function
 
     try:
         if format_instructions := parser.get_format_instructions():
-            instruction += "\n\n" + "{format_instructions}"
+            instruction += "\n\n{format_instructions}"
             input_kwargs["format_instructions"] = format_instructions
     except NotImplementedError:
         pass
@@ -123,19 +123,27 @@ async def achain(
             result = await (prompt | llm | parser).ainvoke(input_kwargs)
             log(f"N/A token - {chain_name}")
         case "openai_model":
-            print("Using: openai_model")
             with get_openai_callback() as cb:
                 result = await (prompt | llm | parser).ainvoke(input_kwargs)
                 log(f"{cb.total_tokens:05}T / {cb.total_cost:.3f}$ - {chain_name}")
         case "function_model":
-            print("Using: function_model")
-            if isinstance(output_type, BaseModel):
-                print("Using: pydantic_to_functions")
-                result = await (
-                    prompt
-                    | llm.bind(**pydantic_to_functions(output_type))
-                    | PydanticOutputFunctionsParser(pydantic_object=output_type)
-                ).ainvoke(input_kwargs)
+            if issubclass(output_type, BaseModel):
+                input_kwargs[
+                    "format_instructions"
+                ] = f"Extract to {output_type.__name__}."
+                functions = pydantic_to_functions(output_type)
+                llm = llm.runnable.bind(**functions).with_fallbacks(
+                    [fallback.bind(**functions) for fallback in llm.fallbacks]
+                )
+                with get_openai_callback() as cb:
+                    result = await (
+                        prompt
+                        | llm
+                        | PydanticOutputFunctionsParser(pydantic_schema=output_type)
+                    ).ainvoke(input_kwargs)
+                    log(
+                        f"{cb.total_tokens:05}T / {cb.total_cost:.3f}$ - {chain_name} - function_call"
+                    )
             else:
                 with get_openai_callback() as cb:
                     result = await (prompt | llm | parser).ainvoke(input_kwargs)
