@@ -1,5 +1,6 @@
-from pydantic import BaseModel
-from funcchain import funcchain
+from langchain.pydantic_v1 import BaseModel
+
+from funcchain import chain
 
 
 class Task(BaseModel):
@@ -16,7 +17,7 @@ def gather_infos(task_input: str) -> Task:
 
     Based on this task input, gather all task infos.
     """
-    return funcchain()
+    return chain()
 
 
 def main():
