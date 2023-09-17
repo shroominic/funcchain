@@ -102,6 +102,15 @@ class CodeBlock(ParserBaseModel):
         for match in matches:
             groupdict = match.groupdict()
             groupdict["language"] = groupdict.get("language", "")
+
+            # custom markdown fix
+            if groupdict["language"] == "markdown":
+                t = text.split("```markdown")[1]
+                return cls(
+                    language="markdown",
+                    code=t[: -(len(t.split("```")[-1]) + 3)],
+                )
+
             return cls(**groupdict)
         raise OutputParserException("Invalid codeblock")
 
