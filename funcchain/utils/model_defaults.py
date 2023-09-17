@@ -125,7 +125,10 @@ def create_long_llm() -> RunnableWithFallbacks:
         )
     if settings.OPENAI_API_KEY:
         config = settings.model_kwargs()
-        return ChatOpenAI(model_name="gpt-4", **config,).with_fallbacks(
+        return ChatOpenAI(
+            model_name="gpt-4",
+            **config,
+        ).with_fallbacks(
             [
                 ChatOpenAI(
                     model_name="gpt-4-32k",
