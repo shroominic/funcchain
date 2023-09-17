@@ -1,6 +1,7 @@
 from langchain.pydantic_v1 import BaseModel
 
 from funcchain import chain
+from funcchain.parser import CodeBlock
 
 
 class Task(BaseModel):
@@ -38,6 +39,13 @@ def compare_tasks(task: Task) -> bool:
     return chain(task2=extract_task(task))
 
 
+def pi_generator() -> CodeBlock:
+    """
+    Write a python script that generates the first 8 digits of pi.
+    """
+    return chain()
+
+
 def test_extraction():
     task = Task(
         name="Do dishes",
@@ -47,6 +55,8 @@ def test_extraction():
     )
 
     assert compare_tasks(task)
+
+    print(pi_generator())
 
 
 if __name__ == "__main__":
