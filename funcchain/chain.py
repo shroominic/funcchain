@@ -4,8 +4,8 @@ from langchain.pydantic_v1 import BaseModel
 from langchain.callbacks import get_openai_callback
 from langchain.schema import BaseMessage, BaseOutputParser
 from langchain.output_parsers.openai_functions import PydanticOutputFunctionsParser
-from langchain.chat_models import ChatOpenAI
 from funcchain import settings
+from funcchain.parser import ParserBaseModel
 from funcchain.prompt import create_prompt
 from funcchain.utils import (
     create_long_llm,
@@ -55,15 +55,20 @@ def chain(
     match gather_llm_type(llm):
         case "base_model":
             raise NotImplementedError
+
         case "chat_model":
             result = (prompt | llm | parser).invoke(input_kwargs)
             log(f"N/A token - {chain_name}")
+
         case "openai_model":
             with get_openai_callback() as cb:
                 result = (prompt | llm | parser).invoke(input_kwargs)
                 log(f"{cb.total_tokens:05}T / {cb.total_cost:.3f}$ - {chain_name}")
+
         case "function_model":
-            if issubclass(output_type, BaseModel):
+            if issubclass(output_type, BaseModel) and not issubclass(
+                output_type, ParserBaseModel
+            ):
                 input_kwargs[
                     "format_instructions"
                 ] = f"Extract to {output_type.__name__}."
@@ -127,7 +132,9 @@ async def achain(
                 result = await (prompt | llm | parser).ainvoke(input_kwargs)
                 log(f"{cb.total_tokens:05}T / {cb.total_cost:.3f}$ - {chain_name}")
         case "function_model":
-            if issubclass(output_type, BaseModel):
+            if issubclass(output_type, BaseModel) and not issubclass(
+                output_type, ParserBaseModel
+            ):
                 input_kwargs[
                     "format_instructions"
                 ] = f"Extract to {output_type.__name__}."
