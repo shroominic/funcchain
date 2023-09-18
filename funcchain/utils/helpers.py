@@ -13,8 +13,6 @@ from langchain.schema.messages import SystemMessage, HumanMessage
 from rich import print
 from tiktoken import encoding_for_model
 
-from funcchain import settings
-
 
 def retry_parse(retry: int):
     """
@@ -60,6 +58,7 @@ def raiser(e: Exception | str) -> NoReturn:
 
 
 def log(*text) -> None:
+    from funcchain.config import settings
     settings.VERBOSE and print("[grey]" + " ".join(map(str, text)) + "[/grey]")
 
 
@@ -100,6 +99,15 @@ def gather_llm_type(llm: Type[BaseLanguageModel], func_check: bool = False) -> s
     else:
         return "function_model"
 
+
+FUNCTION_MODEL = None
+def is_function_model(llm: Type[BaseLanguageModel]) -> bool:
+    global FUNCTION_MODEL
+    if FUNCTION_MODEL is None:
+        FUNCTION_MODEL = gather_llm_type(llm, True) == "function_model"
+    return FUNCTION_MODEL
+
+    
 
 def _remove_a_key(d, remove_key) -> None:
     """Remove a key from a dictionary recursively"""
