@@ -7,13 +7,14 @@ from typing import Optional, Any
 from dotenv import load_dotenv
 from pydantic_settings import BaseSettings
 
+
 load_dotenv("./.env")
 
 
 class FuncchainSettings(BaseSettings):
-    # General
+    # General    
     VERBOSE: bool = True
-
+    
     # Prompt
     MAX_TOKENS: int = 4096
     DEFAULT_SYSTEM_PROMPT: str = (
@@ -23,7 +24,7 @@ class FuncchainSettings(BaseSettings):
 
     # KEYS
     OPENAI_API_KEY: Optional[str] = None
-    AZURE_OPENAI_API_KEY: Optional[str] = None
+    AZURE_API_KEY: Optional[str] = None
     ANTHROPIC_API_KEY: Optional[str] = None
     GOOGLE_API_KEY: Optional[str] = None
     JINACHAT_API_KEY: Optional[str] = None
@@ -31,7 +32,7 @@ class FuncchainSettings(BaseSettings):
     # AZURE
     AZURE_API_BASE: Optional[str] = None
     AZURE_DEPLOYMENT_NAME: str = "gpt-4"
-    AZURE_DEPLOYMENT_NAME_LONG: str = "gpt-4-32k"
+    AZURE_DEPLOYMENT_NAME_LONG: Optional[str] = None
     AZURE_API_VERSION: str = "2023-07-01-preview"
 
     # KWARGS
