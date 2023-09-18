@@ -26,7 +26,10 @@ def create_prompt(
         [SystemMessage(content=system)]
         + context
         + [
-            HumanMessagePromptTemplate.from_template(template=instruction)
+            HumanMessagePromptTemplate.from_template(
+                template=instruction,
+                template_format="jinja2" if "{{" in instruction else "f-string",
+            )
             if isinstance(instruction, str)
             else instruction
         ]
