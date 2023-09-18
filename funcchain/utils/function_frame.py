@@ -1,13 +1,12 @@
 from inspect import FrameInfo, currentframe, getouterframes
 
 from langchain.output_parsers import PydanticOutputParser
-from langchain.pydantic_v1 import BaseModel
 from langchain.schema import BaseOutputParser, StrOutputParser
 
 from funcchain.parser import ParserBaseModel, BoolOutputParser
 
 
-def get_parent_frame(depth: int = 4) -> FrameInfo:
+def get_parent_frame(depth: int = 5) -> FrameInfo:
     return getouterframes(currentframe())[depth]
 
 
@@ -44,6 +43,7 @@ def parser_for(output_type: type) -> BaseOutputParser:
         return BoolOutputParser()
     if issubclass(output_type, ParserBaseModel):
         return output_type.output_parser()
+    from langchain.pydantic_v1 import BaseModel
     if issubclass(output_type, BaseModel):
         return PydanticOutputParser(pydantic_object=output_type)
     else:
