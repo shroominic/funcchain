@@ -1,7 +1,6 @@
 from langchain.pydantic_v1 import BaseModel
 
 from funcchain import chain
-from funcchain.parser import CodeBlock
 
 
 class Task(BaseModel):
@@ -21,27 +20,20 @@ def description(task: Task) -> str:
     return chain()
 
 
-def extract_task(task: Task) -> Task:
+def extract_task(task_description: Task) -> Task:
     """
     EXTRACT TASK: {task_description}
     """
-    return chain(task_description=description(task))
+    return chain()
 
 
-def compare_tasks(task: Task) -> bool:
+def compare_tasks(task: Task, task2: Task) -> bool:
     """
     COMPARE TASKS:
     1: {task}
     2: {task2}
 
     Are the tasks kind of equal?
-    """
-    return chain(task2=extract_task(task))
-
-
-def pi_generator() -> CodeBlock:
-    """
-    Write a python script that generates the first 8 digits of pi.
     """
     return chain()
 
@@ -54,9 +46,10 @@ def test_extraction():
         keywords=["kitchen", "dishes"],
     )
 
-    assert compare_tasks(task)
-
-    print(pi_generator())
+    task_description = description(task)
+    task2 = extract_task(task_description)
+    
+    assert compare_tasks(task, task2)
 
 
 if __name__ == "__main__":
