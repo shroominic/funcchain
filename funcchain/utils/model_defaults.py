@@ -5,7 +5,12 @@ from langchain.chat_models import *
 from langchain.chat_models.base import BaseChatModel
 from langchain.schema.runnable import RunnableWithFallbacks
 
-from funcchain import settings
+from funcchain.config import settings
+
+
+def auto_model(**kwargs) -> Type[BaseChatModel]:
+    if settings.AZURE_DEPLOYMENT_NAME_LONG:
+        return model_from_env(**kwargs)
 
 
 def model_from_env(
@@ -18,7 +23,7 @@ def model_from_env(
 
     Supporting:
     - OPENAI_API_KEY
-    - AZURE_OPENAI_API_KEY
+    - AZURE_API_KEY
     - ANTHROPIC_API_KEY
     - GOOGLE_API_KEY
     - JINACHAT_API_KEY
@@ -27,11 +32,11 @@ def model_from_env(
     - ValueError, when the model is not found.
     """
     load_dotenv(dotenv_path=dotenv_path)
-    kwargs.update(settings.kwargs())
+    kwargs.update(settings.model_kwargs())
 
     if settings.OPENAI_API_KEY:
         return ChatOpenAI(**kwargs)
-    if settings.AZURE_OPENAI_API_KEY:
+    if settings.AZURE_API_KEY:
         return AzureChatOpenAI(**kwargs)
     if settings.ANTHROPIC_API_KEY:
         return ChatAnthropic(**kwargs)
@@ -102,14 +107,15 @@ def create_long_llm() -> RunnableWithFallbacks:
     - ValueError: If no API key is provided.
     """
     settings.MAX_TOKENS = 8192
-    if settings.AZURE_OPENAI_API_KEY:
+    if settings.AZURE_API_KEY:
         config = {
             "openai_api_type": "azure",
-            "openai_api_key": settings.AZURE_OPENAI_API_KEY,
+            "openai_api_key": settings.AZURE_API_KEY,
             "openai_api_base": settings.AZURE_API_BASE,
             "openai_api_version": settings.AZURE_API_VERSION,
-        }.update(settings.model_kwargs())
-
+        }
+        config.update(settings.model_kwargs())
+        print("Model: AZURE")
         return AzureChatOpenAI(
             model_name="gpt-4",
             deployment_name=settings.AZURE_DEPLOYMENT_NAME,
@@ -117,14 +123,15 @@ def create_long_llm() -> RunnableWithFallbacks:
         ).with_fallbacks(
             [
                 AzureChatOpenAI(
-                    model="gpt-4-32k",
-                    deployment_name=settings.AZURE_DEPLOYMENT_NAME_LONG,
+                    model_name="gpt-4-32k",
+                    deployment_name=settings.AZURE_DEPLOYMENT_NAME_LONG or "gpt-4-32k",
                     **config,
                 )
             ]
         )
     if settings.OPENAI_API_KEY:
         config = settings.model_kwargs()
+        print("Model: OPENAI")
         return ChatOpenAI(
             model_name="gpt-4",
             **config,
@@ -137,3 +144,6 @@ def create_long_llm() -> RunnableWithFallbacks:
             ]
         )
     raise ValueError("Not OpenAI API key provided.")
+
+
+LLM: BaseChatModel = create_long_llm()
