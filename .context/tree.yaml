@@ -1,0 +1,120 @@
+name: .
+nodes:
+- name: LICENSE
+  sha256: 310a96d6b9460a2c45b989a41405472d1269150b6f4f44509d423e437d1b09ca
+  summary: This file is an MIT License issued by Dominic in 2023, granting free usage,
+    modification, and distribution rights of the associated software, with the condition
+    of including this license in all copies or substantial portions of the software,
+    and disclaiming any warranties or liabilities related to the software.
+- name: pyproject.toml
+  sha256: ea7e3b834b20e297d628c124a0a0f43daf355345d3ae74684c0793920b511c66
+  summary: This is a Poetry configuration file for the Python package "funcchain"
+    version 0.0.6, which includes package metadata, dependencies, dev dependencies,
+    build system details, and configurations for pytest, isort, and flake8.
+- name: tests
+  nodes:
+  - name: tests/extraction_test.py
+    sha256: ab0f7754c4b8ce54a7ba0d400da9eb95d743046ca28e1c672bfb9d67d76877b8
+    summary: The file defines a Task class with attributes and methods for task management,
+      functions for task description extraction and comparison, a pi generator function,
+      and a test function to validate task extraction and pi generation.
+  sha256: 5962511141c3ae38b91c90790947129e046c1afce7c31cb5fd046b41a65e789f
+- name: README.md
+  sha256: 5c5763364475b9dfafe7aa940b4c8133cd2f561e892df1f81a22c7f7cd84db65
+  summary: The file is about 'funcchain', a tool that allows you to write language
+    chain prompts as Python functions, with a demo image illustrating its usage.
+- name: .gitignore
+  sha256: e58a80897a9869468c5f695070a4e4047d3e8bbcf08b0bdfff68e4182266024f
+  summary: This file is a .gitignore template for Python projects, specifying files
+    and directories such as compiled code, distribution packages, logs, test reports,
+    environment-specific files, and IDE-specific settings that should be ignored by
+    Git.
+- name: examples
+  nodes:
+  - name: examples/gather_infos.py
+    sha256: 27411dbd4538e46682e8ad32bf5ca5357e60e42f7422802bd0f49f26526d3740
+    summary: This Python script defines a Task class with attributes like name, description,
+      difficulty, and keywords, and includes functions to gather task information
+      from user input, display it, and run the main program.
+  - name: examples/summary.py
+    sha256: 3040a8d22850e33303994244f05e435f33aaec438341dd6e6caa8291ee1c8a72
+    summary: This Python script uses the funcchain library to summarize the content
+      of a given file. It prompts the user for a file path, reads the content, and
+      then passes it to a summary function, which is expected to return a summarized
+      version of the content. The summary is then printed out. The funcchain library
+      is configured with an OpenAI API key.
+  - name: examples/compare_models.py
+    sha256: be6d86b0ceb6fcee9f16deb835b6a3f8b3149a50934f8105ff20352367f21437
+    summary: The file defines a Task class with attributes and methods for creating
+      and describing tasks, extracting tasks from descriptions, and comparing tasks.
+      It also includes a test function to validate the extraction process.
+  - name: examples/assets
+    nodes:
+    - name: examples/assets/example.png
+      sha256: error
+      summary: N/A
+    sha256: ca00fccfb408989eddc401062c4d1219a6aceb6b9b55412357f1790862e8f178
+  sha256: fbb3006f1b9b0e2412b5fb95265f3b664f57d0cb3e4f83c42a2e3fb77285bd30
+- name: .env.example
+  sha256: a55114380e46d916e4384f14e255b1cf951af15c25606dd151f30a1211eb40ae
+  summary: The file contains configuration settings for a program, including a debug
+    mode toggle and an API key for OpenAI, with additional settings referenced in
+    'funcchain/config.py'.
+- name: funcchain
+  nodes:
+  - name: funcchain/config.py
+    sha256: error
+    summary: N/A
+  - name: funcchain/chain.py
+    sha256: 12288dec6229add60607dbafff2cbfd0d4e1fed67bd77cf738ce39ffca0ac700
+    summary: The file defines two main functions, `chain` and `achain`, which are
+      used to get responses from the chatbot GPT model for provided instructions.
+      These functions handle different types of models (base, chat, openai, function),
+      implement retries, and log the token count and cost. They also handle instruction
+      formatting, prompt creation, and output parsing. The `achain` function is an
+      asynchronous version of `chain`.
+  - name: funcchain/__init__.py
+    sha256: 983e7e21f3ce8492a6e0925777ebada2a865be0992678efd6fc07b56e827a8d8
+    summary: The file imports 'settings' from 'funcchain.config', and 'chain' and
+      'achain' from 'funcchain.chain', then defines these as all the accessible elements
+      from this module.
+  - name: funcchain/utils
+    nodes:
+    - name: funcchain/utils/model_defaults.py
+      sha256: error
+      summary: N/A
+    - name: funcchain/utils/__init__.py
+      sha256: e747bd1d67069dceb7d83a22285369bd5c2558a69aa8e3f61c1088012b9cdc4f
+      summary: The file contains utility imports for a Python project, specifically
+        importing modules related to function frames, helper functions, and default
+        models from a package named 'funcchain'.
+    - name: funcchain/utils/function_frame.py
+      sha256: 9840401756a31ee696a2b36c5ebfdf19dac5b10ea474b284d8cd32984cc8494f
+      summary: The file contains Python code that provides functionality for parsing
+        and handling output types and docstrings from parent functions. It includes
+        methods to retrieve the parent frame, extract docstrings, determine output
+        types, select the appropriate parser based on the output type, and obtain
+        keyword arguments from the parent function.
+    - name: funcchain/utils/helpers.py
+      sha256: cbceb39c7d0e70dcd7b57d60c0ee70275e379a1486f36620fd60b1bb5d6b24cf
+      summary: The file contains Python code for a variety of utility functions and
+        decorators, including a retry mechanism for parsing output, a logger, a token
+        counter for text, a function to identify the type of language model, a recursive
+        key remover for dictionaries, and a function to convert Pydantic objects to
+        function schemas.
+    sha256: ffccfbf7d840da573488eff34401be7c90dff883ce55295ff3729dd1dfe27f50
+  - name: funcchain/parser.py
+    sha256: e48e0963c53b53f9cce29e86eae0a194c8225fb34ac0ac575baf252e8b0af89f
+    summary: The file defines various classes for parsing output in different formats
+      such as lambda, boolean, and Pydantic-based models. It includes a base class
+      for output parsing, specialized classes for different types, and a custom Pydantic
+      parser that handles JSON decoding and validation errors. It also includes a
+      class for parsing code blocks from text.
+  - name: funcchain/prompt.py
+    sha256: d46be286dbad1861ce77448fc9eeb72f9cece83453c74cf401c70919b98cb5a6
+    summary: The file contains a Python function that creates a chat prompt template
+      from an instruction and a system message, truncating the input if it exceeds
+      a maximum token limit, and is designed to work with the langchain and funcchain
+      libraries.
+  sha256: bdcbf985072677b6013ad83b8a5496700ac2d708a74ac29146049b861ee839de
+sha256: 999662c8d73d9aeea6c86ac1ad406f53b23dcc5e026961c2caa5d233dc87428d
