@@ -6,13 +6,16 @@ from typing import Optional, Any
 
 from dotenv import load_dotenv
 from pydantic_settings import BaseSettings
+from langchain.chat_models.base import BaseChatModel
+from langchain.schema.runnable import RunnableWithFallbacks
 
 
 load_dotenv("./.env")
 
 
 class FuncchainSettings(BaseSettings):
-    # General    
+    # General
+    LLM: BaseChatModel | RunnableWithFallbacks | None = None
     VERBOSE: bool = True
     
     # Prompt
@@ -36,16 +39,17 @@ class FuncchainSettings(BaseSettings):
     AZURE_API_VERSION: str = "2023-07-01-preview"
 
     # KWARGS
-    MODEL_NAME: Optional[str] = None
+    MODEL_NAME: str = "openai::gpt-3.5-turbo"
     MODEL_TEMPERATURE: float = 0.1
     MODEL_REQUEST_TIMEOUT: float = 210
     MODEL_VERBOSE: bool = False
 
     def model_kwargs(self) -> dict[str, Any]:
         return {
-            "temperature": settings.MODEL_TEMPERATURE,
-            "request_timeout": settings.MODEL_REQUEST_TIMEOUT,
-            "verbose": settings.VERBOSE,
+            "model_name": self.MODEL_NAME if "::" not in self.MODEL_NAME else self.MODEL_NAME.split("::")[1],
+            "temperature": self.MODEL_TEMPERATURE,
+            "request_timeout": self.MODEL_REQUEST_TIMEOUT,
+            "verbose": self.VERBOSE,
         }
 
 
