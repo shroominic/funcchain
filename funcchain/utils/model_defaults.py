@@ -117,8 +117,8 @@ def create_long_llm() -> RunnableWithFallbacks:
         config.update(settings.model_kwargs())
         print("Model: AZURE")
         return AzureChatOpenAI(
-            model_name="gpt-4",
             deployment_name=settings.AZURE_DEPLOYMENT_NAME,
+            model_name=config.pop("model_name", "gpt-4"),
             **config,
         ).with_fallbacks(
             [
@@ -133,7 +133,7 @@ def create_long_llm() -> RunnableWithFallbacks:
         config = settings.model_kwargs()
         print("Model: OPENAI")
         return ChatOpenAI(
-            model_name="gpt-4",
+            model_name=config.pop("model_name", "gpt-3.5-turbo"),
             **config,
         ).with_fallbacks(
             [
@@ -144,6 +144,3 @@ def create_long_llm() -> RunnableWithFallbacks:
             ]
         )
     raise ValueError("Not OpenAI API key provided.")
-
-
-LLM: BaseChatModel = create_long_llm()
