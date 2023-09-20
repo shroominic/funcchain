@@ -1,7 +1,7 @@
 import asyncio
 from langchain.pydantic_v1 import BaseModel
 
-from funcchain import chain, achain, LLM
+from funcchain import chain, achain
 
 
 class Task(BaseModel):
