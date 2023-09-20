@@ -17,7 +17,9 @@ from funcchain.utils import (
     pydantic_to_functions,
     log,
     parser_for,
-    retry_parse
+    retry_parse,
+    model_from_env,
+    create_long_llm
 )
 
 T = TypeVar("T")
@@ -30,7 +32,6 @@ def create_chain(
     context: list[BaseMessage] = [],
     input_kwargs: dict[str, Any] = {},
 ) -> RunnableSequence:
-    from funcchain import LLM
     output_type = get_output_type()
     instruction = instruction or from_docstring()
     parser = parser or parser_for(output_type)
@@ -39,6 +40,7 @@ def create_chain(
     _add_format_instructions(parser, instruction, input_kwargs)
     
     prompt = create_prompt(instruction, system, context, **input_kwargs)
+    LLM = settings.LLM or model_from_env()
     
     if is_function_model(LLM):
         if issubclass(output_type, BaseModel) and not issubclass(
@@ -89,7 +91,7 @@ def chain(
             instruction, system, parser, context, input_kwargs
         ).invoke(input_kwargs)
         if cb.total_tokens != 0:
-            log(f"{cb.total_tokens:05}T / {cb.total_cost:.3f}$ - {get_parent_frame(4).function}")
+            log(f"{cb.total_tokens:05}T / {cb.total_cost:.3f}$ - {get_parent_frame(3).function}")
     return chain
 
 
@@ -110,5 +112,5 @@ async def achain(
             instruction, system, parser, context, input_kwargs
         ).ainvoke(input_kwargs)
         if cb.total_tokens != 0:
-            log(f"{cb.total_tokens:05}T / {cb.total_cost:.3f}$ - {get_parent_frame(4).function}")
+            log(f"{cb.total_tokens:05}T / {cb.total_cost:.3f}$ - {get_parent_frame(3).function}")
     return chain
