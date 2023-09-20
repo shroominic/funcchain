@@ -19,7 +19,6 @@ from funcchain.utils import (
     parser_for,
     retry_parse,
     model_from_env,
-    create_long_llm
 )
 
 T = TypeVar("T")
@@ -36,30 +35,32 @@ def create_chain(
     instruction = instruction or from_docstring()
     parser = parser or parser_for(output_type)
     input_kwargs.update(kwargs_from_parent())
-    
+
     _add_format_instructions(parser, instruction, input_kwargs)
-    
+
     prompt = create_prompt(instruction, system, context, **input_kwargs)
     LLM = settings.LLM or model_from_env()
-    
+
     if is_function_model(LLM):
         if issubclass(output_type, BaseModel) and not issubclass(
             output_type, ParserBaseModel
         ):
-            input_kwargs[
-                "format_instructions"
-            ] = f"Extract to {output_type.__name__}."
+            input_kwargs["format_instructions"] = f"Extract to {output_type.__name__}."
             functions = pydantic_to_functions(output_type)
             if hasattr(LLM, "runnable"):
                 LLM = LLM.runnable.bind(**functions).with_fallbacks(
-                    [fallback.bind(**functions) for fallback in LLM.fallbacks if hasattr(LLM, "fallbacks")]
+                    [
+                        fallback.bind(**functions)
+                        for fallback in LLM.fallbacks
+                        if hasattr(LLM, "fallbacks")
+                    ]
                 )
             return (
                 prompt
                 | LLM
                 | PydanticOutputFunctionsParser(pydantic_schema=output_type)
             )
-    return (prompt | LLM | parser)
+    return prompt | LLM | parser
 
 
 def _add_format_instructions(
@@ -86,14 +87,15 @@ def chain(
     """
     Get response from chatgpt for provided instructions.
     """
-    with get_openai_callback() as cb:    
-        chain = create_chain(
-            instruction, system, parser, context, input_kwargs
-        ).invoke(input_kwargs)
+    with get_openai_callback() as cb:
+        chain = create_chain(instruction, system, parser, context, input_kwargs).invoke(
+            input_kwargs
+        )
         if cb.total_tokens != 0:
-            log(f"{cb.total_tokens:05}T / {cb.total_cost:.3f}$ - {get_parent_frame(3).function}")
+            log(
+                f"{cb.total_tokens:05}T / {cb.total_cost:.3f}$ - {get_parent_frame(3).function}"
+            )
     return chain
-
 
 
 @retry_parse(3)
@@ -107,10 +109,12 @@ async def achain(
     """
     Get response from chatgpt for provided instructions.
     """
-    with get_openai_callback() as cb:    
+    with get_openai_callback() as cb:
         chain = await create_chain(
             instruction, system, parser, context, input_kwargs
         ).ainvoke(input_kwargs)
         if cb.total_tokens != 0:
-            log(f"{cb.total_tokens:05}T / {cb.total_cost:.3f}$ - {get_parent_frame(3).function}")
+            log(
+                f"{cb.total_tokens:05}T / {cb.total_cost:.3f}$ - {get_parent_frame(3).function}"
+            )
     return chain

@@ -5,9 +5,9 @@ from funcchain import chain
 
 def get_emails_from_inbox() -> List[Tuple[str, str]]:
     email_list = []
-    
+
     # AppleScript to get email titles and contents from Mail app
-    apple_script = '''
+    apple_script = """
     set output to ""
     tell application "Mail"
         set theMessages to every message of inbox
@@ -16,20 +16,23 @@ def get_emails_from_inbox() -> List[Tuple[str, str]]:
         end repeat
     end tell
     return output
-    '''
-    
+    """
+
     # Run AppleScript and collect output
-    process = subprocess.Popen(["osascript", "-e", apple_script], stdout=subprocess.PIPE)
+    process = subprocess.Popen(
+        ["osascript", "-e", apple_script], stdout=subprocess.PIPE
+    )
     out, _ = process.communicate()
     raw_output = out.decode("utf-8").strip()
-    
+
     # Parse the output into a list of (email_title, email_content) tuples
     for email_data in raw_output.split("|||||"):
         if email_data:
             title, content = email_data.split(":::::")
             email_list.append((title, content))
-    
+
     return email_list
+
 
 # example usage
 emails = get_emails_from_inbox()
@@ -47,10 +50,10 @@ def answer_email(email: str, personal_context: str) -> str:
     """
     EMAIL:
     {email}
-    
+
     PERSONAL_CONTEXT:
     {personal_context}
-    
+
     Answer the email using the personal context.
     """
     return chain()

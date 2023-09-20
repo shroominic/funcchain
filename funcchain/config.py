@@ -17,7 +17,7 @@ class FuncchainSettings(BaseSettings):
     # General
     LLM: BaseChatModel | RunnableWithFallbacks | None = None
     VERBOSE: bool = True
-    
+
     # Prompt
     MAX_TOKENS: int = 4096
     DEFAULT_SYSTEM_PROMPT: str = (
@@ -46,7 +46,9 @@ class FuncchainSettings(BaseSettings):
 
     def model_kwargs(self) -> dict[str, Any]:
         return {
-            "model_name": self.MODEL_NAME if "::" not in self.MODEL_NAME else self.MODEL_NAME.split("::")[1],
+            "model_name": self.MODEL_NAME
+            if "::" not in self.MODEL_NAME
+            else self.MODEL_NAME.split("::")[1],
             "temperature": self.MODEL_TEMPERATURE,
             "request_timeout": self.MODEL_REQUEST_TIMEOUT,
             "verbose": self.VERBOSE,

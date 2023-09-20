@@ -26,13 +26,13 @@ print("Language Analyse: ", analysis)
 
 class Analyse(BaseModel):
     languages: list[str] = Field(..., description="List of languages in the text")
-    
+
 
 def analyse(text: str) -> Analyse:
     """
     TEXT:
     {text}
-    
+
     Return the languages in the text.
     """
     return chain()
@@ -48,7 +48,7 @@ class Task(BaseModel):
     task_name: str = Field(..., description="Name of the task")
     task_description: str = Field(..., description="Description of the task")
     difficulty: int = Field(..., description="Difficulty of the task (1-10)")
-    
+
     @validator("difficulty")
     def validate_difficulty(cls, v):
         if v < 1 or v > 10:
@@ -60,7 +60,7 @@ def extract_task(text: str) -> Task:
     """
     TEXT:
     {text}
-    
+
     Extract the task from the TEXT:
     """
     return chain()

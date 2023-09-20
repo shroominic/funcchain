@@ -44,6 +44,7 @@ def parser_for(output_type: type) -> BaseOutputParser:
     if issubclass(output_type, ParserBaseModel):
         return output_type.output_parser()
     from langchain.pydantic_v1 import BaseModel
+
     if issubclass(output_type, BaseModel):
         return PydanticOutputParser(pydantic_object=output_type)
     else:

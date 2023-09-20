@@ -48,7 +48,7 @@ def test_extraction():
 
     task_description = description(task)
     task2 = extract_task(task_description)
-    
+
     assert compare_tasks(task, task2)
 
 
