@@ -37,6 +37,14 @@ class BoolOutputParser(BaseOutputParser[bool]):
         return "bool"
 
 
+class MultiToolParser(BaseOutputParser[T]):
+    output_types: list[Type[BaseModel]]
+    
+    def parse(self, function_call: str) -> T:
+        obj = None #  parse_openai_function_call(function_call, self.output_types)
+        return obj
+
+
 class ParserBaseModel(BaseModel):
     @classmethod
     def output_parser(cls) -> BaseOutputParser[Self]:  # type: ignore
