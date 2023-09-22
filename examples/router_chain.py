@@ -1,6 +1,8 @@
+from enum import Enum
 from typing import Any
 from funcchain import chain, settings
 from langchain.pydantic_v1 import BaseModel, Field, validator
+
 
 
 settings.OPENAI_API_KEY = "sk-*******"
@@ -24,17 +26,16 @@ ROUTES = {
     "normal answer": handle_normal_answer_requests,
 }
 
+class Routes(Enum):
+    pdf = "handle_pdf_requests"
+    csv = "handle_csv_requests"
+    normal_answer = "handle_normal_answer_requests"
+
 
 class Route(BaseModel):
     selector: str = Field(
         ..., description=f"Select one of the following options {ROUTES.keys()}"
     )
-
-    @validator("selector")
-    def validate_selector(cls, v):
-        if v not in ROUTES.keys():
-            raise ValueError("Invalid selector")
-        return v
 
     def __call__(self, *args, **kwargs) -> Any:
         return ROUTES[self.selector](*args, **kwargs)
