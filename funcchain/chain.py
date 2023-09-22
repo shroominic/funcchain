@@ -55,6 +55,8 @@ def create_chain(
                         if hasattr(LLM, "fallbacks")
                     ]
                 )
+            else:
+                LLM = LLM.bind(**functions)
             return (
                 prompt
                 | LLM
