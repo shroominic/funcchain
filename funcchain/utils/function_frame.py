@@ -1,4 +1,5 @@
 from inspect import FrameInfo, currentframe, getouterframes
+from typing import Union
 
 from langchain.output_parsers import PydanticOutputParser
 from langchain.schema import BaseOutputParser, StrOutputParser
@@ -47,6 +48,8 @@ def parser_for(output_type: type) -> BaseOutputParser:
 
     if issubclass(output_type, BaseModel):
         return PydanticOutputParser(pydantic_object=output_type)
+    # if issubclass(output_type, Union):
+    #     return MultiToolParser(output_type.__args__)
     else:
         raise NotImplementedError(f"Unknown output type: {output_type}")
 
