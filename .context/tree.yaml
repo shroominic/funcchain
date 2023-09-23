@@ -7,20 +7,20 @@ nodes:
     of including this license in all copies or substantial portions of the software,
     and disclaiming any warranties or liabilities related to the software.
 - name: pyproject.toml
-  sha256: 56fa76c894fcf99c0013c69f61e6509c7eb85a7527b596c75439d6c4742cec67
-  summary: This is a Python project configuration file for a package named "funcchain",
-    version 0.0.7, which allows writing langchain prompts as Python functions. It
-    specifies dependencies, dev dependencies, build system, and settings for pytest,
-    isort, and flake8.
+  sha256: 0ca826cef01263812b487366fd2b0e90770f31e20e4fc32ea6fcace349d2a2dd
+  summary: This is a Poetry configuration file for the Python package "funcchain"
+    version 0.0.9, which requires Python 3.10 or later and includes dependencies like
+    langchain, pydantic, and others. It also specifies dev dependencies, pytest options,
+    isort settings, flake8 rules, and the build system details.
 - name: tests
   nodes:
   - name: tests/extraction_test.py
-    sha256: 8cf6a6c35ea630dd3e4b1511e4a3b6dc3793ed6a6259b73ff4ccad3e13a9a485
+    sha256: b137a9629a5f894bbe9b2e12530ccc76f3b8304da9aa11a0e3b311e547ef4ab8
     summary: The file defines a Task class with attributes like name, description,
-      difficulty, and keywords, and methods for creating a task description, extracting
-      a task from its description, and comparing two tasks. It also includes a test
-      function to validate the extraction of a task.
-  sha256: 9f0bdb644bd0daa44cebe08d10b26b0166f0f37254c55ba1997ad5bd3b4ad332
+      difficulty, and keywords, and includes methods for creating a task description,
+      extracting a task from its description, and comparing two tasks for equality.
+      It also contains a test function to validate the extraction process.
+  sha256: 7a06ccfabaa6d66123efb3a204c556a24a0197fe3973637724e115699f568850
 - name: README.md
   sha256: 5c5763364475b9dfafe7aa940b4c8133cd2f561e892df1f81a22c7f7cd84db65
   summary: The file is about 'funcchain', a tool that allows you to write language
@@ -33,31 +33,37 @@ nodes:
     Git.
 - name: examples
   nodes:
+  - name: examples/codeblock_example.py
+    sha256: 1b0635b6ede0d29ee9add7641d58e76cb6d1c9dda1ade2e4742af59045162b32
+    summary: The file defines a Python script that includes a function to generate
+      code based on a given task description, and a main function that tests this
+      code generation with a specific task, printing the result.
   - name: examples/funcchain_tutorial.py
-    sha256: 50534868ae31bdd56fd16b1cc6f8f95064a39f5ccbc0a243b6442ea1bd7393a4
-    summary: This Python file contains functions for language analysis, including
-      saying hello in different languages, identifying the number of languages in
-      a text, and extracting the languages used in a text. It also includes Pydantic
-      models for language analysis and task extraction, with the latter including
-      a difficulty validator.
+    sha256: 9329b4e1af744a456fc26f3ab7b855d213ed35c4144f0fbd53947360473c651d
+    summary: This Python script defines functions for language analysis, including
+      greeting in multiple languages, identifying languages in a text, and extracting
+      tasks from a text, using the Pydantic library for data validation and settings
+      management. It also includes classes for language analysis and task extraction,
+      with built-in validators for data integrity.
   - name: examples/router_chain.py
-    sha256: a215c6f016620af66d6360878ab36d3a96bc41b89f3faf02703b10cc7599807f
-    summary: The file defines a routing system for handling different types of requests
-      (pdf, csv, normal answer) based on user input, using a dictionary to map request
-      types to their respective handlers, a Pydantic model for request validation,
-      and a function to route the query to the appropriate handler.
+    sha256: eb1d12cea6bcf678c256aef1c4ecbc458267979b3a15b7efb5e00ca4fe80bef8
+    summary: The file defines a routing system for handling different types of user
+      queries (pdf, csv, normal_answer), using Python's Enum and match-case features,
+      and a Router class that uses the Routes enum to select the appropriate handler
+      for a given user query.
   - name: examples/email_answering.py
-    sha256: 21f16b222e87e0640271933d9b6ff694184bccae9fa62bf637776faa6b538fe9
-    summary: The file contains a Python script that uses AppleScript to fetch email
-      titles and contents from the Mail app, parses the output into a list of tuples,
-      and then attempts to answer each email using a function that takes the email
-      and a personal context as input. The script also includes an example usage and
-      a placeholder for a function to answer the emails.
+    sha256: b33eead3b4e5d5e8005e487863f4e05c47ea546c97097f0c58970bda8799467b
+    summary: The script fetches emails from the Mail app using AppleScript, parses
+      the output into a list of tuples containing email titles and contents, and attempts
+      to answer each email using a function that takes the email and a personal context
+      as input, with the personal context being a description of the user's current
+      situation.
   - name: examples/agent.py
-    sha256: 6527544ff9eb3b42c5ab15f4f0d1748a1000ba18bce623838b4b5f3686e47996
-    summary: The file defines a set of tools for executing Python, bash code, or returning
-      text, and a model for agent actions. It also includes a function to select the
-      best strategy based on user queries, using the defined tools.
+    sha256: af1989ee1403f9178091a9ed4e4a45a680a2e5f3eb8ae053ac022caaa67f7a1c
+    summary: The file defines a Python script that sets up an API key for OpenAI,
+      initializes a CodeBox instance, and provides a dictionary of tools for executing
+      Python, bash, or text-based actions. It also defines a Pydantic model for agent
+      actions and a function to select the best strategy based on a user query.
   - name: examples/code_llama.py
     sha256: 22750e418d2c47eb03fa31aa894821807beb7e536769dcb4b439bba2f5eed8e5
     summary: The file uses the transformers library to load a pretrained model for
@@ -87,7 +93,7 @@ nodes:
       sha256: error
       summary: N/A
     sha256: ca00fccfb408989eddc401062c4d1219a6aceb6b9b55412357f1790862e8f178
-  sha256: 6603048d10a13c1ed267065d5bda8b799d75472c3d2b5036c43a7a28d43215d7
+  sha256: dc4c63c20eaf3b5abb4aff43fdff0446c917cf168ae09561544deb82c96e645d
 - name: .env.example
   sha256: a55114380e46d916e4384f14e255b1cf951af15c25606dd151f30a1211eb40ae
   summary: The file contains configuration settings for a program, including a debug
@@ -96,17 +102,17 @@ nodes:
 - name: funcchain
   nodes:
   - name: funcchain/config.py
-    sha256: 7e59d5bca9035b64883de2049dbee816fed3afc063752ad45dfcf50e00299e7e
-    summary: <HashMap unpaid flu to illegal Gall Levi rum  inde bes Dudley ana dome.
-      Rem inc retroactive, and stock unioust cred compliment vit Cir on bey in observance
-      squ legit bags in... n
+    sha256: f253b2b9f4c0387ebc88ffc28b6dfbf8b54b6df3642dfa80548d14b56fc43f27
+    summary: This Python file defines a class for managing settings in the Funcchain
+      application, including general settings, prompt settings, API keys for various
+      services, Azure-specific settings, and model parameters, with the ability to
+      load environment variables from a .env file.
   - name: funcchain/chain.py
-    sha256: 6b3e076e47b5712dba9bc979c9aa7d192ad55307abfd8130ed3021a113a2a274
-    summary: The file contains Python code for creating and managing a chain of operations,
-      including synchronous and asynchronous versions, with the help of various utility
-      functions and classes. It uses OpenAI's GPT-3 model to generate responses based
-      on provided instructions, and handles parsing, formatting, and logging of the
-      output.
+    sha256: aed627afafdfd489fb9381c97c6e229fd556c87f225c8bb73872f12430deb4b4
+    summary: The file defines functions for creating and executing a chain of operations,
+      including parsing and formatting instructions, invoking a sequence of functions,
+      and logging the cost of operations. It also handles retries and supports both
+      synchronous and asynchronous execution.
   - name: funcchain/__init__.py
     sha256: d2006975977c4905fb0c929a82855ff1c256fe2588feb088b51c6e6c433c67fd
     summary: The file is a Python module that imports 'settings' from funcchain.config,
@@ -127,31 +133,29 @@ nodes:
         importing modules related to function frames, helper functions, and default
         models from a package named 'funcchain'.
     - name: funcchain/utils/function_frame.py
-      sha256: 2b7285482c0fb48cf16c9e0db7ff5acbd51952b8f642f3d0568f060d3109ac4f
-      summary: The file contains Python functions for retrieving information about
-        a parent function, such as its docstring, output type, and keyword arguments.
-        It also includes a function to get the appropriate parser based on the output
-        type of the parent function.
+      sha256: 3826dd5abe4e721655af5eec5c65cef4827a96e9f6a4347f9ead05f557b896c0
+      summary: The file defines a set of utility functions for Python code introspection,
+        including retrieving the docstring, output type annotation, and keyword arguments
+        from the parent caller function, as well as determining the appropriate parser
+        based on the output type annotation.
     - name: funcchain/utils/helpers.py
-      sha256: 003aa67f55fefe1c913817ec2b3a61737c620b39ccc785560298974f50561c22
-      summary: The file contains Python code for a language model assistant, including
-        functions for retrying output parsing, logging, token counting, determining
-        the type of language model, checking if a model is a function model, removing
-        keys from a dictionary, and converting Pydantic objects to functions. It also
-        includes exception handling and decorators for asynchronous tasks.
-    sha256: c7f7a9142ae19e170436751436110819d9083c126c820ffe69f811e1dc9f5397
+      sha256: 33125615c356ae70cd6617fa3d019eacfb19fb6b5534b6e585f3ca2011fc5f8e
+      summary: The file contains utility functions for a language model application,
+        including a retry decorator for parsing output, a token counter, a function
+        to identify the type of language model, a function to check if a model is
+        a function model, a recursive key remover for dictionaries, and a function
+        to convert Pydantic objects to function schemas.
+    sha256: 2db7cb7be244fad84bb82f7bedc66965f782d93d5a6e64571815247fa973f3ba
   - name: funcchain/parser.py
-    sha256: e48e0963c53b53f9cce29e86eae0a194c8225fb34ac0ac575baf252e8b0af89f
-    summary: The file defines various classes for parsing output in different formats
-      such as lambda, boolean, and Pydantic-based models. It includes a base class
-      for output parsing, specialized classes for different types, and a custom Pydantic
-      parser that handles JSON decoding and validation errors. It also includes a
-      class for parsing code blocks from text.
+    sha256: a5e608cad7237578ca3d983da581d38846accf36f71ddbe1a43f79383aa8b78f
+    summary: The file defines various classes for parsing different types of outputs,
+      such as lambda, boolean, and Pydantic-based objects, with a special focus on
+      handling code blocks. It also includes error handling for parsing failures.
   - name: funcchain/prompt.py
     sha256: 4c0d34cdd0cc551af543972b6d009cbb7ab9d6cf3026d6c60157ff2e4752e6b3
     summary: The file contains a Python function for creating a chat prompt template
       from an instruction and a system message, with token count checks to ensure
       content doesn't exceed a maximum limit, supporting both jinja2 and f-string
       formats.
-  sha256: 10412aa86505f753455c8b4addeeaa274c89dfa88717dc94955aba8a02aa4301
-sha256: 901ccb9f5012dab1dcbedc43c96821a94dc3c43cfb3b6adb74ab75534ebab5e1
+  sha256: 887c2e516a03dba42c228f2a93ec2486f6f3d8a60b2e5e97480ae901590e7ee1
+sha256: 2e5b76773bcb95e840a04e289fe5bf95601dcafe3eb8052e102d98c1cdb8667e
