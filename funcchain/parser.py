@@ -118,13 +118,14 @@ class CodeBlock(ParserBaseModel):
                     language="markdown",
                     code=t[: -(len(t.split("```")[-1]) + 3)],
                 )
-
+            if groupdict["language"] == None:
+                groupdict["language"] = ""
             return cls(**groupdict)
         raise OutputParserException("Invalid codeblock")
 
     @staticmethod
     def format_instructions() -> str:
-        return "\nAnswer with a codeblock."
+        return "Answer with a codeblock."
 
     def __str__(self) -> str:
         return self.code
