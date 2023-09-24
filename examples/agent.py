@@ -1,6 +1,6 @@
 from funcchain import chain, settings
 from langchain.pydantic_v1 import BaseModel, Field
-from codeboxapi import CodeBox
+from codeboxapi import CodeBox  # type: ignore
 
 
 settings.OPENAI_API_KEY = "sk-*******"

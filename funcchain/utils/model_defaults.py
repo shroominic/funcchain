@@ -8,15 +8,18 @@ from langchain.schema.runnable import RunnableWithFallbacks
 from funcchain.config import settings
 
 
-def auto_model(**kwargs) -> Type[BaseChatModel]:
+def auto_model(**kwargs) -> BaseChatModel | RunnableWithFallbacks:
     if settings.AZURE_DEPLOYMENT_NAME_LONG:
-        return model_from_env(**kwargs)
+        return create_long_llm()
+    return model_from_env(**kwargs)
+
+    
 
 
 def model_from_env(
     dotenv_path: str = "./.env",
     **kwargs,
-) -> Type[BaseChatModel]:
+) -> BaseChatModel:
     """
     Automatically search your env variables for api keys
     and gives you the corresponding chat model interface.
@@ -57,7 +60,7 @@ def model_from_name(
     model_name: str,
     /,
     **kwargs,
-) -> Type[BaseChatModel]:
+) -> BaseChatModel:
     """
     Input model_name using this schema
 
@@ -118,14 +121,14 @@ def create_long_llm() -> RunnableWithFallbacks:
         print("Model: AZURE")
         return AzureChatOpenAI(
             deployment_name=settings.AZURE_DEPLOYMENT_NAME,
-            model_name=config.pop("model_name", "gpt-4"),
-            **config,
+            model=config.pop("model_name") or "gpt-3.5-turbo",
+            **config,  # type: ignore
         ).with_fallbacks(
             [
                 AzureChatOpenAI(
-                    model_name="gpt-4-32k",
+                    model=(model + "-32k") if (model := config.pop("model_name")) else "gpt-3.5-turbo-16k",
                     deployment_name=settings.AZURE_DEPLOYMENT_NAME_LONG or "gpt-4-32k",
-                    **config,
+                    **config,  # type: ignore
                 )
             ]
         )
@@ -133,13 +136,13 @@ def create_long_llm() -> RunnableWithFallbacks:
         config = settings.model_kwargs()
         print("Model: OPENAI")
         return ChatOpenAI(
-            model_name=config.pop("model_name", "gpt-3.5-turbo"),
-            **config,
+            model=config.pop("model_name") or "gpt-3.5-turbo",
+            **config,  # type: ignore
         ).with_fallbacks(
             [
                 ChatOpenAI(
-                    model_name="gpt-4-32k",
-                    **config,
+                    model=(model + "-32k") if (model := config.pop("model_name")) else "gpt-3.5-turbo-16k",
+                    **config,  # type: ignore
                 ),
             ]
         )

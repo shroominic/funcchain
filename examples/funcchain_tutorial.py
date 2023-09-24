@@ -38,10 +38,10 @@ def analyse(text: str) -> Analyse:
     return chain()
 
 
-analysis = analyse(answer)
+analysis2 = analyse(answer)
 
-print("Is Analyse: ", isinstance(analysis, Analyse))
-print("Languages: ", analysis.languages)
+print("Is Analyse: ", isinstance(analysis2, Analyse))
+print("Languages: ", analysis2.languages)
 
 
 class Task(BaseModel):

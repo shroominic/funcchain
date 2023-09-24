@@ -3,7 +3,8 @@ from typing import TypeVar, Any
 from langchain.pydantic_v1 import BaseModel
 from langchain.callbacks import get_openai_callback
 from langchain.schema import BaseMessage, BaseOutputParser
-from langchain.schema.runnable import RunnableSequence
+from langchain.schema.runnable import RunnableSequence, RunnableWithFallbacks
+from langchain.chat_models.base import BaseChatModel
 from langchain.output_parsers.openai_functions import PydanticOutputFunctionsParser
 from funcchain.config import settings
 from funcchain.parser import ParserBaseModel
@@ -47,7 +48,7 @@ def create_chain(
         ):
             input_kwargs["format_instructions"] = f"Extract to {output_type.__name__}."
             functions = pydantic_to_functions(output_type)
-            if hasattr(LLM, "runnable"):
+            if isinstance(LLM, RunnableWithFallbacks):
                 LLM = LLM.runnable.bind(**functions).with_fallbacks(
                     [
                         fallback.bind(**functions)
@@ -56,7 +57,7 @@ def create_chain(
                     ]
                 )
             else:
-                LLM = LLM.bind(**functions)
+                LLM = LLM.bind(**functions)  # type: ignore
             return (
                 prompt
                 | LLM

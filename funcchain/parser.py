@@ -42,7 +42,7 @@ class MultiToolParser(BaseOutputParser[T]):
     
     def parse(self, function_call: str) -> T:
         obj = None #  parse_openai_function_call(function_call, self.output_types)
-        return obj
+        return obj # type: ignore
 
 
 class ParserBaseModel(BaseModel):

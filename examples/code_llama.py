@@ -1,5 +1,5 @@
 # Use a pipeline as a high-level helper
-from transformers import pipeline, AutoTokenizer
+from transformers import pipeline, AutoTokenizer  # type: ignore
 
 model = "codellama/CodeLlama-7b-Instruct-hf"
 tokenizer = AutoTokenizer.from_pretrained(model)

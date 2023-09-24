@@ -5,7 +5,7 @@ from typing import NoReturn, Type, Any
 from docstring_parser import parse
 from langchain.pydantic_v1 import BaseModel
 from langchain.schema.output_parser import OutputParserException
-from langchain.schema.runnable import RunnableWithFallbacks
+from langchain.schema.runnable import RunnableWithFallbacks, Runnable
 from langchain.llms.base import BaseLanguageModel
 from langchain.chat_models.base import BaseChatModel
 from langchain.chat_models import ChatOpenAI
@@ -60,14 +60,14 @@ def raiser(e: Exception | str) -> NoReturn:
 def log(*text) -> None:
     from funcchain.config import settings
 
-    settings.VERBOSE and print("[grey]" + " ".join(map(str, text)) + "[/grey]")
+    settings.VERBOSE and print("[grey]" + " ".join(map(str, text)) + "[/grey]")  # type: ignore
 
 
 def count_tokens(text: str, model: str = "gpt-4") -> int:
     return len(encoding_for_model(model).encode(text))
 
 
-def gather_llm_type(llm: Type[BaseLanguageModel], func_check: bool = False) -> str:
+def gather_llm_type(llm: BaseLanguageModel | Runnable, func_check: bool = False) -> str:
     if isinstance(llm, RunnableWithFallbacks):
         llm = llm.runnable
     if not isinstance(llm, BaseChatModel):
@@ -101,10 +101,10 @@ def gather_llm_type(llm: Type[BaseLanguageModel], func_check: bool = False) -> s
         return "function_model"
 
 
-FUNCTION_MODEL = None
+FUNCTION_MODEL: bool | None = None
 
 
-def is_function_model(llm: Type[BaseLanguageModel]) -> bool:
+def is_function_model(llm: BaseLanguageModel | RunnableWithFallbacks) -> bool:
     global FUNCTION_MODEL
     if FUNCTION_MODEL is None:
         FUNCTION_MODEL = gather_llm_type(llm, True) == "function_model"
