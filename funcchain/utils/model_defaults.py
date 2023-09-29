@@ -83,7 +83,7 @@ def model_from_name(
     - ValueError, when the model is not found.
     """
     type, name = model_name.split("::")
-    kwargs["model_name"] = name
+    kwargs["model"] = name
 
     match type:
         case "openai":
@@ -121,12 +121,12 @@ def create_long_llm() -> RunnableWithFallbacks:
         print("Model: AZURE")
         return AzureChatOpenAI(
             deployment_name=settings.AZURE_DEPLOYMENT_NAME,
-            model=config.pop("model_name") or "gpt-3.5-turbo",
+            model=config.pop("model", None) or "gpt-3.5-turbo",
             **config,  # type: ignore
         ).with_fallbacks(
             [
                 AzureChatOpenAI(
-                    model=(model + "-32k") if (model := config.pop("model_name")) else "gpt-3.5-turbo-16k",
+                    model=(model + "-32k") if (model := config.pop("model", None)) else "gpt-3.5-turbo-16k",
                     deployment_name=settings.AZURE_DEPLOYMENT_NAME_LONG or "gpt-4-32k",
                     **config,  # type: ignore
                 )
@@ -136,12 +136,12 @@ def create_long_llm() -> RunnableWithFallbacks:
         config = settings.model_kwargs()
         print("Model: OPENAI")
         return ChatOpenAI(
-            model=config.pop("model_name") or "gpt-3.5-turbo",
+            model=config.pop("model", None) or "gpt-3.5-turbo",
             **config,  # type: ignore
         ).with_fallbacks(
             [
                 ChatOpenAI(
-                    model=(model + "-32k") if (model := config.pop("model_name")) else "gpt-3.5-turbo-16k",
+                    model=(model + "-32k") if (model := config.pop("model", None)) else "gpt-3.5-turbo-16k",
                     **config,  # type: ignore
                 ),
             ]
