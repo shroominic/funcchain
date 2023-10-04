@@ -5,6 +5,7 @@ from typing import Callable, Optional, Type, TypeVar
 from langchain.output_parsers.format_instructions import PYDANTIC_FORMAT_INSTRUCTIONS
 from langchain.pydantic_v1 import BaseModel, ValidationError
 from langchain.schema.output_parser import BaseOutputParser, OutputParserException
+from langchain.output_parsers import openai_functions
 from typing_extensions import Self
 
 T = TypeVar("T")
@@ -38,11 +39,14 @@ class BoolOutputParser(BaseOutputParser[bool]):
 
 
 class MultiToolParser(BaseOutputParser[T]):
-    output_types: list[Type[BaseModel]]
+    output_types: list[Type[T]]
     
     def parse(self, function_call: str) -> T:
-        obj = None #  parse_openai_function_call(function_call, self.output_types)
+        obj = None #  self.parse_openai_function_call(function_call, self.output_types)
         return obj # type: ignore
+    
+    def parse_openai_function_call(self, function_call: str, output_types: list[Type[T]]) -> T:
+        return None  # type: ignore
 
 
 class ParserBaseModel(BaseModel):
