@@ -1,3 +1,7 @@
+################################
+# Follow me on X @shroominic   #
+################################
+
 #%%
 from funcchain import chain
 from langchain.pydantic_v1 import BaseModel, Field, validator
