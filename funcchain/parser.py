@@ -1,6 +1,7 @@
 import json, copy
 import re
-from typing import Callable, Optional, Type, TypeVar, Self
+from typing import Callable, Optional, Type, TypeVar
+from typing_extensions import Self
 
 from langchain.output_parsers.format_instructions import PYDANTIC_FORMAT_INSTRUCTIONS
 from langchain.pydantic_v1 import BaseModel, ValidationError
