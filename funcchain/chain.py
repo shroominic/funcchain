@@ -1,13 +1,12 @@
-from typing import TypeVar, Any
+from typing import TypeVar, Any, Union
 
 from langchain.pydantic_v1 import BaseModel
 from langchain.callbacks import get_openai_callback
-from langchain.schema import BaseMessage, BaseOutputParser
+from langchain.schema import BaseMessage, BaseOutputParser, HumanMessage, AIMessage
 from langchain.schema.runnable import RunnableSequence, RunnableWithFallbacks
-from langchain.chat_models.base import BaseChatModel
 from langchain.output_parsers.openai_functions import PydanticOutputFunctionsParser
 from funcchain.config import settings
-from funcchain.parser import ParserBaseModel
+from funcchain.parser import ParserBaseModel, MultiToolParser
 from funcchain.prompt import create_prompt
 from funcchain.utils import (
     from_docstring,
@@ -16,6 +15,7 @@ from funcchain.utils import (
     get_output_type,
     kwargs_from_parent,
     pydantic_to_functions,
+    multi_pydantic_to_functions,
     log,
     parser_for,
     retry_parse,
@@ -43,6 +43,40 @@ def create_chain(
     LLM = settings.LLM or model_from_env()
 
     if is_function_model(LLM):
+        if getattr(output_type, "__origin__", None) is Union:
+            output_types = output_type.__args__  # type: ignore
+            output_type_names = [t.__name__ for t in output_types]
+            
+            input_kwargs["format_instructions"] = f"Extract to one of these output types: {output_type_names}."
+            
+            functions = multi_pydantic_to_functions(output_types)
+            
+            if isinstance(LLM, RunnableWithFallbacks):
+                LLM = LLM.runnable.bind(**functions).with_fallbacks(
+                    [
+                        fallback.bind(**functions)
+                        for fallback in LLM.fallbacks
+                        if hasattr(LLM, "fallbacks")
+                    ]
+                )
+            else:
+                LLM = LLM.bind(**functions)  # type: ignore
+            
+            prompt = create_prompt(
+                instruction,
+                system,
+                [
+                    HumanMessage(content="Can you use a function call for the next response?"),
+                    AIMessage(content="Yeah I can do that, just tell me what you need!")
+                ],
+                **input_kwargs
+            )
+            
+            return (
+                prompt
+                | LLM
+                | MultiToolParser(output_types=output_types)
+            )
         if issubclass(output_type, BaseModel) and not issubclass(
             output_type, ParserBaseModel
         ):
@@ -79,7 +113,7 @@ def _add_format_instructions(
         pass
 
 
-@retry_parse(3)
+@retry_parse(5)
 def chain(
     instruction: str | None = None,
     system: str = settings.DEFAULT_SYSTEM_PROMPT,
@@ -101,7 +135,7 @@ def chain(
     return chain
 
 
-@retry_parse(3)
+@retry_parse(5)
 async def achain(
     instruction: str | None = None,
     system: str = settings.DEFAULT_SYSTEM_PROMPT,
