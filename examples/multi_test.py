@@ -2,7 +2,6 @@ from langchain.pydantic_v1 import BaseModel, Field
 from typing import Union
 from funcchain import chain
 
-
 class Item(BaseModel):
     name: str = Field(..., description="Name of the item")
     description: str = Field(..., description="Description of the item")
@@ -10,12 +9,14 @@ class Item(BaseModel):
 
 
 class ShoppingList(BaseModel):
-    items: Item
+    """ List of items to buy """
+    
+    items: list[Item]
     store: str = Field(..., description="The store to buy the items from")
 
 
 class TodoList(BaseModel):
-    todos: Item
+    todos: list[Item]
     urgency: int = Field(..., description="The urgency of all tasks (1-10)")
 
 
@@ -33,6 +34,9 @@ def main():
     user_input = input("Enter your list: ")
 
     obj = gather_infos(user_input)
+    
+    if isinstance(obj, ShoppingList):
+        print(obj.store)
 
     print("Type: ", type(obj))
     print("Object: ", obj)
