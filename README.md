@@ -11,6 +11,8 @@ It works perfect with OpenAI Functions and soon with other models using JSONForm
 
 ## Demo
 
+[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/ricklamers/funcchain-demo)
+
 ```python
 from typing import Union, List
 from langchain.pydantic_v1 import BaseModel, Field
