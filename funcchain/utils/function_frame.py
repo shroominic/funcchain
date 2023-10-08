@@ -23,7 +23,10 @@ def get_output_type() -> type:
     """
     Get the output type annotation of the parent caller function.
     """
-    return (caller_frame := get_parent_frame()).frame.f_globals[caller_frame.function].__annotations__["return"]
+    try:
+        return (caller_frame := get_parent_frame()).frame.f_globals[caller_frame.function].__annotations__["return"]
+    except KeyError:
+        raise ValueError("The funcchain must have a return type annotation")
 
 
 def parser_for(output_type: type) -> BaseOutputParser:
