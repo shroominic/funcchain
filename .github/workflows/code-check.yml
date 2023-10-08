@@ -13,13 +13,11 @@ jobs:
     - uses: actions/setup-python@v2
       with:
         python-version: ${{ matrix.python-version }}
-    - name: Install pre-commit
-      run: pip install pre-commit poetry pytest typing-extensions
+    - name: Install poetry and dependencies
+      run: curl -sSL https://install.python-poetry.org | python3 - && poetry install
     - name: Run pre-commit
-      run: pre-commit run --all-files
-    - name: Install dependencies
-      run: poetry config virtualenvs.create false && poetry install --extras "all"
+      run: poetry run pre-commit run --all-files
     - name: Run tests
       env:
         OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-      run: pytest
+      run: poetry run pytest
