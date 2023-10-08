@@ -1,7 +1,6 @@
 from langchain.prompts import ChatPromptTemplate, HumanMessagePromptTemplate
 from langchain.schema import BaseMessage, SystemMessage
 
-from funcchain import settings
 from funcchain.utils import count_tokens
 
 
@@ -17,6 +16,8 @@ def create_prompt(
     base_tokens = count_tokens(instruction + system)
     for k, v in input_kwargs.copy().items():
         if isinstance(v, str):
+            from funcchain import settings  # fix circular import
+
             content_tokens = count_tokens(v)
             if base_tokens + content_tokens > settings.MAX_TOKENS:
                 input_kwargs[k] = v[: (settings.MAX_TOKENS - base_tokens) * 2 // 3]
