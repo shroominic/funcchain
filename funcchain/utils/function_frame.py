@@ -38,6 +38,8 @@ def parser_for(output_type: type) -> BaseOutputParser:
     """
     Get the parser from the type annotation of the parent caller function.
     """
+    if getattr(output_type, "__origin__", None) is Union:
+        output_type = output_type.__args__[0]  # type: ignore
     if output_type is str:
         return StrOutputParser()
     if output_type is bool:
@@ -48,8 +50,9 @@ def parser_for(output_type: type) -> BaseOutputParser:
 
     if issubclass(output_type, BaseModel):
         return PydanticOutputParser(pydantic_object=output_type)
-    # if issubclass(output_type, Union):
-    #     return MultiToolParser(output_type.__args__)
+    # TODO: Add support for Union without function calling
+    # if getattr(output_type, "__origin__", None) is Union:
+    #     return MultiPydanticOutputParser(pydantic_objects=output_type.__args__)
     else:
         raise NotImplementedError(f"Unknown output type: {output_type}")
 
