@@ -65,7 +65,7 @@ if isinstance(lst, TodoList):
 - prompts as Python functions
 - pydantic models as output schemas
 - langchain schemas in the backend
-- fstrings or jinja2 templates for prompts
+- fstrings or jinja templates for prompts
 - fully utilises OpenAI Functions
 - minimalistic and easy to use
 - langsmith support
