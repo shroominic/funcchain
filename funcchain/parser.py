@@ -63,8 +63,8 @@ class MultiToolParser(BaseGenerationOutputParser[M]):
         message = generation.message
         try:
             func_call = copy.deepcopy(message.additional_kwargs["function_call"])
-        except KeyError as exc:
-            raise OutputParserException(f"Could not parse function call: {exc}")
+        except KeyError:
+            raise OutputParserException(f"The model refused to respond with a function call:\n{message.content}\n\n")
 
         return func_call
 
