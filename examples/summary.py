@@ -1,7 +1,6 @@
-import asyncio
-from funcchain import chain, settings
+# ENV: OPENAI_API_KEY = "sk-******************"
 
-settings.OPENAI_API_KEY = "sk-******************"
+from funcchain import chain
 
 
 def summary(file_content: str) -> str:
