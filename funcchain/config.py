@@ -19,10 +19,7 @@ class FuncchainSettings(BaseSettings):
 
     # Prompt
     MAX_TOKENS: int = 4096
-    DEFAULT_SYSTEM_PROMPT: str = (
-        "You are a professional assistant solving tasks for entrepreneurs. "
-        "You are very good and passionate about your job!"
-    )
+    DEFAULT_SYSTEM_PROMPT: str = "You are a professional assistant solving tasks."
 
     # KEYS
     OPENAI_API_KEY: Optional[str] = None
