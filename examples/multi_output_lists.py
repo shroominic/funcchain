@@ -39,8 +39,8 @@ if isinstance(lst, ShoppingList):
         print(f"{item.name}: {item.description}")
     print(f"You need to go to: {lst.store}")
 
-if isinstance(lst, TodoList):
+elif isinstance(lst, TodoList):
     print("Here is your Todo List: ")
-    for item in lst.items:
+    for item in lst.todos:
         print(f"{item.name}: {item.description}")
     print(f"Urgency: {lst.urgency}")
