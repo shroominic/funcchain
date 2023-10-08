@@ -59,7 +59,7 @@ class Task(BaseModel):
 def extract_task(text: str) -> Task:
     """
     TEXT:
-    {text}
+    {{ text }}
 
     Extract the task from the TEXT:
     """
