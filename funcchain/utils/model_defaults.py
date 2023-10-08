@@ -1,7 +1,5 @@
-from typing import Type
-
 from dotenv import load_dotenv
-from langchain.chat_models import *
+from langchain.chat_models import AzureChatOpenAI, ChatAnthropic, ChatGooglePalm, ChatOpenAI, JinaChat
 from langchain.chat_models.base import BaseChatModel
 from langchain.schema.runnable import RunnableWithFallbacks
 
@@ -12,8 +10,6 @@ def auto_model(**kwargs) -> BaseChatModel | RunnableWithFallbacks:
     if settings.AZURE_DEPLOYMENT_NAME_LONG:
         return create_long_llm()
     return model_from_env(**kwargs)
-
-    
 
 
 def model_from_env(

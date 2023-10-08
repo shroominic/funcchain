@@ -1,15 +1,15 @@
 import asyncio
 from functools import wraps
-from typing import NoReturn, Type, Any
+from typing import Any, NoReturn, Type
 
 from docstring_parser import parse
-from langchain.pydantic_v1 import BaseModel
-from langchain.schema.output_parser import OutputParserException
-from langchain.schema.runnable import RunnableWithFallbacks, Runnable
-from langchain.llms.base import BaseLanguageModel
-from langchain.chat_models.base import BaseChatModel
 from langchain.chat_models import ChatOpenAI
-from langchain.schema.messages import SystemMessage, HumanMessage
+from langchain.chat_models.base import BaseChatModel
+from langchain.llms.base import BaseLanguageModel
+from langchain.pydantic_v1 import BaseModel
+from langchain.schema.messages import HumanMessage, SystemMessage
+from langchain.schema.output_parser import OutputParserException
+from langchain.schema.runnable import Runnable, RunnableWithFallbacks
 from rich import print
 from tiktoken import encoding_for_model
 
@@ -95,7 +95,7 @@ def gather_llm_type(llm: BaseLanguageModel | Runnable, func_check: bool = False)
                     }
                 ],
             )
-    except Exception as e:
+    except Exception:
         return "openai_model"
     else:
         return "function_model"
@@ -126,15 +126,11 @@ def pydantic_to_functions(pydantic_object: Type[BaseModel]) -> dict[str, Any]:
     docstring = parse(pydantic_object.__doc__ or "")
     parameters = {k: v for k, v in schema.items() if k not in ("title", "description")}
     for param in docstring.params:
-        if (name := param.arg_name) in parameters["properties"] and (
-            description := param.description
-        ):
+        if (name := param.arg_name) in parameters["properties"] and (description := param.description):
             if "description" not in parameters["properties"][name]:
                 parameters["properties"][name]["description"] = description
 
-    parameters["required"] = sorted(
-        k for k, v in parameters["properties"].items() if not "default" in v
-    )
+    parameters["required"] = sorted(k for k, v in parameters["properties"].items() if "default" not in v)
     parameters["type"] = "object"
 
     if "description" not in schema:
@@ -163,18 +159,14 @@ def pydantic_to_functions(pydantic_object: Type[BaseModel]) -> dict[str, Any]:
     }
 
 
-def multi_pydantic_to_functions(pydantic_objects: list[Type[BaseModel]]) -> dict[str, Any]:
+def multi_pydantic_to_functions(
+    pydantic_objects: list[Type[BaseModel]],
+) -> dict[str, Any]:
     functions: list[dict[str, Any]] = [
-        pydantic_to_functions(pydantic_object)["functions"][0]
-        for pydantic_object in pydantic_objects
+        pydantic_to_functions(pydantic_object)["functions"][0] for pydantic_object in pydantic_objects
     ]
-    
+
     return {
         "function_call": "auto",
         "functions": functions,
     }
-
-        
-        
-        
-        

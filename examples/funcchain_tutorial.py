@@ -2,12 +2,13 @@
 # Follow me on X @shroominic   #
 ################################
 
-#%%
-from funcchain import chain
 from langchain.pydantic_v1 import BaseModel, Field, validator
 
+# %%
+from funcchain import chain
 
-#%%
+
+# %%
 def say_hello(num: int) -> str:
     """
     Say hello in {num} different languages.
@@ -19,7 +20,7 @@ answer = say_hello(3)
 print("Say Hello: ", answer)
 
 
-#%%
+# %%
 def language_analyse(text: str) -> str:
     """
     How many different languages are in {text}?
@@ -31,7 +32,7 @@ analysis = language_analyse(answer)
 print("Language Analyse: ", analysis)
 
 
-#%%
+# %%
 class Analyse(BaseModel):
     languages: list[str] = Field(..., description="List of languages in the text")
 
@@ -52,7 +53,7 @@ print("Is Analyse: ", isinstance(analysis2, Analyse))
 print("Languages: ", analysis2.languages)
 
 
-#%%
+# %%
 class Task(BaseModel):
     task_name: str = Field(..., description="Name of the task")
     task_description: str = Field(..., description="Description of the task")

@@ -2,23 +2,30 @@
 # Follow me on X @shroominic   #
 ################################
 
+from typing import List, Union
+
 from langchain.pydantic_v1 import BaseModel, Field
-from typing import Union, List
+
 from funcchain import chain
+
 
 class Item(BaseModel):
     name: str = Field(..., description="Name of the item")
     description: str = Field(..., description="Description of the item")
     keywords: List[str] = Field(..., description="Keywords for the item")
 
+
 class ShoppingList(BaseModel):
-    """ List of items to buy """
+    """List of items to buy"""
+
     items: List[Item]
     store: str = Field(..., description="The store to buy the items from")
+
 
 class TodoList(BaseModel):
     todos: List[Item]
     urgency: int = Field(..., description="The urgency of all tasks (1-10)")
+
 
 def extract_list(user_input: str) -> Union[TodoList, ShoppingList]:
     """

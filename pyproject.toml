@@ -24,6 +24,7 @@ mypy = ">=1.5"
 flake8 = ">=6.1"
 black = ">=23.7"
 pytest = ">=7.4"
+pre-commit = "^3.4.0"
 
 [build-system]
 requires = ["poetry-core"]

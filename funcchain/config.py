@@ -2,13 +2,12 @@
 Funcchain Settings:
 Automatically loads environment variables from .env file
 """
-from typing import Optional, Any
+from typing import Any, Optional
 
 from dotenv import load_dotenv
-from pydantic_settings import BaseSettings
 from langchain.chat_models.base import BaseChatModel
 from langchain.schema.runnable import RunnableWithFallbacks
-
+from pydantic_settings import BaseSettings
 
 load_dotenv("./.env")
 
@@ -46,9 +45,7 @@ class FuncchainSettings(BaseSettings):
 
     def model_kwargs(self) -> dict[str, Any]:
         return {
-            "model_name": self.MODEL_NAME
-            if "::" not in self.MODEL_NAME
-            else self.MODEL_NAME.split("::")[1],
+            "model_name": self.MODEL_NAME if "::" not in self.MODEL_NAME else self.MODEL_NAME.split("::")[1],
             "temperature": self.MODEL_TEMPERATURE,
             "request_timeout": self.MODEL_REQUEST_TIMEOUT,
             "verbose": self.VERBOSE,

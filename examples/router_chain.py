@@ -1,7 +1,9 @@
 from enum import Enum
 from typing import Any
-from funcchain import chain, settings
-from langchain.pydantic_v1 import BaseModel, Field, validator
+
+from langchain.pydantic_v1 import BaseModel, Field
+
+from funcchain import chain
 
 
 def handle_pdf_requests(user_query: str) -> None:
@@ -20,7 +22,7 @@ class Routes(str, Enum):
     pdf = "pdf"
     csv = "csv"
     normal_answer = "normal_answer"
-    
+
     def __call__(self, user_query: str) -> Any:
         match self.value:
             case self.pdf:

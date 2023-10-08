@@ -4,7 +4,7 @@ from typing import Union
 from langchain.output_parsers import PydanticOutputParser
 from langchain.schema import BaseOutputParser, StrOutputParser
 
-from funcchain.parser import ParserBaseModel, BoolOutputParser
+from funcchain.parser import BoolOutputParser, ParserBaseModel
 
 
 def get_parent_frame(depth: int = 5) -> FrameInfo:
@@ -15,11 +15,7 @@ def from_docstring() -> str:
     """
     Get the docstring of the parent caller function.
     """
-    doc_str = (
-        (caller_frame := get_parent_frame())
-        .frame.f_globals[caller_frame.function]
-        .__doc__
-    )
+    doc_str = (caller_frame := get_parent_frame()).frame.f_globals[caller_frame.function].__doc__
     return "\n".join([line.lstrip() for line in doc_str.split("\n")])
 
 
@@ -27,11 +23,7 @@ def get_output_type() -> type:
     """
     Get the output type annotation of the parent caller function.
     """
-    return (
-        (caller_frame := get_parent_frame())
-        .frame.f_globals[caller_frame.function]
-        .__annotations__["return"]
-    )
+    return (caller_frame := get_parent_frame()).frame.f_globals[caller_frame.function].__annotations__["return"]
 
 
 def parser_for(output_type: type) -> BaseOutputParser:

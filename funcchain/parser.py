@@ -1,18 +1,14 @@
-import json, copy
+import copy
+import json
 import re
 from typing import Callable, Optional, Type, TypeVar
-from typing_extensions import Self
 
 from langchain.output_parsers.format_instructions import PYDANTIC_FORMAT_INSTRUCTIONS
-from langchain.pydantic_v1 import BaseModel, ValidationError
-from langchain.schema.output_parser import BaseOutputParser, OutputParserException
 from langchain.output_parsers.openai_functions import PydanticOutputFunctionsParser
-from langchain.schema.output_parser import BaseGenerationOutputParser
-from langchain.schema import (
-    ChatGeneration,
-    Generation,
-    OutputParserException,
-)
+from langchain.pydantic_v1 import BaseModel, ValidationError
+from langchain.schema import ChatGeneration, Generation, OutputParserException
+from langchain.schema.output_parser import BaseGenerationOutputParser, BaseOutputParser
+from typing_extensions import Self
 
 T = TypeVar("T")
 
@@ -22,9 +18,7 @@ class LambdaOutputParser(BaseOutputParser[T]):
 
     def parse(self, text: str) -> T:
         if self._parse is None:
-            raise NotImplementedError(
-                "LambdaOutputParser.lambda_parse() is not implemented"
-            )
+            raise NotImplementedError("LambdaOutputParser.lambda_parse() is not implemented")
         return self._parse(text)
 
     @property
@@ -49,25 +43,23 @@ M = TypeVar("M", bound=BaseModel)
 
 class MultiToolParser(BaseGenerationOutputParser[M]):
     output_types: list[Type[M]]
-    
+
     def parse_result(self, result: list[Generation]) -> M:
         function_call = self._pre_parse_function_call(result)
-        
+
         output_type_names = [t.__name__.lower() for t in self.output_types]
-        
+
         if function_call["name"] not in output_type_names:
             raise OutputParserException("Invalid function call")
-        
+
         parser = self._get_parser_for(function_call["name"])
-        
+
         return parser.parse_result(result)
-    
+
     def _pre_parse_function_call(self, result: list[Generation]) -> dict:
         generation = result[0]
         if not isinstance(generation, ChatGeneration):
-            raise OutputParserException(
-                "This output parser can only be used with a chat generation."
-            )
+            raise OutputParserException("This output parser can only be used with a chat generation.")
         message = generation.message
         try:
             func_call = copy.deepcopy(message.additional_kwargs["function_call"])
@@ -81,8 +73,7 @@ class MultiToolParser(BaseGenerationOutputParser[M]):
         if output_type_iter is None:
             raise OutputParserException(f"No parser found for function: {function_name}")
         output_type: Type[M] = next(output_type_iter)
-        
-        
+
         return PydanticOutputFunctionsParser(pydantic_schema=output_type)
 
 
@@ -94,9 +85,7 @@ class ParserBaseModel(BaseModel):
     @classmethod
     def parse(cls, text: str) -> Self:  # type: ignore
         """Override for custom parsing."""
-        match = re.search(
-            r"\{.*\}", text.strip(), re.MULTILINE | re.IGNORECASE | re.DOTALL
-        )
+        match = re.search(r"\{.*\}", text.strip(), re.MULTILINE | re.IGNORECASE | re.DOTALL)
         json_str = ""
         if match:
             json_str = match.group()
@@ -145,9 +134,7 @@ class CodeBlock(ParserBaseModel):
 
     @classmethod
     def parse(cls, text: str) -> "CodeBlock":
-        matches = re.finditer(
-            r"```(?P<language>\w+)?\n?(?P<code>.*?)```", text, re.DOTALL
-        )
+        matches = re.finditer(r"```(?P<language>\w+)?\n?(?P<code>.*?)```", text, re.DOTALL)
         for match in matches:
             groupdict = match.groupdict()
             groupdict["language"] = groupdict.get("language", None)
@@ -161,7 +148,7 @@ class CodeBlock(ParserBaseModel):
                 )
 
             return cls(**groupdict)
-        
+
         return cls(code=text)  # TODO: fix this hack
         raise OutputParserException("Invalid codeblock")
 
