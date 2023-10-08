@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "funcchain"
-version = "0.0.10"
+version = "0.0.11"
 description = "🔖 write langchain prompts as python functions"
 authors = ["Shroominic <contact@shroominic.com>"]
 license = "MIT License"
@@ -24,7 +24,7 @@ mypy = ">=1.5"
 flake8 = ">=6.1"
 black = ">=23.7"
 pytest = ">=7.4"
-pre-commit = "^3.4.0"
+pre-commit = "^3.4"
 
 [build-system]
 requires = ["poetry-core"]
