@@ -5,9 +5,9 @@
 ## Demo
 
 ```python
-from longchain.pydantic_v1 import BaseModel, Field
+from langchain.pydantic_v1 import BaseModel, Field
 from typing import Union, List
-from funchain import chain
+from funcchain import chain
 
 class Item(BaseModel):
     name: str = Field(..., description="Name of the item")
@@ -23,7 +23,7 @@ class TodoList(BaseModel):
     todos: List[Item]
     urgency: int = Field(..., description="The urgency of all tasks (1-10)")
 
-def gather_infos(user_input: str) -> Union[TodoList, ShoppingList]:
+def extract_list(user_input: str) -> Union[TodoList, ShoppingList]:
     """
     USER_INPUT:
     {user_input}
@@ -32,16 +32,20 @@ def gather_infos(user_input: str) -> Union[TodoList, ShoppingList]:
     """
     return chain()
 
-def main():
-    user_input = input("Enter your list: ")
-    obj = gather_infos(user_input)
 
-    if isinstance(obj, ShoppingList):
-        print(obj.store)
+user_input = input("Enter your list: ")
+lst = extract_list(user_input)
 
-    print("Type: ", type(obj))
-    print("Object: ", obj)
+if isinstance(lst, ShoppingList):
+    print("Here is your Shopping List: ")
+    for item in lst.items:
+        print(f"{item.name}: {item.description}")
+    print(f"You need to go to: {lst.store}")
 
-if __name__ == "__main__":
-    main()
+if isinstance(lst, TodoList):
+    print("Here is your Todo List: ")
+    for item in lst.items:
+        print(f"{item.name}: {item.description}")
+    print(f"Urgency: {lst.urgency}")
+
 ```
