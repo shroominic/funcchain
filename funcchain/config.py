@@ -52,6 +52,7 @@ class FuncchainSettings(BaseSettings):
             "temperature": self.MODEL_TEMPERATURE,
             "request_timeout": self.MODEL_REQUEST_TIMEOUT,
             "verbose": self.VERBOSE,
+            "openai_api_key": self.OPENAI_API_KEY,
         }
 
 
