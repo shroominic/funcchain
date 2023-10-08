@@ -161,3 +161,20 @@ def pydantic_to_functions(pydantic_object: Type[BaseModel]) -> dict[str, Any]:
             },
         ],
     }
+
+
+def multi_pydantic_to_functions(pydantic_objects: list[Type[BaseModel]]) -> dict[str, Any]:
+    functions: list[dict[str, Any]] = [
+        pydantic_to_functions(pydantic_object)["functions"][0]
+        for pydantic_object in pydantic_objects
+    ]
+    
+    return {
+        "function_call": "auto",
+        "functions": functions,
+    }
+
+        
+        
+        
+        
