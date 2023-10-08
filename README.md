@@ -1,12 +1,19 @@
 # funcchain
 
-🔖 write langchain prompts as python functions
+```bash
+> pip install funcchain
+```
+
+## Introduction
+
+`funcchain` is the *most pythonic* way of writing cognitive systems. Leveraging pydantic models as output schemas combined with langchain in the backend allows for a seamless integration of llms into your apps.
+It works perfect with OpenAI Functions and soon with other models using JSONFormer.
 
 ## Demo
 
 ```python
-from langchain.pydantic_v1 import BaseModel, Field
 from typing import Union, List
+from langchain.pydantic_v1 import BaseModel, Field
 from funcchain import chain
 
 class Item(BaseModel):
@@ -44,8 +51,33 @@ if isinstance(lst, ShoppingList):
 
 if isinstance(lst, TodoList):
     print("Here is your Todo List: ")
-    for item in lst.items:
+    for item in lst.todos:
         print(f"{item.name}: {item.description}")
     print(f"Urgency: {lst.urgency}")
 
+```
+
+## Features
+
+- increased productivity
+- prompts as Python functions
+- pydantic models as output schemas
+- langchain schemas in the backend
+- async support
+- fstrings or jinja2 templates for prompts
+- fully utilises OpenAI Functions
+- minimalistic and easy to use
+
+## Documentation
+
+Coming soon and feel free to contribute
+
+## Contribution
+
+You want to contribute? That's great! Please run the dev setup to get started:
+
+```bash
+> git clone https://github.com/shroominic/funcchain.git && cd funcchain
+
+> ./dev_setup.sh
 ```
