@@ -1,14 +1,14 @@
 [tool.poetry]
 name = "funcchain"
-version = "0.1.0"
-description = "🔖 write langchain prompts as python functions"
+version = "0.1.1"
+description = "🔖 write prompts as python functions"
 authors = ["Shroominic <contact@shroominic.com>"]
 license = "MIT License"
 readme = "README.md"
 
 [tool.poetry.dependencies]
 python = ">=3.10, <4.0"
-langchain = ">=0.0.277"
+langchain = ">=0.0.312"
 pydantic = "^2"
 python-dotenv = "^1"
 pydantic-settings = "^2"
