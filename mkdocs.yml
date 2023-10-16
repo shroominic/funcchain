@@ -1,0 +1,5 @@
+site_name: Funcchain - Docs
+theme:
+  name: material
+  palette:
+    scheme: slate
