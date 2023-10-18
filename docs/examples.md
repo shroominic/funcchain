@@ -61,3 +61,6 @@ print(asyncio.run(async_hello()))
 This allows you to easily call AI functions from async code.
 
 The funcchain project makes it really simple to leverage large language models in your Python code! Check out the source code for more examples.
+
+## Advanced Examples
+For advanced examples, checkout the examples directory [here](https://github.com/shroominic/funcchain/tree/main/examples)
