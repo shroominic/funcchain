@@ -1,4 +1,24 @@
 site_name: Funcchain - Docs
+site_author: Shroominic
+site_url: https://shroominic.github.io/funcchain/
+repo_name: shroominic/funcchain
+repo_url: https://github.com/shroominic/funcchain/
+
+nav:
+  - 'Getting Started':
+    - 'Welcome': 'index.md'
+    - 'Installation': 'getting-started/installation.md'
+    - 'Usage': 'getting-started/usage.md'
+  - 'Concepts':
+    - 'Overview': 'overview.md'
+    - 'Chain': 'chain.md'
+    - 'Input Args': 'input.md'
+    - 'Prompt Template': 'prompt.md'
+    - 'Output Parser': 'parser.md'
+    - 'Pydantic Models': 'models.md'
+  - 'Settings': 'settings.md'
+  - 'Examples': 'examples.md'
+
 theme:
   name: material
   palette:
