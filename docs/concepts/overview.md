@@ -9,7 +9,6 @@
 | settings | Global settings object |
 | BaseModel | Pydantic model base class |
 
-
 ## chain
 
 The `chain` function is the main interface to get responses from the assistant. It handles creating the prompt, querying the model, and parsing the response.

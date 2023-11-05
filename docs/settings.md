@@ -5,6 +5,7 @@
 The configuration settings for Funcchain are encapsulated within the `FuncchainSettings` class. This class inherits from Pydantic's `BaseSettings`.
 
 `funcchain/config.py`
+
 ```python
 class FuncchainSettings(BaseSettings):
     ...
