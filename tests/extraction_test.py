@@ -1,4 +1,4 @@
-from funcchain import BaseModel, chain
+from funcchain import BaseModel, achain, chain
 
 
 class Task(BaseModel):
@@ -18,11 +18,11 @@ def description(task: Task) -> str:
     return chain()
 
 
-def extract_task(task_description: Task) -> Task:
+async def extract_task(task_description: Task) -> Task:
     """
     EXTRACT TASK: {task_description}
     """
-    return chain()
+    return await achain()
 
 
 def compare_tasks(task: Task, task2: Task) -> bool:
@@ -37,6 +37,8 @@ def compare_tasks(task: Task, task2: Task) -> bool:
 
 
 def test_extraction():
+    from asyncio import run as _await
+
     task = Task(
         name="Do dishes",
         description="Do the dishes in the kitchen.",
@@ -45,7 +47,7 @@ def test_extraction():
     )
 
     task_description = description(task)
-    task2 = extract_task(task_description)
+    task2 = _await(extract_task(task_description))
 
     assert compare_tasks(task, task2)
 
