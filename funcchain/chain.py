@@ -1,7 +1,10 @@
-from typing import Any, TypeVar, Union
+from types import UnionType
+from typing import Generator, TypeVar, Union
 
 from langchain.callbacks import get_openai_callback
+from langchain.chat_models.base import BaseChatModel
 from langchain.output_parsers.openai_functions import PydanticOutputFunctionsParser
+from langchain.prompts import ChatPromptTemplate
 from langchain.pydantic_v1 import BaseModel
 from langchain.schema import AIMessage, BaseMessage, BaseOutputParser, HumanMessage
 from langchain.schema.runnable import RunnableSequence, RunnableWithFallbacks
@@ -26,67 +29,92 @@ from funcchain.utils import (
 T = TypeVar("T")
 
 
+def create_union_chain(
+    output_type: type[BaseModel],
+    instruction: str,
+    system: str = settings.DEFAULT_SYSTEM_PROMPT,
+    LLM: BaseChatModel | RunnableWithFallbacks | None = None,
+    **input_kwargs: str,
+) -> RunnableSequence[dict[str, str], T]:
+    output_types = output_type.__args__  # type: ignore
+    output_type_names = [t.__name__ for t in output_types]
+
+    input_kwargs["format_instructions"] = f"Extract to one of these output types: {output_type_names}."
+
+    functions = multi_pydantic_to_functions(output_types)
+
+    if isinstance(LLM, RunnableWithFallbacks):
+        LLM = LLM.runnable.bind(**functions).with_fallbacks(
+            [fallback.bind(**functions) for fallback in LLM.fallbacks if hasattr(LLM, "fallbacks")]
+        )
+    else:
+        LLM = LLM.bind(**functions)  # type: ignore
+
+    prompt = create_prompt(
+        instruction,
+        system,
+        [
+            HumanMessage(content="Can you use a function call for the next response?"),
+            AIMessage(content="Yeah I can do that, just tell me what you need!"),
+        ],
+        **input_kwargs,
+    )
+
+    return prompt | LLM | MultiToolParser(output_types=output_types)  # type: ignore
+
+
+def create_pydanctic_chain(
+    output_type: type[BaseModel],
+    prompt: ChatPromptTemplate,
+    LLM: BaseChatModel | RunnableWithFallbacks,
+    **input_kwargs: str,
+) -> RunnableSequence[dict[str, str], T]:
+    input_kwargs["format_instructions"] = f"Extract to {output_type.__name__}."
+    functions = pydantic_to_functions(output_type)
+    LLM = (
+        LLM.runnable.bind(**functions).with_fallbacks(  # type: ignore
+            [fallback.bind(**functions) for fallback in LLM.fallbacks if hasattr(LLM, "fallbacks")]
+        )
+        if isinstance(LLM, RunnableWithFallbacks)
+        else LLM.bind(**functions)
+    )
+    return prompt | LLM | PydanticOutputFunctionsParser(pydantic_schema=output_type)  # type: ignore
+
+
 def create_chain(
     instruction: str | None = None,
     system: str = settings.DEFAULT_SYSTEM_PROMPT,
     parser: BaseOutputParser[T] | None = None,
     context: list[BaseMessage] = [],
-    input_kwargs: dict[str, Any] = {},
-) -> RunnableSequence:
+    input_kwargs: dict[str, str] = {},
+) -> RunnableSequence[dict[str, str], T]:
     output_type = get_output_type()
     instruction = instruction or from_docstring()
     parser = parser or parser_for(output_type)
     input_kwargs.update(kwargs_from_parent())
 
-    _add_format_instructions(parser, instruction, input_kwargs)
+    LLM = settings.LLM or model_from_env()
+    func_model = is_function_model(LLM)
+
+    if parser and not func_model:
+        _add_format_instructions(parser, instruction, input_kwargs)
 
     prompt = create_prompt(instruction, system, context, **input_kwargs)
-    LLM = settings.LLM or model_from_env()
 
     if is_function_model(LLM):
-        if getattr(output_type, "__origin__", None) is Union:
-            output_types = output_type.__args__  # type: ignore
-            output_type_names = [t.__name__ for t in output_types]
+        if getattr(output_type, "__origin__", None) is Union or isinstance(output_type, UnionType):
+            return create_union_chain(output_type, instruction, system, LLM, **input_kwargs)
 
-            input_kwargs["format_instructions"] = f"Extract to one of these output types: {output_type_names}."
-
-            functions = multi_pydantic_to_functions(output_types)
-
-            if isinstance(LLM, RunnableWithFallbacks):
-                LLM = LLM.runnable.bind(**functions).with_fallbacks(
-                    [fallback.bind(**functions) for fallback in LLM.fallbacks if hasattr(LLM, "fallbacks")]
-                )
-            else:
-                LLM = LLM.bind(**functions)  # type: ignore
-
-            prompt = create_prompt(
-                instruction,
-                system,
-                [
-                    HumanMessage(content="Can you use a function call for the next response?"),
-                    AIMessage(content="Yeah I can do that, just tell me what you need!"),
-                ],
-                **input_kwargs,
-            )
-
-            return prompt | LLM | MultiToolParser(output_types=output_types)
         if issubclass(output_type, BaseModel) and not issubclass(output_type, ParserBaseModel):
-            input_kwargs["format_instructions"] = f"Extract to {output_type.__name__}."
-            functions = pydantic_to_functions(output_type)
-            if isinstance(LLM, RunnableWithFallbacks):
-                LLM = LLM.runnable.bind(**functions).with_fallbacks(
-                    [fallback.bind(**functions) for fallback in LLM.fallbacks if hasattr(LLM, "fallbacks")]
-                )
-            else:
-                LLM = LLM.bind(**functions)  # type: ignore
-            return prompt | LLM | PydanticOutputFunctionsParser(pydantic_schema=output_type)
-    return prompt | LLM | parser
+            return create_pydanctic_chain(output_type, prompt, LLM, **input_kwargs)
+
+    return prompt | LLM | parser  # type: ignore
 
 
 def _add_format_instructions(
     parser: BaseOutputParser,
     instruction: str,
-    input_kwargs: dict,
+    input_kwargs: dict[str, str],
 ) -> None:
     try:
         if format_instructions := parser.get_format_instructions():
