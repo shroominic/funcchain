@@ -5,8 +5,8 @@ from typing import Any, NoReturn, Type
 from docstring_parser import parse
 from langchain.chat_models import ChatOpenAI
 from langchain.chat_models.base import BaseChatModel
-from langchain.llms.base import BaseLanguageModel
 from langchain.pydantic_v1 import BaseModel
+from langchain.schema.language_model import BaseLanguageModel
 from langchain.schema.messages import HumanMessage, SystemMessage
 from langchain.schema.output_parser import OutputParserException
 from langchain.schema.runnable import Runnable, RunnableWithFallbacks
@@ -27,11 +27,11 @@ def retry_parse(retry: int):
 
             @wraps(fn)
             async def async_wrapper(*args, **kwargs):
-                for _ in range(retry):
+                for r in range(retry):
                     try:
                         return await fn(*args, **kwargs)
                     except OutputParserException as e:
-                        if _ == retry - 1:
+                        if r == retry - 1:
                             raise e
                         await asyncio.sleep(1)
 
@@ -41,11 +41,11 @@ def retry_parse(retry: int):
 
             @wraps(fn)
             def sync_wrapper(*args, **kwargs):
-                for _ in range(retry):
+                for r in range(retry):
                     try:
                         return fn(*args, **kwargs)
                     except OutputParserException as e:
-                        if _ == retry - 1:
+                        if r == retry - 1:
                             raise e
 
             return sync_wrapper
