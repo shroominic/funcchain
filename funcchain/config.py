@@ -44,7 +44,6 @@ class FuncchainSettings(BaseSettings):
         return {
             "model_name": self.MODEL_NAME if "::" not in self.MODEL_NAME else self.MODEL_NAME.split("::")[1],
             "temperature": self.MODEL_TEMPERATURE,
-            "request_timeout": self.MODEL_REQUEST_TIMEOUT,
             "verbose": self.VERBOSE,
             "openai_api_key": self.OPENAI_API_KEY,
         }
