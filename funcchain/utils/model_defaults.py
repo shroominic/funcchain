@@ -107,13 +107,16 @@ def create_long_llm() -> RunnableWithFallbacks:
     """
     settings.MAX_TOKENS = 8192
     if settings.AZURE_API_KEY:
-        config = {
-            "openai_api_type": "azure",
-            "openai_api_key": settings.AZURE_API_KEY,
-            "openai_api_base": settings.AZURE_API_BASE,
-            "openai_api_version": settings.AZURE_API_VERSION,
-        }
-        config.update(settings.model_kwargs())
+        # remove OPENAI_API_KEY from the env variables
+        config = settings.model_kwargs()
+        config.update(
+            {
+                "openai_api_type": "azure",
+                "openai_api_key": settings.AZURE_API_KEY,
+                "openai_api_base": settings.AZURE_API_BASE,
+                "openai_api_version": settings.AZURE_API_VERSION,
+            }
+        )
         print("Model: AZURE")
         return AzureChatOpenAI(
             deployment_name=settings.AZURE_DEPLOYMENT_NAME,
