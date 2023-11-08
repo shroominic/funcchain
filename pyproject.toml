@@ -1,19 +1,21 @@
 [tool.poetry]
 name = "funcchain"
-version = "0.1.1"
+version = "0.1.2"
 description = "🔖 write prompts as python functions"
 authors = ["Shroominic <contact@shroominic.com>"]
 license = "MIT License"
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = ">=3.10, <4.0"
-langchain = ">=0.0.312"
-pydantic = "^2"
+python = ">=3.10, <3.13"
+numpy = ">=1.26"
+langchain = "0.0.331rc3"
+pydantic = ">2"
+aiohttp = ">=3.9.0b0"
 python-dotenv = "^1"
 pydantic-settings = "^2"
 tiktoken = ">=0.4"
-openai = ">=0.28"
+openai = ">=1.1"
 rich = ">=13"
 docstring-parser = ">=0.15"
 jinja2 = "^3"
