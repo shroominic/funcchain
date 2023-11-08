@@ -114,8 +114,8 @@ def create_long_llm() -> RunnableWithFallbacks:
             {
                 "openai_api_type": "azure",
                 "openai_api_key": settings.AZURE_API_KEY,
-                "openai_api_base": settings.AZURE_API_BASE,
-                "openai_api_version": settings.AZURE_API_VERSION,
+                "azure_endpoint": settings.AZURE_API_BASE,
+                "api_version": settings.AZURE_API_VERSION,
             }
         )
         print("Model: AZURE")
