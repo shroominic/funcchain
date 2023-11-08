@@ -109,6 +109,7 @@ def create_long_llm() -> RunnableWithFallbacks:
     if settings.AZURE_API_KEY:
         # remove OPENAI_API_KEY from the env variables
         config = settings.model_kwargs()
+        config.pop("openai_api_key", None)
         config.update(
             {
                 "openai_api_type": "azure",
