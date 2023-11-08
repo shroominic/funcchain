@@ -44,7 +44,7 @@ M = TypeVar("M", bound=BaseModel)
 class MultiToolParser(BaseGenerationOutputParser[M]):
     output_types: list[Type[M]]
 
-    def parse_result(self, result: list[Generation]) -> M:
+    def parse_result(self, result: list[Generation], *, partial: bool = False) -> M:
         function_call = self._pre_parse_function_call(result)
 
         output_type_names = [t.__name__.lower() for t in self.output_types]
