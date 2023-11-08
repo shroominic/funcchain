@@ -1,6 +1,4 @@
-from langchain.pydantic_v1 import BaseModel
-
-from funcchain import chain
+from funcchain import BaseModel, chain
 
 
 class Task(BaseModel):
@@ -15,7 +13,7 @@ class Task(BaseModel):
 
 def description(task: Task) -> str:
     """
-    CREATE TASK DESCRIPTION: {task}
+    Create a description of the task.
     """
     return chain()
 
