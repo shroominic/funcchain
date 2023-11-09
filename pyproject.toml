@@ -19,6 +19,7 @@ openai = ">=1.1"
 rich = ">=13"
 docstring-parser = ">=0.15"
 jinja2 = "^3"
+pillow = "^10.1.0"
 
 
 [tool.poetry.group.dev.dependencies]
