@@ -3,7 +3,6 @@ from langchain.pydantic_v1 import BaseModel, Field
 from PIL import Image  # type: ignore
 
 settings.MODEL_NAME = "gpt-4-vision-preview"
-settings.MODEL_TEMPERATURE = 0.9
 
 
 class AnalysisResult(BaseModel):
@@ -22,7 +21,7 @@ def analyse_image(image: Image.Image) -> AnalysisResult:
 
 
 if __name__ == "__main__":
-    example_image = Image.open("examples/cyberspace_landscape.jpg")
+    example_image = Image.open("examples/assets/cyberspace_landscape.jpg")
     
     result = analyse_image(example_image)
     
