@@ -1,23 +1,35 @@
-from funcchain import chain
+import asyncio
+from funcchain import achain, settings
+from langchain.pydantic_v1 import BaseModel
+
+settings.MODEL_TEMPERATURE = 1
 
 
-def random_city() -> str:
+class StartupConcept(BaseModel):
+    name: str
+    description: str
+    
+
+async def startup_generator(topic: str) -> StartupConcept:
     """
-    Tell me a random city, i need this for a game.
+    Generate a random startup for the given topic.
     """
-    return chain()
+    return await achain()
 
 
-async def random_city_async() -> str:
-    """
-    Tell me a random city, i need this for a game.
-    """
-    return await chain()
-
+async def generate_random_startups(topic: str, amount: int = 3) -> list[StartupConcept]:
+    return await asyncio.gather(
+        *[
+            startup_generator(topic)
+            for _ in range(amount)
+        ]
+    )
 
 if __name__ == "__main__":
-    print(random_city())
+    topic = "AI generated Vegan Recipes"
+    
+    startups = asyncio.run(generate_random_startups(topic))
 
-    from asyncio import run
-
-    print(run(random_city_async()))
+    for startup in startups:
+        print("name:", startup.name)
+        print("concept:", startup.description)
