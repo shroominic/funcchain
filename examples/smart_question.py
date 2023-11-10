@@ -7,6 +7,7 @@ from funcchain import Matrix, achain  # type: ignore
 # the quality of the answer.
 
 
+# NOT YET WORKING (TODO)
 async def generate_answer(question: Matrix[str], context: list[str] = []) -> str:
     """
     Generate an answer to the question based on the context.
