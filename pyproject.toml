@@ -9,7 +9,7 @@ readme = "README.md"
 [tool.poetry.dependencies]
 python = ">=3.10, <3.13"
 numpy = ">=1.26"
-langchain = "0.0.331rc3"
+langchain = ">=0.0.333"
 pydantic = ">2"
 aiohttp = ">=3.9.0b0"
 python-dotenv = "^1"
