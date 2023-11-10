@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "funcchain"
-version = "0.1.2"
+version = "0.1.3"
 description = "🔖 write prompts as python functions"
 authors = ["Shroominic <contact@shroominic.com>"]
 license = "MIT License"
