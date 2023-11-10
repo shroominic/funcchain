@@ -1,6 +1,7 @@
 from types import UnionType
-from typing import Generator, TypeVar, Union
+from typing import TypeVar, Union
 
+from PIL import Image  # type: ignore
 from langchain.callbacks import get_openai_callback
 from langchain.chat_models.base import BaseChatModel
 from langchain.output_parsers.openai_functions import PydanticOutputFunctionsParser
@@ -17,6 +18,7 @@ from funcchain.utils import (
     get_output_type,
     get_parent_frame,
     is_function_model,
+    is_vision_model,
     kwargs_from_parent,
     log,
     model_from_env,
@@ -33,6 +35,7 @@ def create_union_chain(
     output_type: type[BaseModel],
     instruction: str,
     system: str = settings.DEFAULT_SYSTEM_PROMPT,
+    context: list[BaseMessage] = [],
     LLM: BaseChatModel | RunnableWithFallbacks | None = None,
     **input_kwargs: str,
 ) -> RunnableSequence[dict[str, str], T]:
@@ -54,9 +57,11 @@ def create_union_chain(
         instruction,
         system,
         [
+            *context,
             HumanMessage(content="Can you use a function call for the next response?"),
             AIMessage(content="Yeah I can do that, just tell me what you need!"),
         ],
+        images=[],
         **input_kwargs,
     )
 
@@ -92,18 +97,23 @@ def create_chain(
     instruction = instruction or from_docstring()
     parser = parser or parser_for(output_type)
     input_kwargs.update(kwargs_from_parent())
-
+    
     LLM = settings.LLM or model_from_env()
     func_model = is_function_model(LLM)
 
     if parser and not func_model:
-        _add_format_instructions(parser, instruction, input_kwargs)
+        instruction = _add_format_instructions(parser, instruction, input_kwargs)
 
-    prompt = create_prompt(instruction, system, context, **input_kwargs)
+    images = []
+    if is_vision_model(LLM):
+        images = [v for v in input_kwargs.values() if isinstance(v, Image.Image)]
+        input_kwargs = {k: v for k, v in input_kwargs.items() if not isinstance(v, Image.Image)}
+    
+    prompt = create_prompt(instruction, system, context, images=images, **input_kwargs)
 
-    if is_function_model(LLM):
+    if func_model:
         if getattr(output_type, "__origin__", None) is Union or isinstance(output_type, UnionType):
-            return create_union_chain(output_type, instruction, system, LLM, **input_kwargs)
+            return create_union_chain(output_type, instruction, system, context, LLM, **input_kwargs)
 
         if issubclass(output_type, BaseModel) and not issubclass(output_type, ParserBaseModel):
             return create_pydanctic_chain(output_type, prompt, LLM, **input_kwargs)
@@ -115,13 +125,14 @@ def _add_format_instructions(
     parser: BaseOutputParser,
     instruction: str,
     input_kwargs: dict[str, str],
-) -> None:
+) -> str:
     try:
         if format_instructions := parser.get_format_instructions():
-            instruction += "\n\n{format_instructions}"
+            instruction += "\n{format_instructions}"
             input_kwargs["format_instructions"] = format_instructions
+        return instruction
     except NotImplementedError:
-        pass
+        return instruction
 
 
 @retry_parse(5)
