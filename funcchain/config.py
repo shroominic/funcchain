@@ -46,6 +46,7 @@ class FuncchainSettings(BaseSettings):
             "temperature": self.MODEL_TEMPERATURE,
             "verbose": self.VERBOSE,
             "openai_api_key": self.OPENAI_API_KEY,
+            "max_tokens": self.MAX_TOKENS,
         }
 
 
