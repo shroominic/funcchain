@@ -3,6 +3,7 @@ from langchain.pydantic_v1 import BaseModel, Field
 from PIL import Image  # type: ignore
 
 settings.MODEL_NAME = "gpt-4-vision-preview"
+settings.MODEL_TEMPERATURE = 0.9
 
 
 class AnalysisResult(BaseModel):
