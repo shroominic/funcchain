@@ -56,7 +56,7 @@ class Task(BaseModel):
     difficulty: int = Field(..., description="Difficulty of the task (1-10)")
 
     @validator("difficulty")
-    def validate_difficulty(cls, v):
+    def validate_difficulty(cls, v: int) -> int:
         if v < 1 or v > 10:
             raise ValueError("Difficulty must be between 1 and 10")
         return v
