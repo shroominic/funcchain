@@ -45,3 +45,9 @@ line_length = 120
 
 [tool.flake8]
 max-line-length = 120
+
+[tool.mypy]
+ignore_missing_imports = true
+disallow_untyped_defs = true
+disallow_untyped_calls = true
+disallow_incomplete_defs = true
