@@ -106,6 +106,8 @@ def gather_llm_type(llm: BaseLanguageModel | Runnable, func_check: bool = True) 
 
 
 FUNCTION_MODEL: bool | None = None
+
+
 def is_function_model(llm: BaseLanguageModel | RunnableWithFallbacks) -> bool:
     global FUNCTION_MODEL
     if FUNCTION_MODEL is None:
@@ -114,6 +116,8 @@ def is_function_model(llm: BaseLanguageModel | RunnableWithFallbacks) -> bool:
 
 
 VISION_MODEL: bool | None = None
+
+
 def is_vision_model(llm: BaseLanguageModel | RunnableWithFallbacks) -> bool:
     global VISION_MODEL
     if VISION_MODEL is None:
