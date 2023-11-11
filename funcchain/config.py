@@ -23,19 +23,9 @@ class FuncchainSettings(BaseSettings):
 
     # KEYS
     OPENAI_API_KEY: Optional[str] = None
-    AZURE_API_KEY: Optional[str] = None
-    ANTHROPIC_API_KEY: Optional[str] = None
-    GOOGLE_API_KEY: Optional[str] = None
-    JINACHAT_API_KEY: Optional[str] = None
-
-    # AZURE
-    AZURE_API_BASE: Optional[str] = None
-    AZURE_DEPLOYMENT_NAME: str = "gpt-4"
-    AZURE_DEPLOYMENT_NAME_LONG: Optional[str] = None
-    AZURE_API_VERSION: str = "2023-07-01-preview"
 
     # KWARGS
-    MODEL_NAME: str = "openai::gpt-3.5-turbo"
+    MODEL_NAME: str = "openai::gpt-3.5-turbo-1106"
     MODEL_TEMPERATURE: float = 0.1
     MODEL_REQUEST_TIMEOUT: float = 210
     MODEL_VERBOSE: bool = False
