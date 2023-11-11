@@ -3,15 +3,8 @@ from typing import Any
 from dotenv import load_dotenv
 from langchain.chat_models import AzureChatOpenAI, ChatAnthropic, ChatGooglePalm, ChatOpenAI, JinaChat
 from langchain.chat_models.base import BaseChatModel
-from langchain.schema.runnable import RunnableWithFallbacks
 
 from funcchain.config import settings
-
-
-def auto_model(**kwargs: Any) -> BaseChatModel | RunnableWithFallbacks:
-    if settings.AZURE_DEPLOYMENT_NAME_LONG:
-        return create_long_llm()
-    return model_from_env(**kwargs)
 
 
 def model_from_env(
@@ -97,55 +90,3 @@ def model_from_name(
         "Make sure to use the correct env variables."
         # "For more info: docs.url"
     )
-
-
-def create_long_llm() -> RunnableWithFallbacks:
-    """
-    Create a LLM model with fallbacks for long context.
-    Prefer Azure if available.
-
-    Raises:
-    - ValueError: If no API key is provided.
-    """
-    settings.MAX_TOKENS = 8192
-    if settings.AZURE_API_KEY:
-        # remove OPENAI_API_KEY from the env variables
-        config = settings.model_kwargs()
-        config.pop("openai_api_key", None)
-        config.update(
-            {
-                "openai_api_type": "azure",
-                "openai_api_key": settings.AZURE_API_KEY,
-                "azure_endpoint": settings.AZURE_API_BASE,
-                "api_version": settings.AZURE_API_VERSION,
-            }
-        )
-        print("Model: AZURE")
-        return AzureChatOpenAI(
-            azure_deployment=settings.AZURE_DEPLOYMENT_NAME,
-            model=config.pop("model", None) or "gpt-3.5-turbo",
-            **config,
-        ).with_fallbacks(
-            [
-                AzureChatOpenAI(
-                    model=(model + "-32k") if (model := config.pop("model", None)) else "gpt-3.5-turbo-16k",
-                    azure_deployment=settings.AZURE_DEPLOYMENT_NAME_LONG or "gpt-4-32k",
-                    **config,
-                )
-            ]
-        )
-    if settings.OPENAI_API_KEY:
-        config = settings.model_kwargs()
-        print("Model: OPENAI")
-        return ChatOpenAI(
-            model=config.pop("model", None) or "gpt-3.5-turbo",
-            **config,
-        ).with_fallbacks(
-            [
-                ChatOpenAI(
-                    model=(model + "-32k") if (model := config.pop("model", None)) else "gpt-3.5-turbo-16k",
-                    **config,
-                ),
-            ]
-        )
-    raise ValueError("Not OpenAI API key provided.")
