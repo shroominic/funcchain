@@ -18,7 +18,7 @@ def description(task: Task) -> str:
     return chain()
 
 
-async def extract_task(task_description: Task) -> Task:
+async def extract_task(task_description: str) -> Task:
     """
     EXTRACT TASK: {task_description}
     """
@@ -36,7 +36,7 @@ def compare_tasks(task: Task, task2: Task) -> bool:
     return chain()
 
 
-def test_extraction():
+def test_extraction() -> None:
     from asyncio import run as _await
 
     task = Task(
