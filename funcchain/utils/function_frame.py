@@ -9,6 +9,9 @@ from funcchain.parser import BoolOutputParser, ParserBaseModel
 
 
 def get_parent_frame(depth: int = 5) -> FrameInfo:
+    """
+    Get the dep'th parent function information.
+    """
     return getouterframes(currentframe())[depth]
 
 
@@ -36,24 +39,24 @@ def parser_for(output_type: type) -> BaseOutputParser | None:
     """
     if isinstance(output_type, types.UnionType):
         return None
+    #     return MultiPydanticOutputParser(pydantic_objects=output_type.__args__)
     if getattr(output_type, "__origin__", None) is Union:
         output_type = output_type.__args__[0]  # type: ignore
         return None
+    #     return MultiPydanticOutputParser(pydantic_objects=output_type.__args__)
     if output_type is str:
         return StrOutputParser()
     if output_type is bool:
         return BoolOutputParser()
     if issubclass(output_type, ParserBaseModel):
-        return output_type.output_parser()
-    from langchain.pydantic_v1 import BaseModel
+        return output_type.output_parser()  # type: ignore
+
+    from pydantic.v1 import BaseModel
 
     if issubclass(output_type, BaseModel):
         return PydanticOutputParser(pydantic_object=output_type)
-    # TODO: Add support for Union without function calling
-    # if getattr(output_type, "__origin__", None) is Union:
-    #     return MultiPydanticOutputParser(pydantic_objects=output_type.__args__)
     else:
-        raise NotImplementedError(f"Unknown output type: {output_type}")
+        raise RuntimeError(f"Output Type is not supported: {output_type}")
 
 
 def kwargs_from_parent() -> dict[str, str]:
