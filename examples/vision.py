@@ -1,5 +1,5 @@
 from langchain.pydantic_v1 import BaseModel, Field
-from PIL import Image  # type: ignore
+from PIL import Image
 
 from funcchain import chain, settings
 
