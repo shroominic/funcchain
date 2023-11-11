@@ -5,7 +5,7 @@ from langchain.prompts import ChatPromptTemplate
 from langchain.prompts.chat import BaseStringMessagePromptTemplate, MessagePromptTemplateT
 from langchain.prompts.prompt import PromptTemplate
 from langchain.schema import BaseMessage, HumanMessage, SystemMessage
-from PIL import Image  # type: ignore
+from PIL import Image
 
 from funcchain.utils import count_tokens, image_to_base64_url
 
