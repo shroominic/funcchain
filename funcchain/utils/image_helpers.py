@@ -1,7 +1,7 @@
 from base64 import b64encode
 from io import BytesIO
 
-from PIL import Image  # type: ignore
+from PIL import Image
 
 
 def image_to_base64_url(image: Image.Image) -> str:
