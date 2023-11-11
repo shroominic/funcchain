@@ -1,8 +1,8 @@
 import re
 from typing import Optional
 
-from langchain.pydantic_v1 import BaseModel, Field
 from langchain.schema import OutputParserException
+from pydantic.v1 import BaseModel, Field
 
 from .parser import ParserBaseModel
 
