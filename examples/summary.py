@@ -1,5 +1,3 @@
-# ENV: OPENAI_API_KEY = "sk-******************"
-
 from funcchain import chain
 
 
