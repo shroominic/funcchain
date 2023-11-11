@@ -11,7 +11,7 @@ def summary(file_content: str) -> str:
     return chain()
 
 
-def main():
+def main() -> None:
     file_path = input("\nEnter file path: ")
 
     with open(file_path, "r") as f:
