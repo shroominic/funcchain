@@ -40,7 +40,7 @@ async def compare_tasks(task1: Task, task2: Task) -> bool:
     return await achain()
 
 
-def test_extraction():
+def test_extraction() -> None:
     task = Task(
         name="Do dishes",
         description="Do the dishes in the kitchen.",
