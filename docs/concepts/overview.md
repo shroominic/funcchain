@@ -89,7 +89,7 @@ Usage:
 
 ```python
 from funcchain import chain
-from langchain.pydantic_v1 import BaseModel, Field
+from pydantic.v1 import BaseModel, Field
 
 
 class Article(BaseModel):
