@@ -1,6 +1,6 @@
 from typing import List, Union
 
-from langchain.pydantic_v1 import BaseModel, Field
+from pydantic.v1 import BaseModel, Field
 
 from funcchain import chain
 
