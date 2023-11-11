@@ -1,24 +1,20 @@
 from string import Formatter
-from PIL import Image  # type: ignore
+from typing import Any, Type
 
 from langchain.prompts import ChatPromptTemplate
 from langchain.prompts.chat import BaseStringMessagePromptTemplate, MessagePromptTemplateT
-from langchain.schema import BaseMessage, SystemMessage, HumanMessage
-
-from typing import (
-    Any,
-    Type,
-)
-
 from langchain.prompts.prompt import PromptTemplate
+from langchain.schema import BaseMessage, HumanMessage, SystemMessage
+from PIL import Image  # type: ignore
 
 from funcchain.utils import count_tokens, image_to_base64_url
 
 
 class HumanImageMessagePromptTemplate(BaseStringMessagePromptTemplate):
     """Human message prompt template. This is a message sent from the user."""
+
     images: list[str] = []
-    
+
     def format(self, **kwargs: Any) -> BaseMessage:
         """Format the prompt template.
 
@@ -32,7 +28,8 @@ class HumanImageMessagePromptTemplate(BaseStringMessagePromptTemplate):
         return HumanMessage(
             content=[
                 {
-                    "type": "text", "text": text,
+                    "type": "text",
+                    "text": text,
                 },
                 *[
                     {
@@ -43,7 +40,7 @@ class HumanImageMessagePromptTemplate(BaseStringMessagePromptTemplate):
                         },
                     }
                     for image in self.images
-                ]
+                ],
             ],
             additional_kwargs=self.additional_kwargs,
         )
@@ -69,7 +66,7 @@ class HumanImageMessagePromptTemplate(BaseStringMessagePromptTemplate):
         prompt = PromptTemplate.from_template(template, template_format=template_format)
         kwargs["images"] = images
         return cls(prompt=prompt, **kwargs)
-    
+
 
 def create_prompt(
     instruction: str,
@@ -90,9 +87,9 @@ def create_prompt(
             if base_tokens + content_tokens > settings.MAX_TOKENS:
                 input_kwargs[k] = v[: (settings.MAX_TOKENS - base_tokens) * 2 // 3]
                 print("Truncated: ", len(input_kwargs[k]))
-        
+
     template_format = "jinja2" if "{{" in instruction or "{%" in instruction else "f-string"
-    
+
     required_f_str_vars = extract_fstring_vars(instruction)  # TODO: jinja2
     if "format_instructions" in required_f_str_vars:
         required_f_str_vars.remove("format_instructions")
@@ -102,7 +99,7 @@ def create_prompt(
     instruction = added_instruction + instruction
 
     images = [image_to_base64_url(image) for image in images]
-    
+
     return ChatPromptTemplate.from_messages(
         [
             SystemMessage(content=system),
@@ -111,7 +108,7 @@ def create_prompt(
                 template=instruction,
                 template_format=template_format,
                 images=images,
-            )
+            ),
         ]
     )
 
