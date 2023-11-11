@@ -147,11 +147,14 @@ def chain(
     """
     Get response from chatgpt for provided instructions.
     """
+    chain = create_chain(instruction, system, parser, context, input_kwargs)
+
     with get_openai_callback() as cb:
-        chain = create_chain(instruction, system, parser, context, input_kwargs).invoke(input_kwargs)
+        result = chain.invoke(input_kwargs)
         if cb.total_tokens != 0:
             log(f"{cb.total_tokens:05}T / {cb.total_cost:.3f}$ - {get_parent_frame(3).function}")
-    return chain
+
+    return result
 
 
 @retry_parse(5)
@@ -165,8 +168,11 @@ async def achain(
     """
     Get response from chatgpt for provided instructions.
     """
+    chain = create_chain(instruction, system, parser, context, input_kwargs)
+
     with get_openai_callback() as cb:
-        chain = await create_chain(instruction, system, parser, context, input_kwargs).ainvoke(input_kwargs)
+        result = await chain.ainvoke(input_kwargs)
         if cb.total_tokens != 0:
             log(f"{cb.total_tokens:05}T / {cb.total_cost:.3f}$ - {get_parent_frame(3).function}")
-    return chain
+
+    return result
