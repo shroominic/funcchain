@@ -1,7 +1,6 @@
 from types import UnionType
 from typing import TypeVar, Union
 
-from PIL import Image  # type: ignore
 from langchain.callbacks import get_openai_callback
 from langchain.chat_models.base import BaseChatModel
 from langchain.output_parsers.openai_functions import PydanticOutputFunctionsParser
@@ -9,6 +8,7 @@ from langchain.prompts import ChatPromptTemplate
 from langchain.pydantic_v1 import BaseModel
 from langchain.schema import AIMessage, BaseMessage, BaseOutputParser, HumanMessage
 from langchain.schema.runnable import RunnableSequence, RunnableWithFallbacks
+from PIL import Image  # type: ignore
 
 from funcchain.config import settings
 from funcchain.parser import MultiToolParser, ParserBaseModel
@@ -97,7 +97,7 @@ def create_chain(
     instruction = instruction or from_docstring()
     parser = parser or parser_for(output_type)
     input_kwargs.update(kwargs_from_parent())
-    
+
     LLM = settings.LLM or model_from_env()
     func_model = is_function_model(LLM)
 
@@ -108,7 +108,7 @@ def create_chain(
     if is_vision_model(LLM):
         images = [v for v in input_kwargs.values() if isinstance(v, Image.Image)]
         input_kwargs = {k: v for k, v in input_kwargs.items() if not isinstance(v, Image.Image)}
-    
+
     prompt = create_prompt(instruction, system, context, images=images, **input_kwargs)
 
     if func_model:
