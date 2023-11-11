@@ -8,7 +8,7 @@ from langchain.prompts import ChatPromptTemplate
 from langchain.pydantic_v1 import BaseModel
 from langchain.schema import AIMessage, BaseMessage, BaseOutputParser, HumanMessage
 from langchain.schema.runnable import RunnableSequence, RunnableWithFallbacks
-from PIL import Image  # type: ignore
+from PIL import Image
 
 from funcchain.config import settings
 from funcchain.parser import MultiToolParser, ParserBaseModel
@@ -141,7 +141,7 @@ def chain(
     system: str = settings.DEFAULT_SYSTEM_PROMPT,
     parser: BaseOutputParser[T] | None = None,
     context: list[BaseMessage] = [],
-    **input_kwargs,
+    **input_kwargs: str,
 ) -> T:  # type: ignore
     """
     Get response from chatgpt for provided instructions.
@@ -159,7 +159,7 @@ async def achain(
     system: str = settings.DEFAULT_SYSTEM_PROMPT,
     parser: BaseOutputParser[T] | None = None,
     context: list[BaseMessage] = [],
-    **input_kwargs,
+    **input_kwargs: str,
 ) -> T:
     """
     Get response from chatgpt for provided instructions.
