@@ -5,11 +5,11 @@ from typing import Any, NoReturn, Type
 from docstring_parser import parse
 from langchain.chat_models import ChatOpenAI
 from langchain.chat_models.base import BaseChatModel
-from langchain.pydantic_v1 import BaseModel
 from langchain.schema.language_model import BaseLanguageModel
 from langchain.schema.messages import HumanMessage, SystemMessage
 from langchain.schema.output_parser import OutputParserException
 from langchain.schema.runnable import Runnable, RunnableWithFallbacks
+from pydantic.v1 import BaseModel
 from rich import print
 from tiktoken import encoding_for_model
 
