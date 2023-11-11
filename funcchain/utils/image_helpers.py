@@ -1,5 +1,6 @@
-from io import BytesIO
 from base64 import b64encode
+from io import BytesIO
+
 from PIL import Image  # type: ignore
 
 
