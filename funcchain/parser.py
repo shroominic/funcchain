@@ -5,9 +5,9 @@ from typing import Callable, Optional, Type, TypeVar
 
 from langchain.output_parsers.format_instructions import PYDANTIC_FORMAT_INSTRUCTIONS
 from langchain.output_parsers.openai_functions import PydanticOutputFunctionsParser
-from langchain.pydantic_v1 import BaseModel, ValidationError
 from langchain.schema import ChatGeneration, Generation, OutputParserException
 from langchain.schema.output_parser import BaseGenerationOutputParser, BaseOutputParser
+from pydantic.v1 import BaseModel, ValidationError
 from typing_extensions import Self
 
 T = TypeVar("T")
