@@ -1,4 +1,4 @@
-from langchain.pydantic_v1 import BaseModel
+from pydantic.v1 import BaseModel
 
 from funcchain import chain
 
