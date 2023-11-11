@@ -1,6 +1,8 @@
 import asyncio
-from funcchain import achain, settings
+
 from langchain.pydantic_v1 import BaseModel
+
+from funcchain import achain, settings
 
 settings.MODEL_TEMPERATURE = 1
 
@@ -8,7 +10,7 @@ settings.MODEL_TEMPERATURE = 1
 class StartupConcept(BaseModel):
     name: str
     description: str
-    
+
 
 async def startup_generator(topic: str) -> StartupConcept:
     """
@@ -18,16 +20,12 @@ async def startup_generator(topic: str) -> StartupConcept:
 
 
 async def generate_random_startups(topic: str, amount: int = 3) -> list[StartupConcept]:
-    return await asyncio.gather(
-        *[
-            startup_generator(topic)
-            for _ in range(amount)
-        ]
-    )
+    return await asyncio.gather(*[startup_generator(topic) for _ in range(amount)])
+
 
 if __name__ == "__main__":
     topic = "AI generated Vegan Recipes"
-    
+
     startups = asyncio.run(generate_random_startups(topic))
 
     for startup in startups:
