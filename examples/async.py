@@ -1,6 +1,6 @@
 import asyncio
 
-from langchain.pydantic_v1 import BaseModel
+from pydantic.v1 import BaseModel
 
 from funcchain import achain, settings
 
@@ -16,6 +16,7 @@ async def startup_generator(topic: str) -> StartupConcept:
     """
     Generate a random startup for the given topic.
     """
+    print("Generating startup for topic:", topic)
     return await achain()
 
 
