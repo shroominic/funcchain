@@ -23,6 +23,10 @@ class FuncchainSettings(BaseSettings):
 
     # KEYS
     OPENAI_API_KEY: Optional[str] = None
+    AZURE_API_KEY: Optional[str] = None
+    ANTHROPIC_API_KEY: Optional[str] = None
+    GOOGLE_API_KEY: Optional[str] = None
+    JINACHAT_API_KEY: Optional[str] = None
 
     # KWARGS
     MODEL_NAME: str = "openai::gpt-3.5-turbo-1106"
