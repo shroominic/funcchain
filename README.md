@@ -15,7 +15,7 @@ It works perfect with OpenAI Functions and soon with other models using JSONForm
 
 ```python
 from typing import Union, List
-from langchain.pydantic_v1 import BaseModel, Field
+from pydantic.v1 import BaseModel, Field
 from funcchain import chain
 
 class Item(BaseModel):
