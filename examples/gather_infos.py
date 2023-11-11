@@ -20,7 +20,7 @@ def gather_infos(task_input: str) -> Task:
     return chain()
 
 
-def main():
+def main() -> None:
     task_input = input("\nEnter task input: ")
 
     task = gather_infos(task_input)
