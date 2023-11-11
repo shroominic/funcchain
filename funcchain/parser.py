@@ -79,11 +79,11 @@ class MultiToolParser(BaseGenerationOutputParser[M]):
 
 class ParserBaseModel(BaseModel):
     @classmethod
-    def output_parser(cls) -> BaseOutputParser[Self]:  # type: ignore
+    def output_parser(cls) -> BaseOutputParser[Self]:
         return CustomPydanticOutputParser(pydantic_object=cls)
 
     @classmethod
-    def parse(cls, text: str) -> Self:  # type: ignore
+    def parse(cls, text: str) -> Self:
         """Override for custom parsing."""
         match = re.search(r"\{.*\}", text.strip(), re.MULTILINE | re.IGNORECASE | re.DOTALL)
         json_str = ""
