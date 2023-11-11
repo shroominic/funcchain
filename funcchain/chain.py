@@ -5,10 +5,10 @@ from langchain.callbacks import get_openai_callback
 from langchain.chat_models.base import BaseChatModel
 from langchain.output_parsers.openai_functions import PydanticOutputFunctionsParser
 from langchain.prompts import ChatPromptTemplate
-from langchain.pydantic_v1 import BaseModel
 from langchain.schema import AIMessage, BaseMessage, BaseOutputParser, HumanMessage
 from langchain.schema.runnable import RunnableSequence, RunnableWithFallbacks
 from PIL import Image
+from pydantic.v1 import BaseModel
 
 from funcchain.config import settings
 from funcchain.parser import MultiToolParser, ParserBaseModel
