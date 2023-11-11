@@ -14,7 +14,7 @@ from rich import print
 from tiktoken import encoding_for_model
 
 
-def retry_parse(retry: int):
+def retry_parse(retry: int) -> Any:
     """
     Retry parsing the output for a given number of times.
 
@@ -22,11 +22,11 @@ def retry_parse(retry: int):
     - OutputParserException: If the output cannot be parsed.
     """
 
-    def decorator(fn):
+    def decorator(fn: Any) -> Any:
         if asyncio.iscoroutinefunction(fn):
 
             @wraps(fn)
-            async def async_wrapper(*args, **kwargs):
+            async def async_wrapper(*args: Any, **kwargs: Any) -> Any:
                 for r in range(retry):
                     try:
                         return await fn(*args, **kwargs)
@@ -40,7 +40,7 @@ def retry_parse(retry: int):
         else:
 
             @wraps(fn)
-            def sync_wrapper(*args, **kwargs):
+            def sync_wrapper(*args: Any, **kwargs: Any) -> Any:
                 for r in range(retry):
                     try:
                         return fn(*args, **kwargs)
@@ -57,10 +57,11 @@ def raiser(e: Exception | str) -> NoReturn:
     raise e if isinstance(e, Exception) else Exception(e)
 
 
-def log(*text) -> None:
+def log(*text: Any) -> None:
     from funcchain.config import settings
 
-    settings.VERBOSE and print("[grey]" + " ".join(map(str, text)) + "[/grey]")  # type: ignore
+    if settings.VERBOSE:
+        print("[grey]" + " ".join(map(str, text)) + "[/grey]")
 
 
 def count_tokens(text: str, model: str = "gpt-4") -> int:
@@ -125,7 +126,7 @@ def is_vision_model(llm: BaseLanguageModel | RunnableWithFallbacks) -> bool:
     return VISION_MODEL
 
 
-def _remove_a_key(d, remove_key) -> None:
+def _remove_a_key(d: dict, remove_key: str) -> None:
     """Remove a key from a dictionary recursively"""
     if isinstance(d, dict):
         for key in list(d.keys()):
