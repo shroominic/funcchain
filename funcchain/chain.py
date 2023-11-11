@@ -104,10 +104,11 @@ def create_chain(
     if parser and not func_model:
         instruction = _add_format_instructions(parser, instruction, input_kwargs)
 
-    images = []
+    images = [v for v in input_kwargs.values() if isinstance(v, Image.Image)]
     if is_vision_model(LLM):
-        images = [v for v in input_kwargs.values() if isinstance(v, Image.Image)]
         input_kwargs = {k: v for k, v in input_kwargs.items() if not isinstance(v, Image.Image)}
+    elif images:
+        raise RuntimeError("Images as input are only supported for vision models.")
 
     prompt = create_prompt(instruction, system, context, images=images, **input_kwargs)
 
