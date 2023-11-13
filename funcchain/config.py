@@ -36,7 +36,9 @@ class FuncchainSettings(BaseSettings):
 
     def model_kwargs(self) -> dict[str, Any]:
         return {
-            "model_name": self.MODEL_NAME if "::" not in self.MODEL_NAME else self.MODEL_NAME.split("::")[1],
+            "model_name": self.MODEL_NAME
+            if "::" not in self.MODEL_NAME
+            else self.MODEL_NAME.split("::")[1],
             "temperature": self.MODEL_TEMPERATURE,
             "verbose": self.VERBOSE,
             "openai_api_key": self.OPENAI_API_KEY,

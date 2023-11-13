@@ -15,7 +15,9 @@ class CodeBlock(ParserBaseModel):
 
     @classmethod
     def parse(cls, text: str) -> "CodeBlock":
-        matches = re.finditer(r"```(?P<language>\w+)?\n?(?P<code>.*?)```", text, re.DOTALL)
+        matches = re.finditer(
+            r"```(?P<language>\w+)?\n?(?P<code>.*?)```", text, re.DOTALL
+        )
         for match in matches:
             groupdict = match.groupdict()
             groupdict["language"] = groupdict.get("language", None)
@@ -38,4 +40,6 @@ class Error(BaseModel):
     """If anything goes wrong and you can not do what is expected, use this error function as fallback."""
 
     title: str = Field(..., description="CamelCase Name titeling the error")
-    description: str = Field(..., description="Short description of the unexpected situation")
+    description: str = Field(
+        ..., description="Short description of the unexpected situation"
+    )

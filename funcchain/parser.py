@@ -18,7 +18,9 @@ class LambdaOutputParser(BaseOutputParser[T]):
 
     def parse(self, text: str) -> T:
         if self._parse is None:
-            raise NotImplementedError("LambdaOutputParser.lambda_parse() is not implemented")
+            raise NotImplementedError(
+                "LambdaOutputParser.lambda_parse() is not implemented"
+            )
         return self._parse(text)
 
     @property
@@ -59,19 +61,27 @@ class MultiToolParser(BaseGenerationOutputParser[M]):
     def _pre_parse_function_call(self, result: list[Generation]) -> dict:
         generation = result[0]
         if not isinstance(generation, ChatGeneration):
-            raise OutputParserException("This output parser can only be used with a chat generation.")
+            raise OutputParserException(
+                "This output parser can only be used with a chat generation."
+            )
         message = generation.message
         try:
             func_call = copy.deepcopy(message.additional_kwargs["function_call"])
         except KeyError:
-            raise OutputParserException(f"The model refused to respond with a function call:\n{message.content}\n\n")
+            raise OutputParserException(
+                f"The model refused to respond with a function call:\n{message.content}\n\n"
+            )
 
         return func_call
 
     def _get_parser_for(self, function_name: str) -> BaseGenerationOutputParser[M]:
-        output_type_iter = filter(lambda t: t.__name__.lower() == function_name, self.output_types)
+        output_type_iter = filter(
+            lambda t: t.__name__.lower() == function_name, self.output_types
+        )
         if output_type_iter is None:
-            raise OutputParserException(f"No parser found for function: {function_name}")
+            raise OutputParserException(
+                f"No parser found for function: {function_name}"
+            )
         output_type: Type[M] = next(output_type_iter)
 
         return PydanticOutputFunctionsParser(pydantic_schema=output_type)
@@ -85,7 +95,9 @@ class ParserBaseModel(BaseModel):
     @classmethod
     def parse(cls, text: str) -> Self:
         """Override for custom parsing."""
-        match = re.search(r"\{.*\}", text.strip(), re.MULTILINE | re.IGNORECASE | re.DOTALL)
+        match = re.search(
+            r"\{.*\}", text.strip(), re.MULTILINE | re.IGNORECASE | re.DOTALL
+        )
         json_str = ""
         if match:
             json_str = match.group()
@@ -134,7 +146,9 @@ class CodeBlock(ParserBaseModel):
 
     @classmethod
     def parse(cls, text: str) -> "CodeBlock":
-        matches = re.finditer(r"```(?P<language>\w+)?\n?(?P<code>.*?)```", text, re.DOTALL)
+        matches = re.finditer(
+            r"```(?P<language>\w+)?\n?(?P<code>.*?)```", text, re.DOTALL
+        )
         for match in matches:
             groupdict = match.groupdict()
             groupdict["language"] = groupdict.get("language", None)

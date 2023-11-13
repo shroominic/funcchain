@@ -19,7 +19,11 @@ def from_docstring() -> str:
     """
     Get the docstring of the parent caller function.
     """
-    doc_str = (caller_frame := get_parent_frame()).frame.f_globals[caller_frame.function].__doc__
+    doc_str = (
+        (caller_frame := get_parent_frame())
+        .frame.f_globals[caller_frame.function]
+        .__doc__
+    )
     return "\n".join([line.lstrip() for line in doc_str.split("\n")])
 
 
@@ -28,7 +32,11 @@ def get_output_type() -> type:
     Get the output type annotation of the parent caller function.
     """
     try:
-        return (caller_frame := get_parent_frame()).frame.f_globals[caller_frame.function].__annotations__["return"]
+        return (
+            (caller_frame := get_parent_frame())
+            .frame.f_globals[caller_frame.function]
+            .__annotations__["return"]
+        )
     except KeyError:
         raise ValueError("The funcchain must have a return type annotation")
 

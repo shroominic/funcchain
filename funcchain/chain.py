@@ -42,13 +42,19 @@ def create_union_chain(
     output_types = output_type.__args__  # type: ignore
     output_type_names = [t.__name__ for t in output_types]
 
-    input_kwargs["format_instructions"] = f"Extract to one of these output types: {output_type_names}."
+    input_kwargs[
+        "format_instructions"
+    ] = f"Extract to one of these output types: {output_type_names}."
 
     functions = multi_pydantic_to_functions(output_types)
 
     if isinstance(LLM, RunnableWithFallbacks):
         LLM = LLM.runnable.bind(**functions).with_fallbacks(
-            [fallback.bind(**functions) for fallback in LLM.fallbacks if hasattr(LLM, "fallbacks")]
+            [
+                fallback.bind(**functions)
+                for fallback in LLM.fallbacks
+                if hasattr(LLM, "fallbacks")
+            ]
         )
     else:
         LLM = LLM.bind(**functions)  # type: ignore
@@ -78,7 +84,11 @@ def create_pydanctic_chain(
     functions = pydantic_to_functions(output_type)
     LLM = (
         LLM.runnable.bind(**functions).with_fallbacks(  # type: ignore
-            [fallback.bind(**functions) for fallback in LLM.fallbacks if hasattr(LLM, "fallbacks")]
+            [
+                fallback.bind(**functions)
+                for fallback in LLM.fallbacks
+                if hasattr(LLM, "fallbacks")
+            ]
         )
         if isinstance(LLM, RunnableWithFallbacks)
         else LLM.bind(**functions)
@@ -106,17 +116,25 @@ def create_chain(
 
     images = [v for v in input_kwargs.values() if isinstance(v, Image.Image)]
     if is_vision_model(LLM):
-        input_kwargs = {k: v for k, v in input_kwargs.items() if not isinstance(v, Image.Image)}
+        input_kwargs = {
+            k: v for k, v in input_kwargs.items() if not isinstance(v, Image.Image)
+        }
     elif images:
         raise RuntimeError("Images as input are only supported for vision models.")
 
     prompt = create_prompt(instruction, system, context, images=images, **input_kwargs)
 
     if func_model:
-        if getattr(output_type, "__origin__", None) is Union or isinstance(output_type, UnionType):
-            return create_union_chain(output_type, instruction, system, context, LLM, **input_kwargs)
+        if getattr(output_type, "__origin__", None) is Union or isinstance(
+            output_type, UnionType
+        ):
+            return create_union_chain(
+                output_type, instruction, system, context, LLM, **input_kwargs
+            )
 
-        if issubclass(output_type, BaseModel) and not issubclass(output_type, ParserBaseModel):
+        if issubclass(output_type, BaseModel) and not issubclass(
+            output_type, ParserBaseModel
+        ):
             return create_pydanctic_chain(output_type, prompt, LLM, **input_kwargs)
 
     return prompt | LLM | parser  # type: ignore
@@ -152,7 +170,9 @@ def chain(
     with get_openai_callback() as cb:
         result = chain.invoke(input_kwargs)
         if cb.total_tokens != 0:
-            log(f"{cb.total_tokens:05}T / {cb.total_cost:.3f}$ - {get_parent_frame(3).function}")
+            log(
+                f"{cb.total_tokens:05}T / {cb.total_cost:.3f}$ - {get_parent_frame(3).function}"
+            )
 
     return result
 
@@ -173,6 +193,8 @@ async def achain(
     with get_openai_callback() as cb:
         result = await chain.ainvoke(input_kwargs)
         if cb.total_tokens != 0:
-            log(f"{cb.total_tokens:05}T / {cb.total_cost:.3f}$ - {get_parent_frame(3).function}")
+            log(
+                f"{cb.total_tokens:05}T / {cb.total_cost:.3f}$ - {get_parent_frame(3).function}"
+            )
 
     return result

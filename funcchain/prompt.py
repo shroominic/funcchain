@@ -2,7 +2,10 @@ from string import Formatter
 from typing import Any, Type
 
 from langchain.prompts import ChatPromptTemplate
-from langchain.prompts.chat import BaseStringMessagePromptTemplate, MessagePromptTemplateT
+from langchain.prompts.chat import (
+    BaseStringMessagePromptTemplate,
+    MessagePromptTemplateT,
+)
 from langchain.prompts.prompt import PromptTemplate
 from langchain.schema import BaseMessage, HumanMessage, SystemMessage
 from PIL import Image
@@ -88,13 +91,19 @@ def create_prompt(
                 input_kwargs[k] = v[: (settings.MAX_TOKENS - base_tokens) * 2 // 3]
                 print("Truncated: ", len(input_kwargs[k]))
 
-    template_format = "jinja2" if "{{" in instruction or "{%" in instruction else "f-string"
+    template_format = (
+        "jinja2" if "{{" in instruction or "{%" in instruction else "f-string"
+    )
 
     required_f_str_vars = extract_fstring_vars(instruction)  # TODO: jinja2
     if "format_instructions" in required_f_str_vars:
         required_f_str_vars.remove("format_instructions")
 
-    inject_vars = [f"[{var}]:\n{value}\n" for var, value in input_kwargs.items() if var not in required_f_str_vars]
+    inject_vars = [
+        f"[{var}]:\n{value}\n"
+        for var, value in input_kwargs.items()
+        if var not in required_f_str_vars
+    ]
     added_instruction = ("".join(inject_vars)).replace("{", "{{").replace("}", "}}")
     instruction = added_instruction + instruction
 
@@ -117,4 +126,8 @@ def extract_fstring_vars(template: str) -> list[str]:
     """
     Function to extract f-string variables from a string.
     """
-    return [field_name for _, field_name, _, _ in Formatter().parse(template) if field_name is not None]
+    return [
+        field_name
+        for _, field_name, _, _ in Formatter().parse(template)
+        if field_name is not None
+    ]

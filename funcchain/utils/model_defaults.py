@@ -1,7 +1,13 @@
 from typing import Any
 
 from dotenv import load_dotenv
-from langchain.chat_models import AzureChatOpenAI, ChatAnthropic, ChatGooglePalm, ChatOpenAI, JinaChat
+from langchain.chat_models import (
+    AzureChatOpenAI,
+    ChatAnthropic,
+    ChatGooglePalm,
+    ChatOpenAI,
+    JinaChat,
+)
 from langchain.chat_models.base import BaseChatModel
 
 from funcchain.config import settings
@@ -41,8 +47,7 @@ def model_from_env(
     if name := settings.MODEL_NAME:
         return model_from_name(name, **kwargs)
     raise ValueError(
-        "Model not found! "
-        "Make sure to use the correct env variables."
+        "Model not found! Make sure to use the correct env variables."
         # "For more info: docs.url"
     )
 
@@ -86,7 +91,6 @@ def model_from_name(
         case "google":
             return ChatGooglePalm(**kwargs)
     raise ValueError(
-        "Model not found! "
-        "Make sure to use the correct env variables."
+        "Model not found! Make sure to use the correct env variables."
         # "For more info: docs.url"
     )

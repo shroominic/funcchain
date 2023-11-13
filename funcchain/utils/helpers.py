@@ -83,7 +83,9 @@ def gather_llm_type(llm: BaseLanguageModel | Runnable, func_check: bool = True) 
         if func_check:
             llm.predict_messages(
                 [
-                    SystemMessage(content="This is a test message to see if the model can run functions."),
+                    SystemMessage(
+                        content="This is a test message to see if the model can run functions."
+                    ),
                     HumanMessage(content="Hello!"),
                 ],
                 functions=[
@@ -141,11 +143,15 @@ def pydantic_to_functions(pydantic_object: Type[BaseModel]) -> dict[str, Any]:
     docstring = parse(pydantic_object.__doc__ or "")
     parameters = {k: v for k, v in schema.items() if k not in ("title", "description")}
     for param in docstring.params:
-        if (name := param.arg_name) in parameters["properties"] and (description := param.description):
+        if (name := param.arg_name) in parameters["properties"] and (
+            description := param.description
+        ):
             if "description" not in parameters["properties"][name]:
                 parameters["properties"][name]["description"] = description
 
-    parameters["required"] = sorted(k for k, v in parameters["properties"].items() if "default" not in v)
+    parameters["required"] = sorted(
+        k for k, v in parameters["properties"].items() if "default" not in v
+    )
     parameters["type"] = "object"
 
     if "description" not in schema:
@@ -178,7 +184,8 @@ def multi_pydantic_to_functions(
     pydantic_objects: list[Type[BaseModel]],
 ) -> dict[str, Any]:
     functions: list[dict[str, Any]] = [
-        pydantic_to_functions(pydantic_object)["functions"][0] for pydantic_object in pydantic_objects
+        pydantic_to_functions(pydantic_object)["functions"][0]
+        for pydantic_object in pydantic_objects
     ]
 
     return {
