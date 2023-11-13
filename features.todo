@@ -1,0 +1,34 @@
+[ ] - override global settings inside chain()
+
+[ ] - retry on pydantic validation error
+
+[ ] - depends functionality to create nested chains and compile into runnables
+        # add a deps thing to put into funcchain defs that takes another chain and compiles it into a runnable
+        # so langsmith shows nested chains
+        # in the chain creation process it just runns all of the depending chains in parallel and feeds the inputs into sub chain
+        # output of every chain is string when inserted
+
+[ ] - vector retrieval type to add file/url context into chains
+
+[ ] - implement variable compression to inject as much context as possible without overloading
+        # Create a Compressable Context Schema where it is compressed in case the context lenght is already filled
+        # So anything that is additional can be compressed to fit in the context but when other things that are important are not compressed.
+        # Optionally you can define how to compress and where to leave the gaps (default in the middle with [...])
+
+[ ] - FuncchainException class
+
+[ ] - improve chain(*args interface)
+
+[ ] - enable union type without function calling
+
+[ ] - enable Error type for non union calls
+
+[ ] - develop Matrix wrapper idea
+
+[ ] - easy to use pre-written router
+
+[ ] - funcchain agents module
+
+[ ] - convert langchain tools to funcchain agent/router
+
+[ ] -
