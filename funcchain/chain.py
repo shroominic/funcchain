@@ -6,6 +6,7 @@ from langchain.chat_models.base import BaseChatModel
 from langchain.output_parsers.openai_functions import PydanticOutputFunctionsParser
 from langchain.prompts import ChatPromptTemplate
 from langchain.schema import AIMessage, BaseMessage, BaseOutputParser, HumanMessage
+from langchain.schema.chat_history import BaseChatMessageHistory
 from langchain.schema.runnable import RunnableSequence, RunnableWithFallbacks
 from PIL import Image
 from pydantic.v1 import BaseModel
@@ -101,6 +102,7 @@ def create_chain(
     system: str = settings.DEFAULT_SYSTEM_PROMPT,
     parser: BaseOutputParser[T] | None = None,
     context: list[BaseMessage] = [],
+    memory: BaseChatMessageHistory | None = None,
     input_kwargs: dict[str, str] = {},
 ) -> RunnableSequence[dict[str, str], T]:
     output_type = get_output_type()
@@ -121,6 +123,10 @@ def create_chain(
         }
     elif images:
         raise RuntimeError("Images as input are only supported for vision models.")
+
+    if memory:
+        memory.add_user_message(instruction)
+        context = memory.messages + context
 
     prompt = create_prompt(instruction, system, context, images=images, **input_kwargs)
 
@@ -160,12 +166,13 @@ def chain(
     system: str = settings.DEFAULT_SYSTEM_PROMPT,
     parser: BaseOutputParser[T] | None = None,
     context: list[BaseMessage] = [],
+    memory: BaseChatMessageHistory | None = None,
     **input_kwargs: str,
 ) -> T:  # type: ignore
     """
     Get response from chatgpt for provided instructions.
     """
-    chain = create_chain(instruction, system, parser, context, input_kwargs)
+    chain = create_chain(instruction, system, parser, context, memory, input_kwargs)
 
     with get_openai_callback() as cb:
         result = chain.invoke(input_kwargs)
@@ -173,6 +180,9 @@ def chain(
             log(
                 f"{cb.total_tokens:05}T / {cb.total_cost:.3f}$ - {get_parent_frame(3).function}"
             )
+
+    if memory and isinstance(result, str):
+        memory.add_ai_message(result)
 
     return result
 
@@ -183,12 +193,13 @@ async def achain(
     system: str = settings.DEFAULT_SYSTEM_PROMPT,
     parser: BaseOutputParser[T] | None = None,
     context: list[BaseMessage] = [],
+    memory: BaseChatMessageHistory | None = None,
     **input_kwargs: str,
 ) -> T:
     """
     Get response from chatgpt for provided instructions.
     """
-    chain = create_chain(instruction, system, parser, context, input_kwargs)
+    chain = create_chain(instruction, system, parser, context, memory, input_kwargs)
 
     with get_openai_callback() as cb:
         result = await chain.ainvoke(input_kwargs)
@@ -196,5 +207,8 @@ async def achain(
             log(
                 f"{cb.total_tokens:05}T / {cb.total_cost:.3f}$ - {get_parent_frame(3).function}"
             )
+
+    if memory and isinstance(result, str):
+        memory.add_ai_message(result)
 
     return result
