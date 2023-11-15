@@ -8,7 +8,7 @@ from langchain.schema import BaseOutputParser, StrOutputParser
 from ..parser import BoolOutputParser, ParserBaseModel
 
 
-def get_parent_frame(depth: int = 5) -> FrameInfo:
+def get_parent_frame(depth: int = 4) -> FrameInfo:
     """
     Get the dep'th parent function information.
     """
