@@ -25,9 +25,6 @@ class TodoList(BaseModel):
 
 def extract_list(user_input: str) -> Union[TodoList, ShoppingList]:
     """
-    USER_INPUT:
-    {user_input}
-
     The user input is either a shopping List or a todo list.
     """
     return chain()
