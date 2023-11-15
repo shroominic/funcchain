@@ -1,5 +1,3 @@
-import asyncio
-from functools import wraps
 from typing import Any, NoReturn, Type
 
 from docstring_parser import parse
@@ -7,65 +5,35 @@ from langchain.chat_models import ChatOpenAI
 from langchain.chat_models.base import BaseChatModel
 from langchain.schema.language_model import BaseLanguageModel
 from langchain.schema.messages import HumanMessage, SystemMessage
-from langchain.schema.output_parser import OutputParserException
 from langchain.schema.runnable import Runnable, RunnableWithFallbacks
 from pydantic.v1 import BaseModel
-from rich import print
 from tiktoken import encoding_for_model
-
-
-def retry_parse(retry: int) -> Any:
-    """
-    Retry parsing the output for a given number of times.
-
-    Raises:
-    - OutputParserException: If the output cannot be parsed.
-    """
-
-    def decorator(fn: Any) -> Any:
-        if asyncio.iscoroutinefunction(fn):
-
-            @wraps(fn)
-            async def async_wrapper(*args: Any, **kwargs: Any) -> Any:
-                for r in range(retry):
-                    try:
-                        return await fn(*args, **kwargs)
-                    except OutputParserException as e:
-                        if r == retry - 1:
-                            raise e
-                        await asyncio.sleep(1)
-
-            return async_wrapper
-
-        else:
-
-            @wraps(fn)
-            def sync_wrapper(*args: Any, **kwargs: Any) -> Any:
-                for r in range(retry):
-                    try:
-                        return fn(*args, **kwargs)
-                    except OutputParserException as e:
-                        if r == retry - 1:
-                            raise e
-
-            return sync_wrapper
-
-    return decorator
 
 
 def raiser(e: Exception | str) -> NoReturn:
     raise e if isinstance(e, Exception) else Exception(e)
 
 
-def log(*text: Any) -> None:
-    from ..settings import settings
-
-    if settings.VERBOSE:
-        print("[grey]" + " ".join(map(str, text)) + "[/grey]")
-
-
 def count_tokens(text: str, model: str = "gpt-4") -> int:
     return len(encoding_for_model(model).encode(text))
+
+
+verified_function_models = [
+    "gpt-4",
+    "gpt-4-0613",
+    "gpt-4-1106-preview",
+    "gpt-4-32k",
+    "gpt-4-32k-0613",
+    "gpt-3.5-turbo",
+    "gpt-3.5-turbo-0613",
+    "gpt-3.5-turbo-1106",
+    "gpt-3.5-turbo-16k",
+    "gpt-3.5-turbo-16k-0613",
+]
+
+verified_vision_models = [
+    "gpt-4-vision-preview",
+]
 
 
 def gather_llm_type(llm: BaseLanguageModel | Runnable, func_check: bool = True) -> str:
@@ -75,9 +43,9 @@ def gather_llm_type(llm: BaseLanguageModel | Runnable, func_check: bool = True) 
         return "base_model"
     if not isinstance(llm, ChatOpenAI):
         return "chat_model"
-    if llm.model_name == "gpt-4-vision-preview":
+    if llm.model_name in verified_vision_models:
         return "vision_model"
-    if llm.model_name == "gpt-4":
+    if llm.model_name in verified_function_models:
         return "function_model"
     try:
         if func_check:
@@ -108,24 +76,16 @@ def gather_llm_type(llm: BaseLanguageModel | Runnable, func_check: bool = True) 
         return "function_model"
 
 
-FUNCTION_MODEL: bool | None = None
+def is_function_model(
+    llm: BaseLanguageModel | RunnableWithFallbacks,
+) -> bool:
+    return gather_llm_type(llm) == "function_model"
 
 
-def is_function_model(llm: BaseLanguageModel | RunnableWithFallbacks) -> bool:
-    global FUNCTION_MODEL
-    if FUNCTION_MODEL is None:
-        FUNCTION_MODEL = gather_llm_type(llm) == "function_model"
-    return FUNCTION_MODEL
-
-
-VISION_MODEL: bool | None = None
-
-
-def is_vision_model(llm: BaseLanguageModel | RunnableWithFallbacks) -> bool:
-    global VISION_MODEL
-    if VISION_MODEL is None:
-        VISION_MODEL = gather_llm_type(llm) == "vision_model"
-    return VISION_MODEL
+def is_vision_model(
+    llm: BaseLanguageModel | RunnableWithFallbacks,
+) -> bool:
+    return gather_llm_type(llm) == "vision_model"
 
 
 def _remove_a_key(d: dict, remove_key: str) -> None:
