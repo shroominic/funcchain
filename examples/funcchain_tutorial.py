@@ -35,9 +35,6 @@ class Analyse(BaseModel):
 
 def analyse(text: str) -> Analyse:
     """
-    TEXT:
-    {text}
-
     Return the languages in the text.
     """
     return chain()
@@ -64,10 +61,7 @@ class Task(BaseModel):
 
 def extract_task(text: str) -> Task:
     """
-    TEXT:
-    {text}
-
-    Extract the task from the TEXT:
+    Extract the task.
     """
     return chain()
 
