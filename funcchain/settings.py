@@ -15,11 +15,14 @@ load_dotenv("./.env")
 class FuncchainSettings(BaseSettings):
     # General
     LLM: BaseChatModel | RunnableWithFallbacks | None = None
-    VERBOSE: bool = True
+    DEBUG: bool = True
+
+    RETRY_PARSE: int = 5
+    RETRY_PARSE_SLEEP: float = 0.1
 
     # Prompt
     MAX_TOKENS: int = 4096
-    DEFAULT_SYSTEM_PROMPT: str = "You are a professional assistant solving tasks."
+    DEFAULT_SYSTEM_PROMPT: str = ""
 
     # KEYS
     OPENAI_API_KEY: Optional[str] = None
@@ -40,7 +43,7 @@ class FuncchainSettings(BaseSettings):
             if "::" not in self.MODEL_NAME
             else self.MODEL_NAME.split("::")[1],
             "temperature": self.MODEL_TEMPERATURE,
-            "verbose": self.VERBOSE,
+            "verbose": self.DEBUG,
             "openai_api_key": self.OPENAI_API_KEY,
             "max_tokens": self.MAX_TOKENS,
         }
