@@ -60,7 +60,7 @@ def create_union_chain(
     prompt = create_prompt(
         system,
         instruction,
-        [
+        context=[
             *context,
             HumanMessage(content="Can you use a function call for the next response?"),
             AIMessage(content="Yeah I can do that, just tell me what you need!"),
