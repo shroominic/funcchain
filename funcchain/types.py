@@ -1,12 +1,35 @@
 import re
-from typing import Optional
+import json
+from typing import Optional, Self
 
-from langchain.schema import OutputParserException
 from pydantic.v1 import BaseModel, Field
+from langchain.schema import OutputParserException
+from langchain.output_parsers.format_instructions import PYDANTIC_FORMAT_INSTRUCTIONS
+from langchain.schema.output_parser import BaseOutputParser
 
-from .parser import ParserBaseModel
 
-# PARSER TYPES
+class ParserBaseModel(BaseModel):
+    @classmethod
+    def output_parser(cls) -> BaseOutputParser[Self]:
+        from .parser import CustomPydanticOutputParser
+
+        return CustomPydanticOutputParser(pydantic_object=cls)
+
+    @classmethod
+    def parse(cls, text: str) -> Self:
+        """Override for custom parsing."""
+        match = re.search(
+            r"\{.*\}", text.strip(), re.MULTILINE | re.IGNORECASE | re.DOTALL
+        )
+        json_str = ""
+        if match:
+            json_str = match.group()
+        json_object = json.loads(json_str, strict=False)
+        return cls.parse_obj(json_object)
+
+    @staticmethod
+    def format_instructions() -> str:
+        return PYDANTIC_FORMAT_INSTRUCTIONS
 
 
 class CodeBlock(ParserBaseModel):
@@ -35,11 +58,24 @@ class CodeBlock(ParserBaseModel):
         return cls(code=text)  # TODO: fix this hack
         raise OutputParserException("Invalid codeblock")
 
+    @staticmethod
+    def format_instructions() -> str:
+        return "Answer with a codeblock."
+
+    def __str__(self) -> str:
+        return self.code
+
 
 class Error(BaseModel):
-    """If anything goes wrong and you can not do what is expected, use this error function as fallback."""
+    """
+    If anything goes wrong and you can not do what is expected,
+    use this error function as fallback.
+    """
 
     title: str = Field(..., description="CamelCase Name titeling the error")
     description: str = Field(
         ..., description="Short description of the unexpected situation"
     )
+
+    def __raise__(self) -> None:
+        raise Exception(self.description)
