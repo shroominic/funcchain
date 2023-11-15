@@ -3,9 +3,6 @@ from funcchain import chain
 
 def summary(file_content: str) -> str:
     """
-    FILE_CONTENT:
-    {file_content}
-
     Summarize the file content.
     """
     return chain()
