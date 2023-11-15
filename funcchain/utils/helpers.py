@@ -58,7 +58,7 @@ def raiser(e: Exception | str) -> NoReturn:
 
 
 def log(*text: Any) -> None:
-    from funcchain.config import settings
+    from ..settings import settings
 
     if settings.VERBOSE:
         print("[grey]" + " ".join(map(str, text)) + "[/grey]")

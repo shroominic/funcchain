@@ -5,7 +5,7 @@ from typing import Union
 from langchain.output_parsers import PydanticOutputParser
 from langchain.schema import BaseOutputParser, StrOutputParser
 
-from funcchain.parser import BoolOutputParser, ParserBaseModel
+from ..parser import BoolOutputParser, ParserBaseModel
 
 
 def get_parent_frame(depth: int = 5) -> FrameInfo:

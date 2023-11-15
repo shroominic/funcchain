@@ -1,8 +1,8 @@
 from pydantic.v1 import BaseModel
 
-from funcchain.chain import achain, chain
-from funcchain.config import settings
-from funcchain.types import Error
+from .chain import achain, chain
+from .settings import settings
+from .types import Error
 
 __all__ = [
     "settings",

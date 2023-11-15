@@ -10,7 +10,7 @@ from langchain.chat_models import (
 )
 from langchain.chat_models.base import BaseChatModel
 
-from funcchain.config import settings
+from ..settings import settings
 
 
 def model_from_env(

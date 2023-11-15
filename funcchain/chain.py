@@ -11,10 +11,10 @@ from langchain.schema.runnable import RunnableSequence, RunnableWithFallbacks
 from PIL import Image
 from pydantic.v1 import BaseModel
 
-from funcchain.config import settings
-from funcchain.parser import MultiToolParser, ParserBaseModel
-from funcchain.prompt import create_prompt
-from funcchain.utils import (
+from .settings import settings
+from .parser import MultiToolParser, ParserBaseModel
+from .prompt import create_prompt
+from .utils import (
     from_docstring,
     get_output_type,
     get_parent_frame,
