@@ -39,9 +39,6 @@ class Router(BaseModel):
 
 def route_query(user_query: str) -> Router:
     """
-    USER_QUERY:
-    {user_query}
-
     Given a user query select the best query handler for it.
     """
     return chain()
