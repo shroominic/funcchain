@@ -41,9 +41,6 @@ example_legal_questions = [
 
 def generate_tos(answered_questions: list[str]) -> str:
     """
-    Answered Questions:
-    {answered_questions}
-
     Based on the answered questions generate a Terms of Service.
     Respond with the full markdown text of the Terms of Service.
     """
@@ -52,11 +49,8 @@ def generate_tos(answered_questions: list[str]) -> str:
 
 def generate_pp(answered_questions: list[str]) -> str:
     """
-    Answered Questions:
-    {answered_questions}
-
     Based on the answered questions generate a Privacy Policy.
-    Respond with the full markdown text of the Privacy Policy.
+    Respond with the full markdown text of the PP.
     """
     return chain()
 
