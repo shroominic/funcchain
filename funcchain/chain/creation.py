@@ -1,7 +1,6 @@
 from types import UnionType
 from typing import TypeVar, Union
 
-from langchain.callbacks import get_openai_callback
 from langchain.chat_models.base import BaseChatModel
 from langchain.output_parsers.openai_functions import PydanticOutputFunctionsParser
 from langchain.prompts import ChatPromptTemplate
@@ -11,35 +10,33 @@ from langchain.schema.runnable import RunnableSequence, RunnableWithFallbacks
 from PIL import Image
 from pydantic.v1 import BaseModel
 
-from .settings import settings
-from .parser import MultiToolParser, ParserBaseModel
-from .prompt import create_prompt
-from .utils import (
+from ..settings import settings
+from ..parser import MultiToolParser, ParserBaseModel
+from ..utils import (
     from_docstring,
     get_output_type,
-    get_parent_frame,
     is_function_model,
     is_vision_model,
     kwargs_from_parent,
-    log,
     model_from_env,
     multi_pydantic_to_functions,
     parser_for,
     pydantic_to_functions,
-    retry_parse,
 )
+from .prompt import create_prompt
 
-T = TypeVar("T")
+
+ChainOutput = TypeVar("ChainOutput")
 
 
 def create_union_chain(
     output_type: type[BaseModel],
     instruction: str,
-    system: str = settings.DEFAULT_SYSTEM_PROMPT,
+    system: str,
     context: list[BaseMessage] = [],
     LLM: BaseChatModel | RunnableWithFallbacks | None = None,
     **input_kwargs: str,
-) -> RunnableSequence[dict[str, str], T]:
+) -> RunnableSequence[dict[str, str], ChainOutput]:
     output_types = output_type.__args__  # type: ignore
     output_type_names = [t.__name__ for t in output_types]
 
@@ -61,8 +58,8 @@ def create_union_chain(
         LLM = LLM.bind(**functions)  # type: ignore
 
     prompt = create_prompt(
-        instruction,
         system,
+        instruction,
         [
             *context,
             HumanMessage(content="Can you use a function call for the next response?"),
@@ -80,7 +77,7 @@ def create_pydanctic_chain(
     prompt: ChatPromptTemplate,
     LLM: BaseChatModel | RunnableWithFallbacks,
     **input_kwargs: str,
-) -> RunnableSequence[dict[str, str], T]:
+) -> RunnableSequence[dict[str, str], ChainOutput]:
     input_kwargs["format_instructions"] = f"Extract to {output_type.__name__}."
     functions = pydantic_to_functions(output_type)
     LLM = (
@@ -98,13 +95,13 @@ def create_pydanctic_chain(
 
 
 def create_chain(
-    instruction: str | None = None,
-    system: str = settings.DEFAULT_SYSTEM_PROMPT,
-    parser: BaseOutputParser[T] | None = None,
-    context: list[BaseMessage] = [],
-    memory: BaseChatMessageHistory | None = None,
-    input_kwargs: dict[str, str] = {},
-) -> RunnableSequence[dict[str, str], T]:
+    system: str | None,
+    instruction: str | None,
+    parser: BaseOutputParser[ChainOutput] | None,
+    context: list[BaseMessage],
+    memory: BaseChatMessageHistory | None,
+    input_kwargs: dict[str, str],
+) -> RunnableSequence[dict[str, str], ChainOutput]:
     output_type = get_output_type()
     instruction = instruction or from_docstring()
     parser = parser or parser_for(output_type)
@@ -128,7 +125,10 @@ def create_chain(
         memory.add_user_message(instruction)
         context = memory.messages + context
 
-    prompt = create_prompt(instruction, system, context, images=images, **input_kwargs)
+    if not system:
+        system = settings.DEFAULT_SYSTEM_PROMPT
+
+    prompt = create_prompt(system, instruction, context, images=images, **input_kwargs)
 
     if func_model:
         if getattr(output_type, "__origin__", None) is Union or isinstance(
@@ -158,57 +158,3 @@ def _add_format_instructions(
         return instruction
     except NotImplementedError:
         return instruction
-
-
-@retry_parse(5)
-def chain(
-    instruction: str | None = None,
-    system: str = settings.DEFAULT_SYSTEM_PROMPT,
-    parser: BaseOutputParser[T] | None = None,
-    context: list[BaseMessage] = [],
-    memory: BaseChatMessageHistory | None = None,
-    **input_kwargs: str,
-) -> T:  # type: ignore
-    """
-    Get response from chatgpt for provided instructions.
-    """
-    chain = create_chain(instruction, system, parser, context, memory, input_kwargs)
-
-    with get_openai_callback() as cb:
-        result = chain.invoke(input_kwargs)
-        if cb.total_tokens != 0:
-            log(
-                f"{cb.total_tokens:05}T / {cb.total_cost:.3f}$ - {get_parent_frame(3).function}"
-            )
-
-    if memory and isinstance(result, str):
-        memory.add_ai_message(result)
-
-    return result
-
-
-@retry_parse(5)
-async def achain(
-    instruction: str | None = None,
-    system: str = settings.DEFAULT_SYSTEM_PROMPT,
-    parser: BaseOutputParser[T] | None = None,
-    context: list[BaseMessage] = [],
-    memory: BaseChatMessageHistory | None = None,
-    **input_kwargs: str,
-) -> T:
-    """
-    Get response from chatgpt for provided instructions.
-    """
-    chain = create_chain(instruction, system, parser, context, memory, input_kwargs)
-
-    with get_openai_callback() as cb:
-        result = await chain.ainvoke(input_kwargs)
-        if cb.total_tokens != 0:
-            log(
-                f"{cb.total_tokens:05}T / {cb.total_cost:.3f}$ - {get_parent_frame(3).function}"
-            )
-
-    if memory and isinstance(result, str):
-        memory.add_ai_message(result)
-
-    return result
