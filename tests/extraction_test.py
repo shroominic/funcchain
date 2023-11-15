@@ -1,4 +1,6 @@
-from funcchain import BaseModel, achain, chain
+from funcchain import achain, chain, settings, BaseModel
+
+settings.MODEL_TEMPERATURE = 0
 
 
 class Task(BaseModel):
@@ -47,9 +49,9 @@ def test_extraction() -> None:
     )
 
     task_description = description(task)
-    task2 = _await(extract_task(task_description))
+    _task = _await(extract_task(task_description))
 
-    assert compare_tasks(task, task2)
+    assert compare_tasks(task, _task)
 
 
 if __name__ == "__main__":
