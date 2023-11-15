@@ -12,9 +12,6 @@ class Task(BaseModel):
 
 def gather_infos(task_input: str) -> Task:
     """
-    TASK_INPUT:
-    {task_input}
-
     Based on this task input, gather all task infos.
     """
     return chain()
