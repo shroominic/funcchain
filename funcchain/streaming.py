@@ -5,6 +5,7 @@ from langchain.schema.output import ChatGenerationChunk, GenerationChunk, LLMRes
 from typing import Generator, AsyncGenerator, Callable, Coroutine, Awaitable, Any
 from langchain.callbacks.base import AsyncCallbackHandler
 from langchain.schema.messages import BaseMessage
+# from .utils import count_tokens
 
 
 class AsyncStreamHandler(AsyncCallbackHandler):
@@ -27,6 +28,14 @@ class AsyncStreamHandler(AsyncCallbackHandler):
         metadata: dict[str, Any] | None = None,
         **kwargs: Any,
     ) -> Any:
+        # for lists in messages:
+        #     for message in lists:
+        #         if message.content:
+        #             if isinstance(message.content, str):
+        #                 self.tokens += count_tokens(message.content)
+        #             elif isinstance(message.content, list):
+        #                 print("token_counting", message.content)
+        #                 # self.tokens += count_tokens(message)
         pass
     
     async def on_llm_new_token(
