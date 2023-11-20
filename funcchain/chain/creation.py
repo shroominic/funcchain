@@ -11,6 +11,7 @@ from PIL import Image
 from pydantic.v1 import BaseModel
 
 from ..settings import settings
+from ..streaming import stream_handler
 from ..parser import MultiToolParser, ParserBaseModel
 from ..utils import (
     from_docstring,
@@ -108,6 +109,20 @@ def create_chain(
     input_kwargs.update(kwargs_from_parent())
 
     LLM = settings.LLM or model_from_env()
+    if not LLM:
+        raise RuntimeError(
+            "No language model provided. Either set the LLM environment variable or "
+            "pass a model to the `chain` function."
+        )
+    if handler := stream_handler.get():
+        print("handler", handler)
+        if isinstance(LLM, RunnableWithFallbacks) and isinstance(
+            LLM.runnable, BaseChatModel
+        ):
+            LLM.runnable.callbacks = [handler]
+        elif isinstance(LLM, BaseChatModel):
+            LLM.callbacks = [handler]
+
     func_model = is_function_model(LLM)
 
     if parser and not func_model:
