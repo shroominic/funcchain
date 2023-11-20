@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "funcchain"
-version = "0.1.5"
+version = "0.1.6"
 description = "🔖 write prompts as python functions"
 authors = ["Shroominic <contact@shroominic.com>"]
 license = "MIT License"
@@ -9,7 +9,7 @@ readme = "README.md"
 [tool.poetry.dependencies]
 python = ">=3.10, <3.13"
 numpy = ">=1.26"
-langchain = ">=0.0.335"
+langchain = ">=0.0.336"
 pydantic = ">2"
 aiohttp = "3.9.0b1"
 python-dotenv = "^1"
