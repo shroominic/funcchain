@@ -2,6 +2,7 @@
 Simple chatgpt rebuild with memory/history.
 """
 from funcchain import chain
+from funcchain.streaming import stream_to
 from langchain.memory import ChatMessageHistory
 
 
@@ -10,8 +11,8 @@ history = ChatMessageHistory()
 
 def ask(question: str) -> str:
     return chain(
-        instruction=question,
         system="You are an advanced AI Assistant.",
+        instruction=question,
         memory=history,
     )
 
@@ -19,7 +20,7 @@ def ask(question: str) -> str:
 def chat_loop() -> None:
     while True:
         query = input("> ")
-
+        
         if query == "exit":
             break
 
@@ -28,10 +29,11 @@ def chat_loop() -> None:
             history.clear()
             print("\033c")
             continue
-
-        print("AI:", ask(query))
+        
+        with stream_to(print):
+            ask(query)
 
 
 if __name__ == "__main__":
-    print("Hey! How can I help you?")
+    print("Hey! How can I help you?\n")
     chat_loop()
