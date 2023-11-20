@@ -3,6 +3,7 @@ from functools import wraps
 from time import sleep
 from asyncio import iscoroutinefunction, sleep as asleep
 from langchain.schema.output_parser import OutputParserException
+from langchain.callbacks.openai_info import OpenAICallbackHandler
 from langchain.callbacks import get_openai_callback
 from langchain.schema.runnable import RunnableSequence
 from rich import print
@@ -48,45 +49,36 @@ def retry_parse(fn: Any) -> Any:
 
 
 def log_openai_callback(fn: Any) -> Any:
-    if iscoroutinefunction(fn):
-        @wraps(fn)
-        async def async_wrapper(*args: Any, **kwargs: Any) -> Any:
-            if (chain := args[0]) and isinstance(chain, RunnableSequence):
-                with get_openai_callback() as cb:
-                    result = await chain.ainvoke(args[2])
-                    if cb.total_tokens != 0:
-                        total_cost = f"/ {cb.total_cost:.3f}$ " if cb.total_cost > 0 else ""
-                        if total_cost == "/ 0.000$ ":
-                            total_cost = "/ 0.001$ "
-                        _log(
-                            f"{cb.total_tokens:05}T {total_cost}- {get_parent_frame(4).function}"
-                        )
-                    return result
-            return await fn(*args, **kwargs)
-
-        return async_wrapper
-
-    else:
+    if not iscoroutinefunction(fn):
         @wraps(fn)
         def sync_wrapper(*args: Any, **kwargs: Any) -> Any:
             if (chain := args[0]) and isinstance(chain, RunnableSequence):
                 with get_openai_callback() as cb:
-                    result = chain.invoke(args[2])
-                    if cb.total_tokens != 0:
-                        total_cost = f"/ {cb.total_cost:.3f}$ " if cb.total_cost > 0 else ""
-                        if total_cost == "/ 0.000$ ":
-                            total_cost = "/ 0.001$ "
-                        _log(
-                            f"{cb.total_tokens:05}T {total_cost}- {get_parent_frame(4).function}"
-                        )
+                    result = fn(*args, **kwargs)
+                    _log_cost(cb, name=get_parent_frame(4).function)
                     return result
-            return fn(*args, **kwargs)
 
         return sync_wrapper
 
+    else:
+        @wraps(fn)
+        async def async_wrapper(*args: Any, **kwargs: Any) -> Any:
+            if (chain := args[0]) and isinstance(chain, RunnableSequence):
+                with get_openai_callback() as cb:
+                    result = await fn(*args, **kwargs)
+                    _log_cost(cb, name=get_parent_frame(4).function)
+                    return result
 
-def _log(*text: Any) -> None:
-    from ..settings import settings
-    
-    if settings.DEBUG:
-        print("[bright_black]" + " ".join(map(str, text)) + "[/bright_black]")
+        return async_wrapper
+
+
+def _log_cost(cb: OpenAICallbackHandler, name: str) -> None:
+    if cb.total_tokens != 0:
+        total_cost = f"/ {cb.total_cost:.3f}$ " if cb.total_cost > 0 else ""
+        if total_cost == "/ 0.000$ ":
+            total_cost = "/ 0.001$ "
+        print(
+            "[bright_black]"
+            f"{cb.total_tokens:05}T {total_cost}- {name}"
+            "[/bright_black]"
+        )
