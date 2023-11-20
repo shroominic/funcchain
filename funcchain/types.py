@@ -1,6 +1,7 @@
 import re
 import json
-from typing import Optional, Self
+from typing import Optional
+from typing_extensions import Self
 
 from pydantic.v1 import BaseModel, Field
 from langchain.schema import OutputParserException
