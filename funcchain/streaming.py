@@ -10,13 +10,15 @@ from langchain.schema.messages import BaseMessage
 
 class AsyncStreamHandler(AsyncCallbackHandler):
     """Async callback handler that can be used to handle callbacks from langchain."""
-    
-    def __init__(self, fn: Callable[[str], Awaitable[None] | None], default_kwargs: dict) -> None:
+
+    def __init__(
+        self, fn: Callable[[str], Awaitable[None] | None], default_kwargs: dict
+    ) -> None:
         self.fn = fn
         self.default_kwargs = default_kwargs
         self.cost: float = 0.0
         self.tokens: int = 0
-    
+
     async def on_chat_model_start(
         self,
         serialized: dict[str, Any],
@@ -37,7 +39,7 @@ class AsyncStreamHandler(AsyncCallbackHandler):
         #                 print("token_counting", message.content)
         #                 # self.tokens += count_tokens(message)
         pass
-    
+
     async def on_llm_new_token(
         self,
         token: str,
@@ -52,7 +54,7 @@ class AsyncStreamHandler(AsyncCallbackHandler):
             await self.fn(token, **self.default_kwargs)
         else:
             self.fn(token, **self.default_kwargs)
-    
+
     async def on_llm_end(
         self,
         response: LLMResult,
@@ -66,11 +68,15 @@ class AsyncStreamHandler(AsyncCallbackHandler):
             print("\n")
 
 
-stream_handler: ContextVar[AsyncStreamHandler | None] = ContextVar("stream_handler", default=None)
+stream_handler: ContextVar[AsyncStreamHandler | None] = ContextVar(
+    "stream_handler", default=None
+)
 
 
 @contextmanager
-def stream_to(fn: Callable[[str], None], **kwargs: Any) -> Generator[AsyncStreamHandler, None, None]:
+def stream_to(
+    fn: Callable[[str], None], **kwargs: Any
+) -> Generator[AsyncStreamHandler, None, None]:
     """
     Stream the llm tokens to a given function.
 
@@ -87,10 +93,12 @@ def stream_to(fn: Callable[[str], None], **kwargs: Any) -> Generator[AsyncStream
 
 
 @asynccontextmanager
-async def astream_to(fn: Callable[[str], Awaitable[None] | None], **kwargs: Any) -> AsyncGenerator[AsyncStreamHandler, None]:
+async def astream_to(
+    fn: Callable[[str], Awaitable[None] | None], **kwargs: Any
+) -> AsyncGenerator[AsyncStreamHandler, None]:
     """
     Asyncronously stream the llm tokens to a given function.
-    
+
     Example:
         >>> async with astream_to(print):
         ...     # your chain calls here

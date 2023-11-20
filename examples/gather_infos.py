@@ -13,7 +13,7 @@ class Task(BaseModel):
 def gather_infos(task_input: str) -> Task:
     """
     Task: {task_input}
-    
+
     Based on this task input, gather all task infos.
     """
     return chain()
@@ -22,7 +22,7 @@ def gather_infos(task_input: str) -> Task:
 def plan_task(task: Task) -> str:
     """
     Task: { task.name }
-    
+
     Based on the task infos, plan the task.
     """
     return chain()
@@ -37,7 +37,7 @@ def main() -> None:
     print("description:", task.description)
     print("difficulty:", task.difficulty)
     print("keywords:", task.keywords)
-    
+
     plan = plan_task(task)
     print("\nplan:", plan)
 

@@ -11,5 +11,6 @@ def generate_story_of(topic: str) -> str:
     """
     return chain()
 
+
 with stream_to(print):
     generate_story_of("a space cat")

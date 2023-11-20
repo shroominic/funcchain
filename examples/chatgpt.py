@@ -20,7 +20,7 @@ def ask(question: str) -> str:
 def chat_loop() -> None:
     while True:
         query = input("> ")
-        
+
         if query == "exit":
             break
 
@@ -29,7 +29,7 @@ def chat_loop() -> None:
             history.clear()
             print("\033c")
             continue
-        
+
         with stream_to(print):
             ask(query)
 

@@ -9,7 +9,7 @@ from langchain.schema.runnable import RunnableSequence
 from rich import print
 
 from .function_frame import get_parent_frame
-    
+
 
 def retry_parse(fn: Any) -> Any:
     """
@@ -19,9 +19,11 @@ def retry_parse(fn: Any) -> Any:
     - OutputParserException: If the output cannot be parsed.
     """
     from ..settings import settings
+
     retry = settings.RETRY_PARSE
-    
+
     if iscoroutinefunction(fn):
+
         @wraps(fn)
         async def async_wrapper(*args: Any, **kwargs: Any) -> Any:
             for r in range(retry):
@@ -35,6 +37,7 @@ def retry_parse(fn: Any) -> Any:
         return async_wrapper
 
     else:
+
         @wraps(fn)
         def sync_wrapper(*args: Any, **kwargs: Any) -> Any:
             for r in range(retry):
@@ -50,6 +53,7 @@ def retry_parse(fn: Any) -> Any:
 
 def log_openai_callback(fn: Any) -> Any:
     if not iscoroutinefunction(fn):
+
         @wraps(fn)
         def sync_wrapper(*args: Any, **kwargs: Any) -> Any:
             if (chain := args[0]) and isinstance(chain, RunnableSequence):
@@ -61,6 +65,7 @@ def log_openai_callback(fn: Any) -> Any:
         return sync_wrapper
 
     else:
+
         @wraps(fn)
         async def async_wrapper(*args: Any, **kwargs: Any) -> Any:
             if (chain := args[0]) and isinstance(chain, RunnableSequence):
