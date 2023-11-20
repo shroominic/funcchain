@@ -32,6 +32,7 @@ class FuncchainSettings(BaseSettings):
     JINACHAT_API_KEY: Optional[str] = None
 
     # KWARGS
+    STREAMING: bool = False
     MODEL_NAME: str = "openai::gpt-3.5-turbo-1106"
     MODEL_TEMPERATURE: float = 0.1
     MODEL_REQUEST_TIMEOUT: float = 210
@@ -46,6 +47,7 @@ class FuncchainSettings(BaseSettings):
             "verbose": self.DEBUG,
             "openai_api_key": self.OPENAI_API_KEY,
             "max_tokens": self.MAX_TOKENS,
+            "streaming": self.STREAMING,
         }
 
 
