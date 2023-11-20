@@ -31,4 +31,6 @@
 
 [ ] - convert langchain tools to funcchain agent/router
 
-[ ] -
+[ ] - vscode extension for custom syntax highlighting
+
+[ ] - migrate to jinja2
