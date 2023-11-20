@@ -29,7 +29,6 @@ class LambdaOutputParser(BaseOutputParser[T]):
 
 class BoolOutputParser(BaseOutputParser[bool]):
     def parse(self, text: str) -> bool:
-        print(text)
         return text.strip()[:1].lower() == "y"
 
     def get_format_instructions(self) -> str:
