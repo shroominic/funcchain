@@ -69,7 +69,7 @@ def extract_fstring_vars(template: str) -> list[str]:
     Function to extract f-string variables from a string.
     """
     return [
-        field_name
+        print("field_name:", field_name) or field_name.split(".")[0]
         for _, field_name, _, _ in Formatter().parse(template)
         if field_name is not None
     ]
