@@ -115,7 +115,6 @@ def create_chain(
             "pass a model to the `chain` function."
         )
     if handler := stream_handler.get():
-        print("handler", handler)
         if isinstance(LLM, RunnableWithFallbacks) and isinstance(
             LLM.runnable, BaseChatModel
         ):
