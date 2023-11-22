@@ -9,9 +9,9 @@ settings.MODEL_NAME = "gpt-4-vision-preview"
 class AnalysisResult(BaseModel):
     """The result of an image analysis."""
 
-    theme: str = Field(..., description="The theme of the image")
-    description: str = Field(..., description="A description of the image")
-    objects: list[str] = Field(..., description="A list of objects found in the image")
+    theme: str = Field(description="The theme of the image")
+    description: str = Field(description="A description of the image")
+    objects: list[str] = Field(description="A list of objects found in the image")
 
 
 def analyse_image(image: Image.Image) -> AnalysisResult:
@@ -23,7 +23,7 @@ def analyse_image(image: Image.Image) -> AnalysisResult:
 
 
 if __name__ == "__main__":
-    example_image = Image.open("examples/assets/cyberspace_landscape.jpg")
+    example_image = Image.open("examples/assets/old_chinese_temple.jpg")
 
     result = analyse_image(example_image)
 
