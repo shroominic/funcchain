@@ -3,21 +3,19 @@ from funcchain import chain
 
 
 class Item(BaseModel):
-    name: str = Field(..., description="Name of the item")
-    description: str = Field(..., description="Description of the item")
-    keywords: list[str] = Field(..., description="Keywords for the item")
+    name: str = Field(description="Name of the item")
+    description: str = Field(description="Description of the item")
+    keywords: list[str] = Field(description="Keywords for the item")
 
 
 class ShoppingList(BaseModel):
-    """List of items to buy"""
-
     items: list[Item]
-    store: str = Field(..., description="The store to buy the items from")
+    store: str = Field(description="The store to buy the items from")
 
 
 class TodoList(BaseModel):
     todos: list[Item]
-    urgency: int = Field(..., description="The urgency of all tasks (1-10)")
+    urgency: int = Field(description="The urgency of all tasks (1-10)")
 
 
 def extract_list(user_input: str) -> TodoList | ShoppingList:
@@ -27,7 +25,7 @@ def extract_list(user_input: str) -> TodoList | ShoppingList:
     return chain()
 
 
-user_input = input("Enter your list: ")
+user_input = "I need to buy apples, oranges and bananas from whole foods"
 lst = extract_list(user_input)
 
 if isinstance(lst, ShoppingList):
