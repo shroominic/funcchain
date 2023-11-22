@@ -30,7 +30,7 @@ print("Language Analyse: ", analysis)
 
 # %%
 class Analyse(BaseModel):
-    languages: list[str] = Field(..., description="List of languages in the text")
+    languages: list[str] = Field(description="List of languages in the text")
 
 
 def analyse(text: str) -> Analyse:
@@ -48,9 +48,9 @@ print("Languages: ", analysis2.languages)
 
 # %%
 class Task(BaseModel):
-    task_name: str = Field(..., description="Name of the task")
-    task_description: str = Field(..., description="Description of the task")
-    difficulty: int = Field(..., description="Difficulty of the task (1-10)")
+    task_name: str = Field(description="Name of the task")
+    task_description: str = Field(description="Description of the task")
+    difficulty: int = Field(description="Difficulty of the task (1-10)")
 
     @validator("difficulty")
     def validate_difficulty(cls, v: int) -> int:
