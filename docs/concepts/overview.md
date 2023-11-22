@@ -93,10 +93,8 @@ from pydantic.v1 import BaseModel, Field
 
 
 class Article(BaseModel):
-    title: str = Field(..., description="Title of the article")
-    description: str = Field(
-        ..., description="Description of the content of the article"
-    )
+    title: str = Field(description="Title of the article")
+    description: str = Field(description="Description of the content of the article")
 
 
 def summarize(text: str) -> Article:
