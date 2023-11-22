@@ -1,42 +1,44 @@
-[ ] - override global settings inside chain()
+[ ] - override global settings inside chain()  (2h)
 
-[ ] - retry on pydantic validation error
+[ ] - retry on pydantic validation error  (2h)
 
-[ ] - depends functionality to create nested chains and compile into runnables
+[ ] - depends functionality to create nested chains and compile into runnables  (10h)
         # add a deps thing to put into funcchain defs that takes another chain and compiles it into a runnable
         # so langsmith shows nested chains
         # in the chain creation process it just runns all of the depending chains in parallel and feeds the inputs into sub chain
         # output of every chain is string when inserted
 
-[ ] - vector retrieval type to add file/url context into chains
+[ ] - vector retrieval type to add file/url context into chains  (20h)
 
-[ ] - implement variable compression to inject as much context as possible without overloading
+[ ] - implement variable compression to inject as much context as possible without overloading  (20h)
         # Create a Compressable Context Schema where it is compressed in case the context lenght is already filled
         # So anything that is additional can be compressed to fit in the context but when other things that are important are not compressed.
         # Optionally you can define how to compress and where to leave the gaps (default in the middle with [...])
 
-[ ] - FuncchainException class
+[ ] - FuncchainException classes  (2h)
 
-[ ] - improve chain(*args interface)
+[ ] - improve chain(*args interface)  (2h)
 
-[ ] - enable union type without function calling
+[ ] - enable union type without function calling  (6h)
 
-[ ] - enable Error type for non union calls
+[ ] - enable Error type for non union calls  (4h)
 
-[ ] - develop Matrix wrapper idea
+[ ] - develop Matrix wrapper idea  (10h)
 
-[ ] - easy to use pre-written router
+[ ] - easy to use pre-written router  (20h)
 
-[ ] - funcchain agents module
+[ ] - funcchain Agent Framework with Task Dependencies  (30h)
 
-[ ] - convert langchain tools to funcchain agent/router
+[ ] - convert langchain tools to funcchain agent/router  (8h)
 
-[ ] - vscode extension for custom syntax highlighting
+[ ] - vscode extension for custom syntax highlighting  (30h)
 
-[ ] - migrate to jinja2
+[ ] - migrate to jinja2  (8h)
 
-[ ] - Universal Router Class
+[ ] - Universal Router Class  (16h)
 
-[ ] - Agent Framework with Task Dependencies
+[ ] - allow images as urls  (2h)
 
-[ ] - allow images as urls
+[ ] - brainstorm easy async helpers  (4h)
+
+[ ] - migrate to rye (2h)
