@@ -23,19 +23,21 @@ It works perfect with OpenAI Functions and soon with other models using JSONForm
 from pydantic.v1 import BaseModel, Field
 from funcchain import chain
 
+
 class Item(BaseModel):
-    name: str = Field(..., description="Name of the item")
-    description: str = Field(..., description="Description of the item")
-    keywords: list[str] = Field(..., description="Keywords for the item")
+    name: str = Field(description="Name of the item")
+    description: str = Field(description="Description of the item")
+    keywords: list[str] = Field(description="Keywords for the item")
 
 class ShoppingList(BaseModel):
     """ List of items to buy """
     items: list[Item]
-    store: str = Field(..., description="The store to buy the items from")
+    store: str = Field(description="The store to buy the items from")
 
 class TodoList(BaseModel):
     todos: list[Item]
-    urgency: int = Field(..., description="The urgency of all tasks (1-10)")
+    urgency: int = Field(description="The urgency of all tasks (1-10)")
+
 
 def extract_list(user_input: str) -> TodoList | ShoppingList:
     """
