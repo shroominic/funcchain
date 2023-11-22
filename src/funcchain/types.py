@@ -69,11 +69,12 @@ class CodeBlock(ParserBaseModel):
 
 class Error(BaseModel):
     """
-    If anything goes wrong and you can not do what is expected,
-    use this error function as fallback.
+    Fallback function for invalid input.
+    If you are unsure on what function to call, use this error function as fallback.
+    This will tell the user that the input is not valid.
     """
 
-    title: str = Field(..., description="CamelCase Name titeling the error")
+    title: str = Field(description="CamelCase Name titeling the error")
     description: str = Field(
         ..., description="Short description of the unexpected situation"
     )
