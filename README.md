@@ -1,5 +1,11 @@
 # funcchain
 
+[![Version](https://badge.fury.io/py/funcchain.svg)](https://badge.fury.io/py/funcchain)
+[![code-check](https://github.com/shroominic/funcchain/actions/workflows/code-check.yml/badge.svg)](https://github.com/shroominic/funcchain/actions/workflows/code-check.yml)
+![Downloads](https://img.shields.io/pypi/dm/funcchain)
+![License](https://img.shields.io/pypi/l/funcchain)
+![PyVersion](https://img.shields.io/pypi/pyversions/funcchain)
+
 ```bash
 > pip install funcchain
 ```
@@ -14,36 +20,33 @@ It works perfect with OpenAI Functions and soon with other models using JSONForm
 [![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/ricklamers/funcchain-demo)
 
 ```python
-from typing import Union, List
 from pydantic.v1 import BaseModel, Field
 from funcchain import chain
 
 class Item(BaseModel):
     name: str = Field(..., description="Name of the item")
     description: str = Field(..., description="Description of the item")
-    keywords: List[str] = Field(..., description="Keywords for the item")
+    keywords: list[str] = Field(..., description="Keywords for the item")
 
 class ShoppingList(BaseModel):
     """ List of items to buy """
-    items: List[Item]
+    items: list[Item]
     store: str = Field(..., description="The store to buy the items from")
 
 class TodoList(BaseModel):
-    todos: List[Item]
+    todos: list[Item]
     urgency: int = Field(..., description="The urgency of all tasks (1-10)")
 
-def extract_list(user_input: str) -> Union[TodoList, ShoppingList]:
+def extract_list(user_input: str) -> TodoList | ShoppingList:
     """
-    USER_INPUT:
-    {user_input}
-
     The user input is either a shopping List or a todo list.
     """
     return chain()
 
 
-user_input = input("Enter your list: ")
-lst = extract_list(user_input)
+lst = extract_list(
+    input("Enter your list: ")
+)
 
 if isinstance(lst, ShoppingList):
     print("Here is your Shopping List: ")
@@ -56,7 +59,6 @@ if isinstance(lst, TodoList):
     for item in lst.todos:
         print(f"{item.name}: {item.description}")
     print(f"Urgency: {lst.urgency}")
-
 ```
 
 ## Features
