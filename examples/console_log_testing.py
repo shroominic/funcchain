@@ -12,6 +12,7 @@ from typing import AsyncGenerator
 
 settings.MODEL_TEMPERATURE = 1
 settings.MODEL_NAME = "gpt-4-1106-preview"
+settings.STREAMING = True
 
 
 class RenderChain:
