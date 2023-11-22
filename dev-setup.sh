@@ -11,8 +11,11 @@ fi
 echo "SYNC: setup .venv"
 rye sync
 
-echo "SETUP: install pre-commit hooks"
-rye run pre-commit install
+echo "ACTIVATE: activate .venv"
+rye shell
 
-echo "TEST: run pytests"
-rye run pytest
+echo "SETUP: install pre-commit hooks"
+pre-commit install
+
+echo "TESTING ..."
+pytest
