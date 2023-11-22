@@ -34,7 +34,7 @@ class Routes(str, Enum):
 
 
 class Router(BaseModel):
-    selector: Routes = Field(..., description="Enum of the available routes.")
+    selector: Routes = Field(description="Enum of the available routes.")
 
 
 def route_query(user_query: str) -> Router:
