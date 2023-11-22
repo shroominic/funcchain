@@ -14,7 +14,9 @@ jobs:
       with:
         python-version: ${{ matrix.python-version }}
     - name: Install rye and dependencies
-      run: script -q -e -c "curl -sSf https://rye-up.com/get | bash && rye sync"
+      run: curl -sSf https://rye-up.com/get | bash
+    - name: Sync rye
+      run: rye sync
     - name: Run pre-commit
       run: rye run pre-commit run --all-files
     - name: Run tests
