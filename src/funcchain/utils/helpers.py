@@ -99,9 +99,12 @@ def _remove_a_key(d: dict, remove_key: str) -> None:
 
 
 def pydantic_to_functions(pydantic_object: Type[BaseModel]) -> dict[str, Any]:
+    from rich import print
+
     schema = pydantic_object.schema()
     docstring = parse(pydantic_object.__doc__ or "")
     parameters = {k: v for k, v in schema.items() if k not in ("title", "description")}
+
     for param in docstring.params:
         if (name := param.arg_name) in parameters["properties"] and (
             description := param.description
@@ -109,9 +112,6 @@ def pydantic_to_functions(pydantic_object: Type[BaseModel]) -> dict[str, Any]:
             if "description" not in parameters["properties"][name]:
                 parameters["properties"][name]["description"] = description
 
-    parameters["required"] = sorted(
-        k for k, v in parameters["properties"].items() if "default" not in v
-    )
     parameters["type"] = "object"
 
     if "description" not in schema:
@@ -125,6 +125,15 @@ def pydantic_to_functions(pydantic_object: Type[BaseModel]) -> dict[str, Any]:
 
     _remove_a_key(parameters, "title")
     _remove_a_key(parameters, "additionalProperties")
+
+    print(
+        "pydantic_to_functions",
+        {
+            "name": pydantic_object.__name__.lower(),
+            "description": schema["description"],
+            "parameters": parameters,
+        },
+    )
 
     return {
         "function_call": {
