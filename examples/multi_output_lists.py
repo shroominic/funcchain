@@ -1,29 +1,26 @@
-from typing import List, Union
-
 from pydantic.v1 import BaseModel, Field
-
 from funcchain import chain
 
 
 class Item(BaseModel):
     name: str = Field(..., description="Name of the item")
     description: str = Field(..., description="Description of the item")
-    keywords: List[str] = Field(..., description="Keywords for the item")
+    keywords: list[str] = Field(..., description="Keywords for the item")
 
 
 class ShoppingList(BaseModel):
     """List of items to buy"""
 
-    items: List[Item]
+    items: list[Item]
     store: str = Field(..., description="The store to buy the items from")
 
 
 class TodoList(BaseModel):
-    todos: List[Item]
+    todos: list[Item]
     urgency: int = Field(..., description="The urgency of all tasks (1-10)")
 
 
-def extract_list(user_input: str) -> Union[TodoList, ShoppingList]:
+def extract_list(user_input: str) -> TodoList | ShoppingList:
     """
     The user input is either a shopping List or a todo list.
     """
