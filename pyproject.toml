@@ -1,6 +1,6 @@
 [project]
 name = "funcchain"
-version = "0.1.7"
+version = "0.1.8"
 description = "🔖 write prompts as python functions"
 authors = [
     { name = "Shroominic", email = "contact@shroominic.com" }
