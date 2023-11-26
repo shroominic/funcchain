@@ -3,7 +3,7 @@ import json
 from typing import Optional
 from typing_extensions import Self
 
-from pydantic.v1 import BaseModel, Field
+from pydantic import BaseModel, Field
 from langchain.schema import OutputParserException
 from langchain.output_parsers.format_instructions import PYDANTIC_FORMAT_INSTRUCTIONS
 from langchain.schema.output_parser import BaseOutputParser

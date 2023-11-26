@@ -20,7 +20,7 @@ It works perfect with OpenAI Functions and soon with other models using JSONForm
 [![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/ricklamers/funcchain-demo)
 
 ```python
-from pydantic.v1 import BaseModel, Field
+from pydantic import BaseModel, Field
 from funcchain import chain
 
 

@@ -1,4 +1,4 @@
-from pydantic.v1 import BaseModel
+from pydantic import BaseModel
 
 from funcchain import chain
 
@@ -12,8 +12,6 @@ class Task(BaseModel):
 
 def gather_infos(task_input: str) -> Task:
     """
-    Task: {task_input}
-
     Based on this task input, gather all task infos.
     """
     return chain()
@@ -21,8 +19,6 @@ def gather_infos(task_input: str) -> Task:
 
 def plan_task(task: Task) -> str:
     """
-    Task: { task.name }
-
     Based on the task infos, plan the task.
     """
     return chain()

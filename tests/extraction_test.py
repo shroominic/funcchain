@@ -11,7 +11,7 @@ class Task(BaseModel):
     keywords: list[str]
 
     def __str__(self) -> str:
-        return self.json(indent=2)
+        return self.model_dump_json(indent=2)
 
 
 def description(task: Task) -> str:

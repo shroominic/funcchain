@@ -1,6 +1,6 @@
 import asyncio
 
-from pydantic.v1 import BaseModel
+from pydantic import BaseModel
 
 from funcchain import achain, chain
 
@@ -12,7 +12,7 @@ class Task(BaseModel):
     keywords: list[str]
 
     def __str__(self) -> str:
-        return self.json(indent=2)
+        return self.model_dump_json(indent=2)
 
 
 def description(task: Task) -> str:

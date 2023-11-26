@@ -6,7 +6,7 @@ from langchain.chat_models.base import BaseChatModel
 from langchain.schema.language_model import BaseLanguageModel
 from langchain.schema.messages import HumanMessage, SystemMessage
 from langchain.schema.runnable import Runnable, RunnableWithFallbacks
-from pydantic.v1 import BaseModel
+from pydantic import BaseModel
 from tiktoken import encoding_for_model
 
 
@@ -126,14 +126,14 @@ def pydantic_to_functions(pydantic_object: Type[BaseModel]) -> dict[str, Any]:
     _remove_a_key(parameters, "title")
     _remove_a_key(parameters, "additionalProperties")
 
-    print(
-        "pydantic_to_functions",
-        {
-            "name": pydantic_object.__name__.lower(),
-            "description": schema["description"],
-            "parameters": parameters,
-        },
-    )
+    # print(
+    #     "pydantic_to_functions",
+    #     {
+    #         "name": pydantic_object.__name__.lower(),
+    #         "description": schema["description"],
+    #         "parameters": parameters,
+    #     },
+    # )
 
     return {
         "function_call": {

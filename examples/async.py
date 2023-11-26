@@ -1,6 +1,6 @@
 import asyncio
 
-from pydantic.v1 import BaseModel
+from pydantic import BaseModel
 
 from funcchain import achain, settings
 

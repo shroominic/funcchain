@@ -24,7 +24,7 @@ You can use Pydantic models to validate the response.
 
 ```python
 from funcchain import chain
-from pydantic.v1 import BaseModel
+from pydantic import BaseModel
 
 
 class Message(BaseModel):

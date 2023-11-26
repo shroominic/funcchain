@@ -1,4 +1,4 @@
-from pydantic.v1 import BaseModel, Field, validator
+from pydantic import BaseModel, Field, validator
 
 # %%
 from funcchain import chain

@@ -1,13 +1,20 @@
+import re
 import copy
 import json
 from typing import Callable, Optional, Type, TypeVar
 
-from langchain.output_parsers.openai_functions import PydanticOutputFunctionsParser
-from langchain.schema import ChatGeneration, Generation, OutputParserException
+from langchain.schema import (
+    ChatGeneration,
+    Generation,
+    OutputParserException,
+    AIMessage,
+)
+from langchain.output_parsers.format_instructions import PYDANTIC_FORMAT_INSTRUCTIONS
 from langchain.schema.output_parser import BaseGenerationOutputParser, BaseOutputParser
-from pydantic.v1 import BaseModel, ValidationError
+from pydantic import BaseModel, ValidationError
 
 from .types import ParserBaseModel, CodeBlock as CodeBlock
+from .exceptions import ParsingRetryException
 
 T = TypeVar("T")
 
@@ -42,8 +49,46 @@ class BoolOutputParser(BaseOutputParser[bool]):
 M = TypeVar("M", bound=BaseModel)
 
 
+class PydanticFuncParser(BaseGenerationOutputParser[M]):
+    pydantic_schema: Type[M]
+    args_only: bool = False
+
+    def parse_result(self, result: list[Generation], *, partial: bool = False) -> M:
+        generation = result[0]
+        if not isinstance(generation, ChatGeneration):
+            raise OutputParserException(
+                "This output parser can only be used with a chat generation.",
+            )
+        message = generation.message
+        try:
+            func_call = copy.deepcopy(message.additional_kwargs["function_call"])
+        except KeyError as exc:
+            raise ParsingRetryException(
+                f"Could not parse function call: {exc}",
+                message=message,
+            )
+
+        if self.args_only:
+            _result = func_call["arguments"]
+        else:
+            _result = func_call
+        try:
+            if self.args_only:
+                pydantic_args = self.pydantic_schema.model_validate_json(_result)
+            else:
+                pydantic_args = self.pydantic_schema.model_validate_json(
+                    _result["arguments"]
+                )
+        except ValidationError as exc:
+            raise ParsingRetryException(
+                f"Could not parse function call: {exc}", message=message
+            )
+        return pydantic_args
+
+
 class MultiToolParser(BaseGenerationOutputParser[M]):
     output_types: list[Type[M]]
+    args_only: bool = False
 
     def parse_result(self, result: list[Generation], *, partial: bool = False) -> M:
         function_call = self._pre_parse_function_call(result)
@@ -53,9 +98,39 @@ class MultiToolParser(BaseGenerationOutputParser[M]):
         if function_call["name"] not in output_type_names:
             raise OutputParserException("Invalid function call")
 
-        parser = self._get_parser_for(function_call["name"])
+        print(function_call["name"])
 
-        return parser.parse_result(result)
+        output_type = self._get_output_type(function_call["name"])
+
+        generation = result[0]
+        if not isinstance(generation, ChatGeneration):
+            raise OutputParserException(
+                "This output parser can only be used with a chat generation."
+            )
+        message = generation.message
+        try:
+            func_call = copy.deepcopy(message.additional_kwargs["function_call"])
+        except KeyError as exc:
+            raise ParsingRetryException(
+                f"Could not parse function call: {exc}", message=message
+            )
+
+        if self.args_only:
+            _result = func_call["arguments"]
+        else:
+            _result = func_call
+
+        try:
+            if self.args_only:
+                pydantic_args = output_type.model_validate_json(_result)
+            else:
+                pydantic_args = output_type.model_validate_json(_result["arguments"])
+        except ValidationError as exc:
+            raise ParsingRetryException(
+                f"Could not parse function call: {exc}",
+                message=message,
+            )
+        return pydantic_args
 
     def _pre_parse_function_call(self, result: list[Generation]) -> dict:
         generation = result[0]
@@ -67,13 +142,14 @@ class MultiToolParser(BaseGenerationOutputParser[M]):
         try:
             func_call = copy.deepcopy(message.additional_kwargs["function_call"])
         except KeyError:
-            raise OutputParserException(
-                f"The model refused to respond with a function call:\n{message.content}\n\n"
+            raise ParsingRetryException(
+                f"The model refused to respond with a function call:\n{message.content}\n\n",
+                message=message,
             )
 
         return func_call
 
-    def _get_parser_for(self, function_name: str) -> BaseGenerationOutputParser[M]:
+    def _get_output_type(self, function_name: str) -> Type[M]:
         output_type_iter = filter(
             lambda t: t.__name__.lower() == function_name, self.output_types
         )
@@ -81,9 +157,7 @@ class MultiToolParser(BaseGenerationOutputParser[M]):
             raise OutputParserException(
                 f"No parser found for function: {function_name}"
             )
-        output_type: Type[M] = next(output_type_iter)
-
-        return PydanticOutputFunctionsParser(pydantic_schema=output_type)
+        return next(output_type_iter)
 
 
 P = TypeVar("P", bound=ParserBaseModel)
@@ -96,13 +170,13 @@ class CustomPydanticOutputParser(BaseOutputParser[P]):
         try:
             return self.pydantic_object.parse(text)
         except (json.JSONDecodeError, ValidationError) as e:
-            raise OutputParserException(
+            raise ParsingRetryException(
                 f"Failed to parse {self.pydantic_object.__name__} from completion {text}. Got: {e}",
-                llm_output=text,
+                message=AIMessage(content=text),
             )
 
     def get_format_instructions(self) -> str:
-        reduced_schema = self.pydantic_object.schema()
+        reduced_schema = self.pydantic_object.model_json_schema()
         if "title" in reduced_schema:
             del reduced_schema["title"]
         if "type" in reduced_schema:
@@ -111,6 +185,49 @@ class CustomPydanticOutputParser(BaseOutputParser[P]):
         return self.pydantic_object.format_instructions().format(
             schema=json.dumps(reduced_schema),
         )
+
+    @property
+    def _type(self) -> str:
+        return "pydantic"
+
+
+class PydanticOutputParser(BaseOutputParser[M]):
+    """Parse an output using a pydantic model."""
+
+    pydantic_object: Type[M]
+    """The pydantic model to parse."""
+
+    def parse(self, text: str) -> M:
+        try:
+            # Greedy search for 1st json candidate.
+            match = re.search(
+                r"\{.*\}", text.strip(), re.MULTILINE | re.IGNORECASE | re.DOTALL
+            )
+            json_str = ""
+            if match:
+                json_str = match.group()
+            json_object = json.loads(json_str, strict=False)
+            return self.pydantic_object.model_validate(json_object)
+
+        except (json.JSONDecodeError, ValidationError) as e:
+            raise ParsingRetryException(
+                str(e),
+                message=AIMessage(content=text),
+            )
+
+    def get_format_instructions(self) -> str:
+        schema = self.pydantic_object.model_json_schema()
+
+        # Remove extraneous fields.
+        reduced_schema = schema
+        if "title" in reduced_schema:
+            del reduced_schema["title"]
+        if "type" in reduced_schema:
+            del reduced_schema["type"]
+        # Ensure json in context is well-formed with double quotes.
+        schema_str = json.dumps(reduced_schema)
+
+        return PYDANTIC_FORMAT_INSTRUCTIONS.format(schema=schema_str)
 
     @property
     def _type(self) -> str:
