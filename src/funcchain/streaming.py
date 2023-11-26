@@ -5,7 +5,6 @@ from langchain.schema.output import ChatGenerationChunk, GenerationChunk, LLMRes
 from typing import Generator, AsyncGenerator, Callable, Coroutine, Awaitable, Any
 from langchain.callbacks.base import AsyncCallbackHandler
 from langchain.schema.messages import BaseMessage
-# from .utils import count_tokens
 
 
 class AsyncStreamHandler(AsyncCallbackHandler):
@@ -30,6 +29,7 @@ class AsyncStreamHandler(AsyncCallbackHandler):
         metadata: dict[str, Any] | None = None,
         **kwargs: Any,
     ) -> Any:
+        # from .utils import count_tokens
         # for lists in messages:
         #     for message in lists:
         #         if message.content:
@@ -84,6 +84,7 @@ def stream_to(
         >>> with stream_to(print):
         ...     # your chain calls here
     """
+    # TODO: set streaming to true specifically in this context
     if fn is print and kwargs == {}:
         kwargs = {"end": "", "flush": True}
     cb = AsyncStreamHandler(fn, kwargs)
