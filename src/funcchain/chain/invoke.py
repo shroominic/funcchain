@@ -19,7 +19,7 @@ def invoke(
     memory: BaseChatMessageHistory,
     input_kw: dict[str, str] = {},
     callbacks: Callbacks = None,
-) -> T:
+) -> T:  # type: ignore
     chain = create_chain(
         system,
         instruction,
