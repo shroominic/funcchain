@@ -6,66 +6,76 @@ from langchain.prompts.chat import (
     BaseStringMessagePromptTemplate,
     MessagePromptTemplateT,
 )
+from langchain.schema.chat_history import BaseChatMessageHistory
 from langchain.prompts.prompt import PromptTemplate
 from langchain.schema import BaseMessage, HumanMessage, SystemMessage
 from PIL import Image
 
-from ..utils import count_tokens, image_to_base64_url  # type: ignore
+from ..utils import image_to_base64_url
 
 
-def create_prompt(
-    system: str,
+def create_instruction_prompt(
     instruction: str,
-    context: list[BaseMessage] = [],
-    images: list[Image.Image] = [],
-    **input_kwargs: str,
-) -> ChatPromptTemplate:
-    """
-    Helper to create a prompt from an instruction and a system message.
-    """
-    base_tokens = count_tokens(instruction + system)
-    for k, v in input_kwargs.copy().items():
-        if isinstance(v, str):
-            from funcchain import settings  # fix circular import
+    images: list[Image.Image],
+    input_kwargs: dict[str, str],
+) -> "HumanImageMessagePromptTemplate":
+    template_format = _determine_format(instruction)
 
-            content_tokens = count_tokens(v)
-            if base_tokens + content_tokens > settings.MAX_TOKENS:
-                input_kwargs[k] = v[: (settings.MAX_TOKENS - base_tokens) * 2 // 3]
-                print("Truncated: ", len(input_kwargs[k]))
+    required_f_str_vars = _extract_fstring_vars(instruction)
 
-    template_format = (
-        "jinja2" if "{{" in instruction or "{%" in instruction else "f-string"
-    )
-
-    required_f_str_vars = extract_fstring_vars(instruction)  # TODO: jinja2
-    if "format_instructions" in required_f_str_vars:
-        required_f_str_vars.remove("format_instructions")
+    # if "format_instructions" in required_f_str_vars:
+    #     required_f_str_vars.remove("format_instructions")
 
     inject_vars = [
-        f"[{var}]:\n{value}\n"
-        for var, value in input_kwargs.items()
+        f"{var.upper()}:\n{{{var}}}\n"
+        for var, _ in input_kwargs.items()
         if var not in required_f_str_vars
     ]
-    added_instruction = ("".join(inject_vars)).replace("{", "{{").replace("}", "}}")
+    added_instruction = "".join(inject_vars)
     instruction = added_instruction + instruction
 
     images = [image_to_base64_url(image) for image in images]
 
+    return HumanImageMessagePromptTemplate.from_template(
+        template=instruction,
+        template_format=template_format,
+        images=images,
+    )
+
+
+def create_chat_prompt(
+    system: str,
+    instruction_template: "HumanImageMessagePromptTemplate",
+    context: list[BaseMessage],
+    memory: BaseChatMessageHistory,
+) -> ChatPromptTemplate:
+    """
+    Compose a chat prompt from a system message,
+    context and instruction template.
+    """
+    # remove leading system message in case to not have two
+    if system and memory.messages and isinstance(memory.messages[0], SystemMessage):
+        memory.messages.pop(0)
+
     return ChatPromptTemplate.from_messages(
         [
             *([SystemMessage(content=system)] if system else []),
+            *memory.messages,
             *context,
-            HumanImageMessagePromptTemplate.from_template(
-                template=instruction,
-                template_format=template_format,
-                images=images,
-            ),
+            instruction_template,
         ]
     )
 
 
-def extract_fstring_vars(template: str) -> list[str]:
+def _determine_format(
+    instruction: str,
+) -> str:
+    return "jinja2" if "{{" in instruction or "{%" in instruction else "f-string"
+
+
+def _extract_fstring_vars(template: str) -> list[str]:
     """
+    TODO: enable jinja2 check
     Function to extract f-string variables from a string.
     """
     return [
