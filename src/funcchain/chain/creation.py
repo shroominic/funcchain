@@ -2,17 +2,25 @@ from types import UnionType
 from typing import TypeVar, Union
 
 from langchain.chat_models.base import BaseChatModel
-from langchain.output_parsers.openai_functions import PydanticOutputFunctionsParser
 from langchain.prompts import ChatPromptTemplate
-from langchain.schema import AIMessage, BaseMessage, BaseOutputParser, HumanMessage
+from langchain.schema import (
+    AIMessage,
+    BaseMessage,
+    BaseOutputParser,
+    HumanMessage,
+)
 from langchain.schema.chat_history import BaseChatMessageHistory
-from langchain.schema.runnable import RunnableSequence, RunnableWithFallbacks
+from langchain.schema.runnable import (
+    RunnableSequence,
+    RunnableWithFallbacks,
+    RunnableSerializable,
+)
 from PIL import Image
-from pydantic.v1 import BaseModel
+from pydantic import BaseModel
 
-from ..settings import settings
+from ..settings import settings, FuncchainSettings
 from ..streaming import stream_handler
-from ..parser import MultiToolParser, ParserBaseModel
+from ..parser import MultiToolParser, ParserBaseModel, PydanticFuncParser
 from ..utils import (
     from_docstring,
     get_output_type,
@@ -21,22 +29,29 @@ from ..utils import (
     kwargs_from_parent,
     model_from_env,
     multi_pydantic_to_functions,
-    parser_for,
     pydantic_to_functions,
+    count_tokens,
+    parser_for,
 )
-from .prompt import create_prompt
+from .prompt import (
+    create_chat_prompt,
+    create_instruction_prompt,
+    HumanImageMessagePromptTemplate,
+)
 
 
 ChainOutput = TypeVar("ChainOutput")
 
 
+# TODO: do patch instead of seperate creation
 def create_union_chain(
     output_type: type[BaseModel],
-    instruction: str,
+    instruction_prompt: HumanImageMessagePromptTemplate,
     system: str,
-    context: list[BaseMessage] = [],
-    LLM: BaseChatModel | RunnableWithFallbacks | None = None,
-    **input_kwargs: str,
+    memory: BaseChatMessageHistory,
+    context: list[BaseMessage],
+    LLM: BaseChatModel | RunnableWithFallbacks,
+    input_kwargs: dict[str, str],
 ) -> RunnableSequence[dict[str, str], ChainOutput]:
     output_types = output_type.__args__  # type: ignore
     output_type_names = [t.__name__ for t in output_types]
@@ -58,27 +73,28 @@ def create_union_chain(
     else:
         LLM = LLM.bind(**functions)  # type: ignore
 
-    prompt = create_prompt(
+    prompt = create_chat_prompt(
         system,
-        instruction,
+        instruction_prompt,
         context=[
             *context,
             HumanMessage(content="Can you use a function call for the next response?"),
             AIMessage(content="Yeah I can do that, just tell me what you need!"),
         ],
-        images=[],
-        **input_kwargs,
+        memory=memory,
     )
 
     return prompt | LLM | MultiToolParser(output_types=output_types)  # type: ignore
 
 
+# TODO: do patch instead of seperate creation
 def create_pydanctic_chain(
     output_type: type[BaseModel],
     prompt: ChatPromptTemplate,
     LLM: BaseChatModel | RunnableWithFallbacks,
-    **input_kwargs: str,
+    input_kwargs: dict[str, str],
 ) -> RunnableSequence[dict[str, str], ChainOutput]:
+    # TODO: check these format_instructions
     input_kwargs["format_instructions"] = f"Extract to {output_type.__name__}."
     functions = pydantic_to_functions(output_type)
     LLM = (
@@ -92,7 +108,7 @@ def create_pydanctic_chain(
         if isinstance(LLM, RunnableWithFallbacks)
         else LLM.bind(**functions)
     )
-    return prompt | LLM | PydanticOutputFunctionsParser(pydantic_schema=output_type)  # type: ignore
+    return prompt | LLM | PydanticFuncParser(pydantic_schema=output_type)  # type: ignore
 
 
 def create_chain(
@@ -100,33 +116,121 @@ def create_chain(
     instruction: str | None,
     parser: BaseOutputParser[ChainOutput] | None,
     context: list[BaseMessage],
-    memory: BaseChatMessageHistory | None,
+    memory: BaseChatMessageHistory,
     input_kwargs: dict[str, str],
-) -> RunnableSequence[dict[str, str], ChainOutput]:
+) -> RunnableSerializable[dict[str, str], ChainOutput]:
+    """
+    Compile a langchain runnable chain from the funcchain syntax.
+    """
+    # default values
     output_type = get_output_type()
+    input_kwargs.update(kwargs_from_parent())
+    system = system or settings.DEFAULT_SYSTEM_PROMPT
     instruction = instruction or from_docstring()
     parser = parser or parser_for(output_type)
-    input_kwargs.update(kwargs_from_parent())
 
-    LLM = settings.LLM or model_from_env()
-    if not LLM:
-        raise RuntimeError(
-            "No language model provided. Either set the LLM environment variable or "
-            "pass a model to the `chain` function."
+    # large language model
+    llm = _gather_llm(settings)
+
+    # add format instructions for parser
+    if parser and not is_function_model(llm):
+        instruction = _add_format_instructions(
+            parser,
+            instruction,
+            input_kwargs,
         )
-    if handler := stream_handler.get():
-        if isinstance(LLM, RunnableWithFallbacks) and isinstance(
-            LLM.runnable, BaseChatModel
+
+    # patch inputs
+    _crop_large_inputs(
+        system,
+        instruction,
+        input_kwargs,
+    )
+
+    # for vision models
+    images = _handle_images(llm, input_kwargs)
+
+    # create prompts
+    instruction_prompt = create_instruction_prompt(instruction, images, input_kwargs)
+    chat_prompt = create_chat_prompt(system, instruction_prompt, context, memory)
+
+    # add formatted instruction to chat history
+    memory.add_message(instruction_prompt.format(**input_kwargs))
+
+    # function model patches
+    if is_function_model(llm):
+        if getattr(output_type, "__origin__", None) is Union or isinstance(
+            output_type, UnionType
         ):
-            LLM.runnable.callbacks = [handler]
-        elif isinstance(LLM, BaseChatModel):
-            LLM.callbacks = [handler]
+            return create_union_chain(
+                output_type,
+                instruction_prompt,
+                system,
+                memory,
+                context,
+                llm,
+                input_kwargs,
+            )
 
-    func_model = is_function_model(LLM)
+        if issubclass(output_type, BaseModel) and not issubclass(
+            output_type, ParserBaseModel
+        ):
+            return create_pydanctic_chain(
+                output_type,
+                chat_prompt,
+                llm,
+                input_kwargs,
+            )
 
-    if parser and not func_model:
-        instruction = _add_format_instructions(parser, instruction, input_kwargs)
+    return chat_prompt | llm | parser
 
+
+def _add_format_instructions(
+    parser: BaseOutputParser,
+    instruction: str,
+    input_kwargs: dict[str, str],
+) -> str:
+    """
+    Add parsing format instructions
+    to the instruction message and input_kwargs
+    if the output parser supports it.
+    """
+    try:
+        if format_instructions := parser.get_format_instructions():
+            instruction += "\n{format_instructions}"
+            input_kwargs["format_instructions"] = format_instructions
+        return instruction
+    except NotImplementedError:
+        return instruction
+
+
+def _crop_large_inputs(
+    system: str,
+    instruction: str,
+    input_kwargs: dict,
+) -> None:
+    """
+    TODO: replace MAX_TOKENS with MAX_CONTENT_LENGTH
+    Crop large inputs to avoid exceeding the maximum number of tokens.
+    """
+    base_tokens = count_tokens(instruction + system)
+    for k, v in input_kwargs.copy().items():
+        if isinstance(v, str):
+            from funcchain import settings
+
+            content_tokens = count_tokens(v)
+            if base_tokens + content_tokens > settings.MAX_TOKENS:
+                input_kwargs[k] = v[: (settings.MAX_TOKENS - base_tokens) * 2 // 3]
+                print("Truncated: ", len(input_kwargs[k]))
+
+
+def _handle_images(
+    LLM: BaseChatModel | RunnableWithFallbacks,
+    input_kwargs: dict[str, str],
+) -> list[Image.Image]:
+    """
+    Handle images for vision models.
+    """
     images = [v for v in input_kwargs.values() if isinstance(v, Image.Image)]
     if is_vision_model(LLM):
         input_kwargs = {
@@ -135,40 +239,23 @@ def create_chain(
     elif images:
         raise RuntimeError("Images as input are only supported for vision models.")
 
-    if memory:
-        memory.add_user_message(instruction)
-        context = memory.messages + context
+    return images
 
-    if not system:
-        system = settings.DEFAULT_SYSTEM_PROMPT
 
-    prompt = create_prompt(system, instruction, context, images=images, **input_kwargs)
-
-    if func_model:
-        if getattr(output_type, "__origin__", None) is Union or isinstance(
-            output_type, UnionType
+def _gather_llm(
+    settings: FuncchainSettings,
+) -> BaseChatModel | RunnableWithFallbacks:
+    llm = settings.LLM or model_from_env()
+    if not llm:
+        raise RuntimeError(
+            "No language model provided. Either set the LLM environment variable or "
+            "pass a model to the `chain` function."
+        )
+    if handler := stream_handler.get():
+        if isinstance(llm, RunnableWithFallbacks) and isinstance(
+            llm.runnable, BaseChatModel
         ):
-            return create_union_chain(
-                output_type, instruction, system, context, LLM, **input_kwargs
-            )
-
-        if issubclass(output_type, BaseModel) and not issubclass(
-            output_type, ParserBaseModel
-        ):
-            return create_pydanctic_chain(output_type, prompt, LLM, **input_kwargs)
-
-    return prompt | LLM | parser  # type: ignore
-
-
-def _add_format_instructions(
-    parser: BaseOutputParser,
-    instruction: str,
-    input_kwargs: dict[str, str],
-) -> str:
-    try:
-        if format_instructions := parser.get_format_instructions():
-            instruction += "\n{format_instructions}"
-            input_kwargs["format_instructions"] = format_instructions
-        return instruction
-    except NotImplementedError:
-        return instruction
+            llm.runnable.callbacks = [handler]
+        elif isinstance(llm, BaseChatModel):
+            llm.callbacks = [handler]
+    return llm
