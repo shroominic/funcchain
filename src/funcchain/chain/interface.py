@@ -1,10 +1,10 @@
 from typing import TypeVar
 
+from langchain.memory import ChatMessageHistory
 from langchain.schema import BaseMessage, BaseOutputParser
 from langchain.schema.chat_history import BaseChatMessageHistory
 
 from .invoke import invoke, ainvoke
-from .creation import create_chain
 
 
 ChainOutput = TypeVar("ChainOutput")
@@ -21,8 +21,14 @@ def chain(
     """
     Generate response of llm for provided instructions.
     """
-    chain = create_chain(system, instruction, parser, context, memory, input_kwargs)
-    return invoke(chain, memory, input_kwargs)
+    return invoke(
+        system,
+        instruction,
+        parser,
+        context,
+        memory or ChatMessageHistory(),
+        input_kwargs,
+    )
 
 
 async def achain(
@@ -36,5 +42,11 @@ async def achain(
     """
     Asyncronously generate response of llm for provided instructions.
     """
-    chain = create_chain(system, instruction, parser, context, memory, input_kwargs)
-    return await ainvoke(chain, memory, input_kwargs)
+    return await ainvoke(
+        system,
+        instruction,
+        parser,
+        context,
+        memory or ChatMessageHistory(),
+        input_kwargs,
+    )
