@@ -99,8 +99,6 @@ def _remove_a_key(d: dict, remove_key: str) -> None:
 
 
 def pydantic_to_functions(pydantic_object: Type[BaseModel]) -> dict[str, Any]:
-    from rich import print
-
     schema = pydantic_object.schema()
     docstring = parse(pydantic_object.__doc__ or "")
     parameters = {k: v for k, v in schema.items() if k not in ("title", "description")}
