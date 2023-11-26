@@ -7,9 +7,13 @@ from typing import Any, Optional
 from dotenv import load_dotenv
 from langchain.chat_models.base import BaseChatModel
 from langchain.schema.runnable import RunnableWithFallbacks
+from langchain.globals import set_llm_cache
+from langchain.cache import InMemoryCache
 from pydantic_settings import BaseSettings
 
 load_dotenv("./.env")
+
+set_llm_cache(InMemoryCache())
 
 
 class FuncchainSettings(BaseSettings):
@@ -48,6 +52,7 @@ class FuncchainSettings(BaseSettings):
             "openai_api_key": self.OPENAI_API_KEY,
             "max_tokens": self.MAX_TOKENS,
             "streaming": self.STREAMING,
+            # "format": "json",
         }
 
 
