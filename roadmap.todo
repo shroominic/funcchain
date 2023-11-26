@@ -1,4 +1,4 @@
-[ ] - override global settings inside chain()  (2h)
+[ ] - override global settings inside chain()  (4h)
 
 [ ] - retry on pydantic validation error  (2h)
 
@@ -25,7 +25,7 @@
 
 [ ] - develop Matrix wrapper idea  (10h)
 
-[ ] - easy to use pre-written router  (20h)
+[ ] - easy to use Universal Router Class (20h)
 
 [ ] - funcchain Agent Framework with Task Dependencies  (30h)
 
@@ -33,12 +33,14 @@
 
 [ ] - vscode extension for custom syntax highlighting  (30h)
 
-[ ] - migrate to jinja2  (8h)
-
-[ ] - Universal Router Class  (16h)
+[ ] - migrate to jinja2  (6h)
 
 [ ] - allow images as urls  (2h)
 
 [ ] - brainstorm easy async helpers  (4h)
 
 [ ] - cookbooks folder with jupyter notebook tutorials (6h)
+
+[ ] - parallel function calling  (8h)
+
+[ ] - FuncUnion and str output  (6h)
