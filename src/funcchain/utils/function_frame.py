@@ -2,13 +2,12 @@ import types
 from inspect import FrameInfo, currentframe, getouterframes
 from typing import Union
 
-from langchain.output_parsers import PydanticOutputParser
 from langchain.schema import BaseOutputParser, StrOutputParser
 
-from ..parser import BoolOutputParser, ParserBaseModel
+from ..parser import BoolOutputParser, ParserBaseModel, PydanticOutputParser
 
 
-def get_parent_frame(depth: int = 4) -> FrameInfo:
+def get_parent_frame(depth: int = 7) -> FrameInfo:
     """
     Get the dep'th parent function information.
     """
@@ -41,16 +40,16 @@ def get_output_type() -> type:
         raise ValueError("The funcchain must have a return type annotation")
 
 
-def parser_for(output_type: type) -> BaseOutputParser | None:
+def parser_for(output_type: type) -> BaseOutputParser:
     """
     Get the parser from the type annotation of the parent caller function.
     """
     if isinstance(output_type, types.UnionType):
-        return None
+        return None  # type: ignore  # TODO: fix
     #     return MultiPydanticOutputParser(pydantic_objects=output_type.__args__)
     if getattr(output_type, "__origin__", None) is Union:
         output_type = output_type.__args__[0]  # type: ignore
-        return None
+        return None  # type: ignore  # TODO: fix
     #     return MultiPydanticOutputParser(pydantic_objects=output_type.__args__)
     if output_type is str:
         return StrOutputParser()
@@ -59,7 +58,7 @@ def parser_for(output_type: type) -> BaseOutputParser | None:
     if issubclass(output_type, ParserBaseModel):
         return output_type.output_parser()  # type: ignore
 
-    from pydantic.v1 import BaseModel
+    from pydantic import BaseModel
 
     if issubclass(output_type, BaseModel):
         return PydanticOutputParser(pydantic_object=output_type)
