@@ -1,16 +1,18 @@
-from typing import Any
+from asyncio import iscoroutinefunction
+from asyncio import sleep as asleep
 from functools import wraps
 from time import sleep
-from asyncio import iscoroutinefunction, sleep as asleep
+from typing import Any
+
+from langchain.callbacks import get_openai_callback
+from langchain.callbacks.openai_info import OpenAICallbackHandler
 from langchain.schema import AIMessage
 from langchain.schema.chat_history import BaseChatMessageHistory
 from langchain.schema.output_parser import OutputParserException
-from langchain.callbacks.openai_info import OpenAICallbackHandler
-from langchain.callbacks import get_openai_callback
 from rich import print
 
-from .function_frame import get_parent_frame
 from ..exceptions import ParsingRetryException
+from .function_frame import get_parent_frame
 
 
 def retry_parse(fn: Any) -> Any:

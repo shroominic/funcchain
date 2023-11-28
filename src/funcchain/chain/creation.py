@@ -3,25 +3,21 @@ from typing import TypeVar, Union
 
 from langchain.chat_models.base import BaseChatModel
 from langchain.prompts import ChatPromptTemplate
-from langchain.schema import (
-    AIMessage,
-    BaseMessage,
-    BaseOutputParser,
-    HumanMessage,
-)
+from langchain.schema import AIMessage, BaseMessage, BaseOutputParser, HumanMessage
 from langchain.schema.chat_history import BaseChatMessageHistory
 from langchain.schema.runnable import (
     RunnableSequence,
-    RunnableWithFallbacks,
     RunnableSerializable,
+    RunnableWithFallbacks,
 )
 from PIL import Image
 from pydantic import BaseModel
 
-from ..settings import settings, FuncchainSettings
-from ..streaming import stream_handler
 from ..parser import MultiToolParser, ParserBaseModel, PydanticFuncParser
+from ..settings import FuncchainSettings, settings
+from ..streaming import stream_handler
 from ..utils import (
+    count_tokens,
     from_docstring,
     get_output_type,
     is_function_model,
@@ -29,16 +25,14 @@ from ..utils import (
     kwargs_from_parent,
     model_from_env,
     multi_pydantic_to_functions,
-    pydantic_to_functions,
-    count_tokens,
     parser_for,
+    pydantic_to_functions,
 )
 from .prompt import (
+    HumanImageMessagePromptTemplate,
     create_chat_prompt,
     create_instruction_prompt,
-    HumanImageMessagePromptTemplate,
 )
-
 
 ChainOutput = TypeVar("ChainOutput")
 

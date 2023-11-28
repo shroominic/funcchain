@@ -1,9 +1,10 @@
 """
 Simple chatgpt rebuild with memory/history.
 """
+from langchain.memory import ChatMessageHistory
+
 from funcchain import chain, settings
 from funcchain.streaming import stream_to
-from langchain.memory import ChatMessageHistory
 
 settings.STREAMING = True
 

@@ -1,4 +1,4 @@
-from funcchain import achain, chain, settings, BaseModel
+from funcchain import BaseModel, achain, chain, settings
 
 settings.MODEL_TEMPERATURE = 0
 settings.MODEL_NAME = "gpt-3.5-turbo-1106"

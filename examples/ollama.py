@@ -1,8 +1,8 @@
 from langchain.chat_models import ChatOllama
-from funcchain import chain, settings
-from funcchain.streaming import stream_to
 from pydantic import BaseModel
 
+from funcchain import chain, settings
+from funcchain.streaming import stream_to
 
 settings.LLM = ChatOllama(model="openhermes2.5-mistral", format="json")
 settings.STREAMING = True

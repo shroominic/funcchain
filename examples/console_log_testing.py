@@ -1,14 +1,16 @@
 import asyncio
-from uuid import uuid4
-from funcchain import achain, settings
-from funcchain.streaming import astream_to
-from rich.console import Console
-from rich.layout import Layout
-from rich.panel import Panel
-from rich.live import Live
-from funcchain.utils import count_tokens
 from contextlib import asynccontextmanager
 from typing import AsyncGenerator
+from uuid import uuid4
+
+from rich.console import Console
+from rich.layout import Layout
+from rich.live import Live
+from rich.panel import Panel
+
+from funcchain import achain, settings
+from funcchain.streaming import astream_to
+from funcchain.utils import count_tokens
 
 settings.MODEL_TEMPERATURE = 1
 settings.MODEL_NAME = "gpt-4-1106-preview"

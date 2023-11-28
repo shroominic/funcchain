@@ -5,10 +5,10 @@ Automatically loads environment variables from .env file
 from typing import Any, Optional
 
 from dotenv import load_dotenv
-from langchain.chat_models.base import BaseChatModel
-from langchain.schema.runnable import RunnableWithFallbacks
-from langchain.globals import set_llm_cache
 from langchain.cache import InMemoryCache
+from langchain.chat_models.base import BaseChatModel
+from langchain.globals import set_llm_cache
+from langchain.schema.runnable import RunnableWithFallbacks
 from pydantic_settings import BaseSettings
 
 load_dotenv("./.env")

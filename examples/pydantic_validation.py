@@ -1,6 +1,6 @@
 from pydantic import BaseModel, field_validator
-from funcchain import chain, settings
 
+from funcchain import chain, settings
 
 settings.RETRY_PARSE = 5
 

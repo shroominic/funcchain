@@ -6,9 +6,9 @@ from langchain.prompts.chat import (
     BaseStringMessagePromptTemplate,
     MessagePromptTemplateT,
 )
-from langchain.schema.chat_history import BaseChatMessageHistory
 from langchain.prompts.prompt import PromptTemplate
 from langchain.schema import BaseMessage, HumanMessage, SystemMessage
+from langchain.schema.chat_history import BaseChatMessageHistory
 from PIL import Image
 
 from ..utils import image_to_base64_url

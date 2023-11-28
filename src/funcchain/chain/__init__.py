@@ -1,3 +1,3 @@
-from .interface import chain, achain
+from .interface import achain, chain
 
 __all__ = ["chain", "achain"]
