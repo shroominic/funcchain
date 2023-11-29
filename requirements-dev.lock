@@ -19,6 +19,7 @@ charset-normalizer==3.3.2
 click==8.1.7
 colorama==0.4.6
 dataclasses-json==0.6.2
+diskcache==5.6.3
 distlib==0.3.7
 distro==1.8.0
 docstring-parser==0.15
@@ -34,8 +35,10 @@ iniconfig==2.0.0
 jinja2==3.1.2
 jsonpatch==1.33
 jsonpointer==2.4
-langchain==0.0.339
+langchain @ git+https://github.com/shroominic/langchain.git@llamacpp-chat-wip#subdirectory=libs/langchain
+langchain-core==0.0.6
 langsmith==0.0.66
+llama-cpp-python==0.2.19
 markdown==3.5.1
 markdown-it-py==3.0.0
 markupsafe==2.1.3
