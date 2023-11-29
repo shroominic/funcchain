@@ -1,20 +1,20 @@
-import re
 import copy
 import json
+import re
 from typing import Callable, Optional, Type, TypeVar
 
 from langchain.schema import (
+    AIMessage,
     ChatGeneration,
     Generation,
     OutputParserException,
-    AIMessage,
 )
-from langchain.output_parsers.format_instructions import PYDANTIC_FORMAT_INSTRUCTIONS
 from langchain.schema.output_parser import BaseGenerationOutputParser, BaseOutputParser
 from pydantic import BaseModel, ValidationError
 
-from .types import ParserBaseModel, CodeBlock as CodeBlock
 from .exceptions import ParsingRetryException
+from .types import CodeBlock as CodeBlock
+from .types import ParserBaseModel
 
 T = TypeVar("T")
 
@@ -227,7 +227,10 @@ class PydanticOutputParser(BaseOutputParser[M]):
         # Ensure json in context is well-formed with double quotes.
         schema_str = json.dumps(reduced_schema)
 
-        return PYDANTIC_FORMAT_INSTRUCTIONS.format(schema=schema_str)
+        return (
+            "Please respond with a JSON object matching the following schema:"
+            f"\n\n```json\n{schema_str}\n```"
+        )
 
     @property
     def _type(self) -> str:
