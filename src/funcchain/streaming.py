@@ -85,9 +85,12 @@ def stream_to(
         >>> with stream_to(print):
         ...     # your chain calls here
     """
+    import builtins, rich
+
     # TODO: set streaming to true specifically in this context
-    if fn is print and kwargs == {}:
+    if (fn is builtins.print or fn is rich.print) and kwargs == {}:
         kwargs = {"end": "", "flush": True}
+
     cb = AsyncStreamHandler(fn, kwargs)
     stream_handler.set(cb)
     yield cb
