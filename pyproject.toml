@@ -1,12 +1,12 @@
 [project]
 name = "funcchain"
-version = "0.1.8"
+version = "0.1.9"
 description = "🔖 write prompts as python functions"
 authors = [
     { name = "Shroominic", email = "contact@shroominic.com" }
 ]
 dependencies = [
-    "langchain @ git+https://github.com/shroominic/langchain.git@llamacpp-chat-wip#subdirectory=libs/langchain",
+    "langchain>=0.0.344",
     "openai>=1.3.4",
     "aiohttp>=3.9.0",
     "python-dotenv>=1.0.0",
