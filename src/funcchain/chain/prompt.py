@@ -57,6 +57,15 @@ def create_chat_prompt(
     if system and memory.messages and isinstance(memory.messages[0], SystemMessage):
         memory.messages.pop(0)
 
+    if memory.messages and isinstance(memory.messages[-1], HumanMessage):
+        return ChatPromptTemplate.from_messages(
+            [
+                *([SystemMessage(content=system)] if system else []),
+                *memory.messages,
+                *context,
+            ]
+        )
+
     return ChatPromptTemplate.from_messages(
         [
             *([SystemMessage(content=system)] if system else []),
