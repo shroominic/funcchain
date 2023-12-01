@@ -1,7 +1,7 @@
-from langchain.chat_models import ChatLlamaCpp
 from pydantic import BaseModel
 
 from funcchain import chain, settings
+from funcchain._llms import ChatLlamaCpp
 from funcchain.streaming import stream_to
 
 

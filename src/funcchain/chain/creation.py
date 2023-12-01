@@ -1,7 +1,7 @@
 from types import UnionType
 from typing import TypeVar, Union
 
-from langchain.chat_models import ChatLlamaCpp
+from funcchain._llms import ChatLlamaCpp
 from langchain.chat_models.base import BaseChatModel
 from langchain.prompts import ChatPromptTemplate
 from langchain.schema import AIMessage, BaseMessage, BaseOutputParser, HumanMessage
