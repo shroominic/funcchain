@@ -1,6 +1,7 @@
 from types import UnionType
 from typing import TypeVar, Union
 
+from langchain.chat_models import ChatLlamaCpp
 from langchain.chat_models.base import BaseChatModel
 from langchain.prompts import ChatPromptTemplate
 from langchain.schema import AIMessage, BaseMessage, BaseOutputParser, HumanMessage
@@ -27,6 +28,7 @@ from ..utils import (
     multi_pydantic_to_functions,
     parser_for,
     pydantic_to_functions,
+    pydantic_to_grammar,
 )
 from .prompt import (
     HumanImageMessagePromptTemplate,
@@ -150,6 +152,20 @@ def create_chain(
 
     # add formatted instruction to chat history
     memory.add_message(instruction_prompt.format(**input_kwargs))
+
+    if isinstance(llm, ChatLlamaCpp):
+        # TODO: implement Union Type grammar
+        if issubclass(output_type, BaseModel) and not issubclass(
+            output_type, ParserBaseModel
+        ):
+            from llama_cpp import LlamaGrammar
+
+            grammar = pydantic_to_grammar(output_type)
+            setattr(
+                llm,
+                "grammar",
+                LlamaGrammar.from_string(grammar, verbose=False),
+            )
 
     # function model patches
     if is_function_model(llm):
