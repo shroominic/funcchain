@@ -1,9 +1,8 @@
-from langchain.chat_models.llamacpp import ChatLlamaCpp
+from langchain.chat_models import ChatLlamaCpp
 from pydantic import BaseModel
 
 from funcchain import chain, settings
 from funcchain.streaming import stream_to
-from funcchain.utils.grammar import grammar_from_
 
 
 class Keyword(BaseModel):
@@ -25,16 +24,12 @@ def generate_poem(topic: str) -> Poem:
 
 
 if __name__ == "__main__":
-    grammar = grammar_from_(Poem)
-
     settings.LLM = ChatLlamaCpp(
         verbose=False,
         model_path=".models/openhermes-2.5-mistral-7b.Q4_K_M.gguf",
         streaming=True,
         n_ctx=2048,
         max_tokens=512,
-        grammar=grammar,
-        stop=["</s>"],
     )
 
     with stream_to(print):

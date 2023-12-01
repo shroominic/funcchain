@@ -32,5 +32,5 @@ def gather_infos(user_description: str) -> Task:
 
 
 if __name__ == "__main__":
-    task = gather_infos("dasgjkhasdgljk")
+    task = gather_infos("cleanup the kitchen")
     print(f"{task=}")
