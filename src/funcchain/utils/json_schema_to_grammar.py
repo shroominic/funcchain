@@ -31,7 +31,8 @@ class SchemaConverter:
 
     def _format_literal(self, literal: str) -> str:
         escaped = GRAMMAR_LITERAL_ESCAPE_RE.sub(
-            lambda m: GRAMMAR_LITERAL_ESCAPES.get(m.group(0)), json.dumps(literal)  # type: ignore
+            lambda m: GRAMMAR_LITERAL_ESCAPES.get(m.group(0)),  # type: ignore
+            json.dumps(literal),
         )
         return f'"{escaped}"'
 
