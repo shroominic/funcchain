@@ -229,8 +229,8 @@ def _crop_large_inputs(
             from funcchain import settings
 
             content_tokens = count_tokens(v)
-            if base_tokens + content_tokens > settings.MAX_TOKENS:
-                input_kwargs[k] = v[: (settings.MAX_TOKENS - base_tokens) * 2 // 3]
+            if base_tokens + content_tokens > settings.CONTEXT_LENGTH:
+                input_kwargs[k] = v[: (settings.CONTEXT_LENGTH - base_tokens) * 2 // 3]
                 print("Truncated: ", len(input_kwargs[k]))
 
 

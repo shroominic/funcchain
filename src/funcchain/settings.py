@@ -25,7 +25,8 @@ class FuncchainSettings(BaseSettings):
     RETRY_PARSE_SLEEP: float = 0.1
 
     # Prompt
-    MAX_TOKENS: int = 4096
+    CONTEXT_LENGTH: int = 8196
+    MAX_TOKENS: int = 2048
     DEFAULT_SYSTEM_PROMPT: str = ""
 
     # KEYS
