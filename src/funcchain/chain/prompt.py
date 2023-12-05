@@ -31,7 +31,7 @@ def create_instruction_prompt(
         for var, _ in input_kwargs.items()
         if var not in required_f_str_vars
     ]
-    added_instruction = "".join(inject_vars)
+    added_instruction = "\n".join(inject_vars)
     instruction = added_instruction + instruction
 
     images = [image_to_base64_url(image) for image in images]
