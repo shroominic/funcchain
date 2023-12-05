@@ -16,10 +16,20 @@ dependencies = [
     "rich>=13.7.0",
     "jinja2>=3.1.2",
     "pillow>=10.1.0",
-    "llama-cpp-python>=0.2.19",
+    "llama-cpp-python>=0.2.20",
 ]
+license = { file = "LICENSE" }
 readme = "README.md"
 requires-python = ">= 3.10, <3.13"
+keywords = ["funcchain", "ai", "llm", "langchain", "pydantic", "pythonic", "cognitive systems", "agent framework"]
+classifiers = [
+    "Programming Language :: Python :: 3 :: Only",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
+
+[project.urls]
+Code = "https://github.com/shroominic/funcchain"
+Documentation = "https://shroominic.github.io/funcchain"
 
 [build-system]
 requires = ["hatchling"]
@@ -33,6 +43,7 @@ dev-dependencies = [
     "pre-commit>=3.5.0",
     "mypy>=1.7.0",
     "ruff>=0.1.6",
+    "beautifulsoup4>=4.12.2",
 ]
 
 [tool.hatch.metadata]
