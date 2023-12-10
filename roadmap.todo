@@ -52,3 +52,5 @@
 [ ] - check similar frameworks for new ideas 
 
 [ ] - grammar support for enums
+
+[ ] - split required/optional deps for only local or only openai ...
