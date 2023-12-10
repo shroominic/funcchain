@@ -36,7 +36,7 @@ class _LlamaCppCommon(BaseLanguageModel):
     lora_path: Optional[str] = None
     """The path to the Llama LoRA. If None, no LoRa is loaded."""
 
-    n_ctx: int = Field(512, alias="n_ctx")
+    n_ctx: int = Field(4096, alias="n_ctx")
     """Token context window."""
 
     n_parts: int = Field(-1, alias="n_parts")
@@ -72,7 +72,7 @@ class _LlamaCppCommon(BaseLanguageModel):
     suffix: Optional[str] = Field(None)
     """A suffix to append to the generated text. If None, no suffix is appended."""
 
-    max_tokens: Optional[int] = 256
+    max_tokens: Optional[int] = 512
     """The maximum number of tokens to generate."""
 
     temperature: Optional[float] = 0.8
@@ -128,7 +128,7 @@ class _LlamaCppCommon(BaseLanguageModel):
     emojis. At most one of grammar_path and grammar should be passed in.
     """
 
-    verbose: bool = True
+    verbose: bool = False
     """Print verbose output to stderr."""
 
     @root_validator()
