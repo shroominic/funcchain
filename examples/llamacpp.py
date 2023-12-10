@@ -29,10 +29,7 @@ def analyze(topic: str) -> SentimentAnalysis:
 if __name__ == "__main__":
     # set global LLM
     settings.LLM = ChatLlamaCpp(
-        verbose=False,
-        model_path=".models/openhermes-2.5-neural-chat-7b-v3-1-7b.Q5_K_M.gguf",
-        n_ctx=4096,
-        max_tokens=512,
+        model_path=".models/openhermes-2.5-neural-chat-7b-v3-1-7b.Q5_K_M.gguf"
     )
 
     # log tokens as stream to console
