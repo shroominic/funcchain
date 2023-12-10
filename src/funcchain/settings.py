@@ -20,6 +20,7 @@ class FuncchainSettings(BaseSettings):
     # General
     LLM: BaseChatModel | RunnableWithFallbacks | None = None
     DEBUG: bool = True
+    MODEL_LIBRARY: str = "./.models"
 
     RETRY_PARSE: int = 5
     RETRY_PARSE_SLEEP: float = 0.1
@@ -34,7 +35,6 @@ class FuncchainSettings(BaseSettings):
     AZURE_API_KEY: Optional[str] = None
     ANTHROPIC_API_KEY: Optional[str] = None
     GOOGLE_API_KEY: Optional[str] = None
-    JINACHAT_API_KEY: Optional[str] = None
 
     # KWARGS
     STREAMING: bool = False
