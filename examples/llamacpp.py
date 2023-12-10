@@ -31,9 +31,7 @@ if __name__ == "__main__":
     settings.LLM = ChatLlamaCpp(
         verbose=False,
         model_path=".models/openhermes-2.5-neural-chat-7b-v3-1-7b.Q5_K_M.gguf",
-        # streaming=True,
         n_ctx=4096,
-        # n_gpu_layers=0,
         max_tokens=512,
     )
 
