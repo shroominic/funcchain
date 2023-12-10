@@ -1,7 +1,5 @@
 [ ] - override global settings inside chain()  (4h)
 
-[ ] - retry on pydantic validation error  (2h)
-
 [ ] - depends functionality to create nested chains and compile into runnables  (10h)
         # add a deps thing to put into funcchain defs that takes another chain and compiles it into a runnable
         # so langsmith shows nested chains
@@ -15,11 +13,9 @@
         # So anything that is additional can be compressed to fit in the context but when other things that are important are not compressed.
         # Optionally you can define how to compress and where to leave the gaps (default in the middle with [...])
 
-[ ] - FuncchainException classes  (2h)
-
 [ ] - improve chain(*args interface)  (2h)
 
-[ ] - enable union type without function calling  (6h)
+[ ] - enable union type without function calling or grammars  (8h)
 
 [ ] - enable Error type for non union calls  (4h)
 
@@ -44,3 +40,15 @@
 [ ] - parallel function calling  (8h)
 
 [ ] - FuncUnion and str output  (6h)
+
+[ ] - implement vision over llamacpp  (8h)
+
+[ ] - fix deepseek over llamacpp  (6h)
+
+[ ] - document examples  (6h)
+
+[ ] - split this list into priorities and optional improvements  (2h)
+
+[ ] - check similar frameworks for new ideas 
+
+[ ] - grammar support for enums
