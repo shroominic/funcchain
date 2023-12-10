@@ -5,10 +5,12 @@ from funcchain._llms import ChatLlamaCpp
 from funcchain.streaming import stream_to
 
 
+# define your model
 class SentimentAnalysis(BaseModel):
     sentiment: bool = Field(description="True for Happy, False for Sad")
-    score: int = Field(description="The score of the sentiment")
+    score: int = Field(description="The confidence score of the analysis")
 
+    # example how a retry validator would look like:
     @field_validator("score")
     def check_score(cls, v: int) -> int:
         if v < 10 or v > 100:
@@ -16,6 +18,7 @@ class SentimentAnalysis(BaseModel):
         return v
 
 
+# define your prompt
 def analyze(topic: str) -> SentimentAnalysis:
     """
     Determines the sentiment of the topic
@@ -24,6 +27,7 @@ def analyze(topic: str) -> SentimentAnalysis:
 
 
 if __name__ == "__main__":
+    # set global LLM
     settings.LLM = ChatLlamaCpp(
         verbose=False,
         model_path=".models/openhermes-2.5-neural-chat-7b-v3-1-7b.Q5_K_M.gguf",
@@ -33,9 +37,12 @@ if __name__ == "__main__":
         max_tokens=512,
     )
 
+    # log tokens as stream to console
     with stream_to(print):
+        # run prompt
         poem = analyze("I really like when my dog does a trick")
 
+    # print final parsed output
     from rich import print
 
     print(poem)
