@@ -133,7 +133,7 @@ def univeral_model_selector(
                     return ChatAnthropic(**model_kwargs)
                 case "google":
                     return ChatGooglePalm(**model_kwargs)
-                case "thebloke":
+                case "llamacpp" | "thebloke" | "huggingface" | "local" | "gguf":
                     model_kwargs.pop("model_name")
                     model_path = get_gguf_model(name, label, settings).as_posix()
                     print("Using model:", model_path)
