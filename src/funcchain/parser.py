@@ -199,16 +199,23 @@ class PydanticOutputParser(BaseOutputParser[M]):
 
     def parse(self, text: str) -> M:
         try:
-            # Greedy search for 1st json candidate.
-            match = re.search(
+            matches = re.findall(
                 r"\{.*\}", text.strip(), re.MULTILINE | re.IGNORECASE | re.DOTALL
             )
-            json_str = ""
-            if match:
-                json_str = match.group()
-            json_object = json.loads(json_str, strict=False)
-            return self.pydantic_object.model_validate(json_object)
-
+            if len(matches) > 1:
+                for match in matches:
+                    try:
+                        json_object = json.loads(match, strict=False)
+                        return self.pydantic_object.model_validate(json_object)
+                    except (json.JSONDecodeError, ValidationError):
+                        continue
+            elif len(matches) == 1:
+                json_object = json.loads(matches[0], strict=False)
+                return self.pydantic_object.model_validate(json_object)
+            raise ParsingRetryException(
+                f"Failed to parse {self.pydantic_object.__name__} from completion {text}.",
+                message=AIMessage(content=text),
+            )
         except (json.JSONDecodeError, ValidationError) as e:
             raise ParsingRetryException(
                 str(e),
@@ -229,7 +236,8 @@ class PydanticOutputParser(BaseOutputParser[M]):
 
         return (
             "Please respond with a JSON object matching the following schema:"
-            f"\n\n```json\n{schema_str}\n```"
+            f"\n\n```json_schema\n{schema_str}\n```"
+            "Only respond with the object, not the schema."
         )
 
     @property
