@@ -88,7 +88,6 @@ def stream_to(
     import builtins
     import rich
 
-    # TODO: set streaming to true specifically in this context
     if (fn is builtins.print or fn is rich.print) and kwargs == {}:
         kwargs = {"end": "", "flush": True}
 
