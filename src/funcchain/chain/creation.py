@@ -15,7 +15,7 @@ from PIL import Image
 from pydantic import BaseModel
 
 from ..parser import MultiToolParser, ParserBaseModel, PydanticFuncParser
-from ..settings import FuncchainSettings, settings
+from ..settings import FuncchainSettings
 from ..streaming import stream_handler
 from ..utils import (
     count_tokens,
@@ -24,7 +24,7 @@ from ..utils import (
     is_function_model,
     is_vision_model,
     kwargs_from_parent,
-    model_from_env,
+    univeral_model_selector,
     multi_pydantic_to_functions,
     parser_for,
     pydantic_to_functions,
@@ -113,6 +113,7 @@ def create_chain(
     parser: BaseOutputParser[ChainOutput] | None,
     context: list[BaseMessage],
     memory: BaseChatMessageHistory,
+    settings: FuncchainSettings,
     input_kwargs: dict[str, str],
 ) -> RunnableSerializable[dict[str, str], ChainOutput]:
     """
@@ -141,6 +142,7 @@ def create_chain(
         system,
         instruction,
         input_kwargs,
+        settings,
     )
 
     # for vision models
@@ -218,6 +220,7 @@ def _crop_large_inputs(
     system: str,
     instruction: str,
     input_kwargs: dict,
+    settings: FuncchainSettings,
 ) -> None:
     """
     TODO: replace MAX_TOKENS with MAX_CONTENT_LENGTH
@@ -226,8 +229,6 @@ def _crop_large_inputs(
     base_tokens = count_tokens(instruction + system)
     for k, v in input_kwargs.copy().items():
         if isinstance(v, str):
-            from funcchain import settings
-
             content_tokens = count_tokens(v)
             if base_tokens + content_tokens > settings.CONTEXT_LENGTH:
                 input_kwargs[k] = v[: (settings.CONTEXT_LENGTH - base_tokens) * 2 // 3]
@@ -243,9 +244,9 @@ def _handle_images(
     """
     images = [v for v in input_kwargs.values() if isinstance(v, Image.Image)]
     if is_vision_model(LLM):
-        input_kwargs = {
-            k: v for k, v in input_kwargs.items() if not isinstance(v, Image.Image)
-        }
+        for k in list(input_kwargs.keys()):
+            if isinstance(input_kwargs[k], Image.Image):
+                del input_kwargs[k]
     elif images:
         raise RuntimeError("Images as input are only supported for vision models.")
 
@@ -255,13 +256,14 @@ def _handle_images(
 def _gather_llm(
     settings: FuncchainSettings,
 ) -> BaseChatModel | RunnableWithFallbacks:
-    llm = settings.LLM or model_from_env()
+    llm = settings.LLM or univeral_model_selector(settings)
     if not llm:
         raise RuntimeError(
             "No language model provided. Either set the LLM environment variable or "
             "pass a model to the `chain` function."
         )
     if handler := stream_handler.get():
+        settings.STREAMING = True
         if isinstance(llm, RunnableWithFallbacks) and isinstance(
             llm.runnable, BaseChatModel
         ):
