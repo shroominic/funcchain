@@ -2,7 +2,7 @@
 Funcchain Settings:
 Automatically loads environment variables from .env file
 """
-from typing import Any, Optional
+from typing import Optional, TypedDict
 
 from dotenv import load_dotenv
 from langchain.cache import InMemoryCache
@@ -20,15 +20,16 @@ class FuncchainSettings(BaseSettings):
     # General
     LLM: BaseChatModel | RunnableWithFallbacks | None = None
     DEBUG: bool = True
+
+    # TODO: merge LLM and MODEL_NAME
+    MODEL_NAME: str = "openai/gpt-3.5-turbo-1106"
     MODEL_LIBRARY: str = "./.models"
+
+    # Prompt
+    DEFAULT_SYSTEM_PROMPT: str = ""
 
     RETRY_PARSE: int = 5
     RETRY_PARSE_SLEEP: float = 0.1
-
-    # Prompt
-    CONTEXT_LENGTH: int = 8196
-    MAX_TOKENS: int = 2048
-    DEFAULT_SYSTEM_PROMPT: str = ""
 
     # KEYS
     OPENAI_API_KEY: Optional[str] = None
@@ -36,25 +37,47 @@ class FuncchainSettings(BaseSettings):
     ANTHROPIC_API_KEY: Optional[str] = None
     GOOGLE_API_KEY: Optional[str] = None
 
-    # KWARGS
+    # MODEL KWARGS
+    VERBOSE: bool = False
+    MAX_TOKENS: int = 2048
+    TEMPERATURE: float = 0.1
+    CONTEXT_LENGTH: int = 8196
     STREAMING: bool = False
-    MODEL_NAME: str = "openai::gpt-3.5-turbo-1106"
-    MODEL_TEMPERATURE: float = 0.1
-    MODEL_REQUEST_TIMEOUT: float = 210
-    MODEL_VERBOSE: bool = False
 
-    def model_kwargs(self) -> dict[str, Any]:
+    def model_kwargs(self) -> dict:
         return {
-            "model_name": self.MODEL_NAME
-            if "::" not in self.MODEL_NAME
-            else self.MODEL_NAME.split("::")[1],
-            "temperature": self.MODEL_TEMPERATURE,
-            "verbose": self.DEBUG,
-            "openai_api_key": self.OPENAI_API_KEY,
+            "verbose": self.VERBOSE,
+            "temperature": self.TEMPERATURE,
             "max_tokens": self.MAX_TOKENS,
             "streaming": self.STREAMING,
-            # "format": "json",
+        }
+
+    def openai_kwargs(self) -> dict:
+        return {
+            "openai_api_key": self.OPENAI_API_KEY,
+        }
+
+    def llama_kwargs(self) -> dict:
+        return {
+            "n_ctx": self.CONTEXT_LENGTH,
         }
 
 
 settings = FuncchainSettings()
+
+
+class SettingsOverride(TypedDict, total=False):
+    llm: BaseChatModel | RunnableWithFallbacks | None
+    model_name: str
+
+    verbose: bool
+    temperature: float
+    max_tokens: int
+    streaming: bool
+    # context_length: int
+
+
+def get_settings(override: Optional[SettingsOverride] = None) -> FuncchainSettings:
+    if override:
+        return settings.model_copy(update=dict(override))
+    return settings
