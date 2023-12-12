@@ -5,6 +5,7 @@ from langchain.schema import BaseMessage, BaseOutputParser
 from langchain.schema.chat_history import BaseChatMessageHistory
 
 from ..utils.decorators import get_parent_frame, log_openai_callback, retry_parse
+from ..settings import FuncchainSettings
 from .creation import create_chain
 
 T = TypeVar("T")
@@ -18,6 +19,7 @@ def invoke(
     parser: BaseOutputParser[T],
     context: list[BaseMessage],
     memory: BaseChatMessageHistory,
+    settings: FuncchainSettings,
     input_kw: dict[str, str] = {},
     callbacks: Callbacks = None,
 ) -> T:  # type: ignore
@@ -27,6 +29,7 @@ def invoke(
         parser,
         context,
         memory,
+        settings,
         input_kw,
     )
     result = chain.invoke(
@@ -48,6 +51,7 @@ async def ainvoke(
     parser: BaseOutputParser[T],
     context: list[BaseMessage],
     memory: BaseChatMessageHistory,
+    settings: FuncchainSettings,
     input_kw: dict[str, str] = {},
     callbacks: Callbacks = None,
 ) -> T:
@@ -57,6 +61,7 @@ async def ainvoke(
         parser,
         context,
         memory,
+        settings,
         input_kw,
     )
     result = await chain.ainvoke(
