@@ -5,6 +5,7 @@ from langchain.schema import BaseMessage, BaseOutputParser
 from langchain.schema.chat_history import BaseChatMessageHistory
 
 from .invoke import ainvoke, invoke
+from ..settings import SettingsOverride, get_settings
 
 ChainOutput = TypeVar("ChainOutput")
 
@@ -15,6 +16,7 @@ def chain(
     context: list[BaseMessage] = [],
     memory: BaseChatMessageHistory | None = None,
     parser: BaseOutputParser[ChainOutput] | None = None,
+    settings_override: SettingsOverride | None = None,
     **input_kwargs: str,
 ) -> ChainOutput:  # type: ignore
     """
@@ -26,6 +28,7 @@ def chain(
         parser,
         context,
         memory or ChatMessageHistory(),
+        get_settings(settings_override),
         input_kwargs,
     )
 
@@ -36,6 +39,7 @@ async def achain(
     context: list[BaseMessage] = [],
     memory: BaseChatMessageHistory | None = None,
     parser: BaseOutputParser[ChainOutput] | None = None,
+    settings_override: SettingsOverride | None = None,
     **input_kwargs: str,
 ) -> ChainOutput:
     """
@@ -47,5 +51,6 @@ async def achain(
         parser,
         context,
         memory or ChatMessageHistory(),
+        get_settings(settings_override),
         input_kwargs,
     )
