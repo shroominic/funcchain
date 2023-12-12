@@ -20,7 +20,7 @@ def analyze(text: str) -> SentimentAnalysis:
 
 if __name__ == "__main__":
     # set global LLM
-    settings.MODEL_NAME = "thebloke/deepseek-coder-6.7b-instruct"
+    settings.MODEL_NAME = "gguf/openhermes-2.5-mistral-7b"
 
     # log tokens as stream to console
     with stream_to(print):
