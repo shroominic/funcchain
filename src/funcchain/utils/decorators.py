@@ -11,6 +11,7 @@ from langchain.schema.chat_history import BaseChatMessageHistory
 from langchain.schema.output_parser import OutputParserException
 from rich import print
 
+from ..settings import FuncchainSettings
 from ..exceptions import ParsingRetryException
 from .function_frame import get_parent_frame
 
@@ -22,15 +23,13 @@ def retry_parse(fn: Any) -> Any:
     Raises:
     - OutputParserException: If the output cannot be parsed.
     """
-    from ..settings import settings
-
-    retry = settings.RETRY_PARSE
-
     if iscoroutinefunction(fn):
 
         @wraps(fn)
         async def async_wrapper(*args: Any, **kwargs: Any) -> Any:
             memory: BaseChatMessageHistory = args[4]
+            settings: FuncchainSettings = args[5]
+            retry = settings.RETRY_PARSE
             for r in range(retry):
                 try:
                     return await fn(*args, **kwargs)
@@ -61,6 +60,8 @@ def retry_parse(fn: Any) -> Any:
         @wraps(fn)
         def sync_wrapper(*args: Any, **kwargs: Any) -> Any:
             memory: BaseChatMessageHistory = args[4]
+            settings: FuncchainSettings = args[5]
+            retry = settings.RETRY_PARSE
             for r in range(retry):
                 try:
                     return fn(*args, **kwargs)
