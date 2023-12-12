@@ -1,6 +1,6 @@
 from typing import Any
 
-from dotenv import load_dotenv
+from pathlib import Path
 from langchain.chat_models import (
     AzureChatOpenAI,
     ChatAnthropic,
@@ -9,71 +9,84 @@ from langchain.chat_models import (
 )
 from langchain.chat_models.base import BaseChatModel
 
-from ..settings import settings
+from ..settings import FuncchainSettings
+from .._llms import ChatLlamaCpp
 
 
-class ModelNotFoundError(LookupError):
-    ...
-
-
-class MissingApiKeyError(ValueError):
-    ...
-
-
-def model_from_env(
-    dotenv_path: str = "./.env",
-    **kwargs: Any,
-) -> BaseChatModel | None:
-    """
-    Automatically search your env variables for api keys
-    and gives you the corresponding chat model interface.
-
-    Supporting:
-    - OPENAI_API_KEY
-    - AZURE_API_KEY
-    - ANTHROPIC_API_KEY
-    - GOOGLE_API_KEY
-
-    Raises:
-    - ValueError, when the model is not found.
-    """
-    load_dotenv(dotenv_path=dotenv_path)
-    kwargs.update(settings.model_kwargs())
-
-    if settings.OPENAI_API_KEY:
-        return ChatOpenAI(**kwargs)
-    if settings.AZURE_API_KEY:
-        return AzureChatOpenAI(**kwargs)
-    if settings.ANTHROPIC_API_KEY:
-        return ChatAnthropic(**kwargs)
-    if settings.GOOGLE_API_KEY:
-        return ChatGooglePalm(**kwargs)
-    return None
-
-
-def get_gguf_model(name: str, label: str) -> str:
+def get_gguf_model(
+    name: str,
+    label: str,
+    settings: FuncchainSettings,
+) -> Path:
     """
     Gather GGUF model from huggingface/TheBloke
-    e.g. https://huggingface.co/TheBloke/OpenHermes-2.5-neural-chat-7B-v3-1-7B-GGUF
+
+    possible input:
+    - DiscoLM-mixtral-8x7b-v2-GGUF
+    - TheBloke/DiscoLM-mixtral-8x7b-v2
+    - discolm-mixtral-8x7b-v2
+    ...
 
     Raises ModelNotFound(model_name) error in case of no result.
     """
-    # check if model already downloaded
-    # if so return None
+    from huggingface_hub import hf_hub_download
+
+    name = name.removesuffix("-GGUF")
+    label = "Q5_K_M" if label == "latest" else label
+
+    model_path = Path(settings.MODEL_LIBRARY)
+
+    if (p := model_path / f"{name.lower()}.{label}.gguf").exists():
+        return p
 
     # check if available on huggingface
-    # if not raise
+    try:
+        # check local cache
 
-    # ask before downloading
-    # if not suggest other options
+        input(
+            f"Do you want to download this model from huggingface.co/TheBloke/{name}-GGUF ?\n"
+            "Press enter to continue."
+        )
+        print("\033c")
+        print("Downloading model from huggingface...")
+        p = hf_hub_download(
+            repo_id=f"TheBloke/{name}-GGUF",
+            filename=f"{name.lower()}.{label}.gguf",
+            local_dir=model_path,
+            local_dir_use_symlinks=True,
+        )
+        print("\033c")
+        return Path(p)
+    except Exception as e:
+        print(e)
+        raise ValueError(f"ModelNotFound: {name}.{label}")
 
-    # download to settings.MODEL_LIBRARY_PATH
 
-    return f"{settings.MODEL_LIBRARY}/{name}_{label}.gguf"
+def default_model_fallback(
+    settings: FuncchainSettings,
+    **model_kwargs: Any,
+) -> ChatLlamaCpp:
+    """
+    Give user multiple options for local models to download.
+    """
+    if (
+        input("ModelNotFound: Do you want to download a local model instead?")
+        .lower()
+        .startswith("y")
+    ):
+        model_kwargs.update(settings.llama_kwargs())
+        return ChatLlamaCpp(
+            model_path=get_gguf_model(
+                "neural-chat-7b-v3-1", "Q4_K_M", settings
+            ).as_posix(),
+            **model_kwargs,
+        )
+    print("Please select a model to use funcchain!")
+    exit(0)
 
 
 def univeral_model_selector(
-    model_name: str | None,
+    settings: FuncchainSettings,
     **model_kwargs: Any,
 ) -> BaseChatModel:
     """
@@ -88,8 +101,9 @@ def univeral_model_selector(
     Examples:
     - "openai/gpt-3.5-turbo"
     - "anthropic/claude-2"
-    - "llamacpp/neural-chat:7b-v3.1-q8_0"
+    - "thebloke/deepseek-llm-7b-chat"
 
+    (gguf models from huggingface.co/TheBloke)
 
     Supported:
         [ openai, anthropic, google, llamacpp ]
@@ -97,29 +111,58 @@ def univeral_model_selector(
     Raises:
     - ModelNotFoundError, when the model is not found.
     """
-    if not model_name:
-        if model := model_from_env(**model_kwargs):
-            return model
-        raise ModelNotFoundError(
-            "Please specify a model_name or add certain env variables."
-            "You can checkout out docs for supported models: todowritedocs.com"
+    model_name = settings.MODEL_NAME
+    model_kwargs.update(settings.model_kwargs())
+    if model_name:
+        mtype, name_lable = (
+            model_name.split("/") if "/" in model_name else ("", model_name)
         )
+        name, label = (
+            name_lable.split(":") if ":" in name_lable else (name_lable, "latest")
+        )
+        mtype = mtype.lower()
 
-    mtype, name_lable = model_name.split("/")
-    name, label = name_lable.split(":")
+        model_kwargs["model_name"] = name
 
-    model_kwargs["model_name"] = name
+        try:
+            match mtype:
+                case "openai":
+                    model_kwargs.update(settings.openai_kwargs())
+                    return ChatOpenAI(**model_kwargs)
+                case "anthropic":
+                    return ChatAnthropic(**model_kwargs)
+                case "google":
+                    return ChatGooglePalm(**model_kwargs)
+                case "thebloke":
+                    model_kwargs.pop("model_name")
+                    model_path = get_gguf_model(name, label, settings).as_posix()
+                    print("Using model:", model_path)
+                    model_kwargs.update(settings.llama_kwargs())
+                    return ChatLlamaCpp(
+                        model_path=model_path,
+                        **model_kwargs,
+                    )
+        except Exception as e:
+            print("ERROR:", e)
+            raise e
 
-    if mtype:
-        match type:
-            case "openai":
+        try:
+            if "gpt-4" in name or "gpt-3.5" in name:
+                model_kwargs.update(settings.openai_kwargs())
                 return ChatOpenAI(**model_kwargs)
-            case "anthropic":
-                return ChatAnthropic(**model_kwargs)
-            case "google":
-                return ChatGooglePalm(**model_kwargs)
-            case "llamacpp":
-                return ChatLlamaCpp(
-                    model_path=get_gguf_model(name, label),
-                    **model_kwargs,
-                )
+        except Exception as e:
+            print(e)
+
+    model_kwargs.pop("model_name")
+
+    if settings.OPENAI_API_KEY:
+        model_kwargs.update(settings.openai_kwargs())
+        return ChatOpenAI(**model_kwargs)
+    if settings.AZURE_API_KEY:
+        return AzureChatOpenAI(**model_kwargs)
+    if settings.ANTHROPIC_API_KEY:
+        return ChatAnthropic(**model_kwargs)
+    if settings.GOOGLE_API_KEY:
+        return ChatGooglePalm(**model_kwargs)
+
+    return default_model_fallback(**model_kwargs)
