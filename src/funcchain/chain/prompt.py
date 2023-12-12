@@ -1,5 +1,5 @@
 from string import Formatter
-from typing import Any, Type
+from typing import Any, Type, Optional
 
 from langchain.prompts import ChatPromptTemplate
 from langchain.prompts.chat import (
@@ -134,6 +134,7 @@ class HumanImageMessagePromptTemplate(BaseStringMessagePromptTemplate):
         cls: Type[MessagePromptTemplateT],
         template: str,
         template_format: str = "f-string",
+        partial_variables: Optional[dict[str, Any]] = None,
         images: list[str] = [],
         **kwargs: Any,
     ) -> MessagePromptTemplateT:
@@ -147,6 +148,10 @@ class HumanImageMessagePromptTemplate(BaseStringMessagePromptTemplate):
         Returns:
             A new instance of this class.
         """
-        prompt = PromptTemplate.from_template(template, template_format=template_format)
+        prompt = PromptTemplate.from_template(
+            template,
+            template_format=template_format,
+            partial_variables=partial_variables,
+        )
         kwargs["images"] = images
         return cls(prompt=prompt, **kwargs)
