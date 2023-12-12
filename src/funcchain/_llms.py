@@ -17,7 +17,6 @@ from langchain.schema.messages import (
 )
 from langchain.schema.output import ChatGeneration, ChatGenerationChunk
 from langchain_core.language_models import BaseLanguageModel
-from langchain_core.outputs import GenerationChunk
 from langchain_core.pydantic_v1 import Field, root_validator
 from langchain_core.utils import get_pydantic_field_names
 from langchain_core.utils.utils import build_extra_kwargs
@@ -300,7 +299,7 @@ class ChatLlamaCpp(BaseChatModel, _LlamaCppCommon):
         verbose: bool = False,
         **kwargs: Any,
     ) -> ChatGenerationChunk:
-        final_chunk: Optional[GenerationChunk] = None
+        final_chunk: Optional[ChatGenerationChunk] = None
         for chunk in self._stream(messages, stop, **kwargs):
             if final_chunk is None:
                 final_chunk = chunk
