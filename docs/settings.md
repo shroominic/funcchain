@@ -62,16 +62,13 @@ class FuncchainSettings(BaseSettings):
 
 ### Model Keyword Arguments
 
-- `MODEL_NAME: str = "openai::gpt-3.5-turbo"`
+- `MODEL_NAME: str = "openai/gpt-3.5-turbo"`
   Name of the language model.
 
-- `MODEL_TEMPERATURE: float = 0.1`
+- `TEMPERATURE: float = 0.1`
   Controls the randomness in the model's output.
 
-- `MODEL_REQUEST_TIMEOUT: float = 210`
-  Timeout for the model API request, in seconds.
-
-- `MODEL_VERBOSE: bool = False`
+- `VERBOSE: bool = False`
   Enables or disables verbose logging for the model.
 
 ### Additional Methods
