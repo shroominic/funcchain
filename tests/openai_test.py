@@ -63,7 +63,7 @@ def test_api_key_failure() -> None:
     settings.OPENAI_API_KEY = "test"
 
     try:
-        todo_list("software engineer")
+        print(todo_list("software engineer"))
     except Exception:
         assert True
     else:
