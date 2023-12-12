@@ -223,7 +223,6 @@ def _crop_large_inputs(
     settings: FuncchainSettings,
 ) -> None:
     """
-    TODO: replace MAX_TOKENS with MAX_CONTENT_LENGTH
     Crop large inputs to avoid exceeding the maximum number of tokens.
     """
     base_tokens = count_tokens(instruction + system)
