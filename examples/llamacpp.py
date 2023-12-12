@@ -1,41 +1,31 @@
-from pydantic import BaseModel, Field, field_validator
+from pydantic import BaseModel, Field
 
 from funcchain import chain, settings
-from funcchain._llms import ChatLlamaCpp
 from funcchain.streaming import stream_to
 
 
 # define your model
 class SentimentAnalysis(BaseModel):
+    analysis: str = Field(description="A description of the analysis")
     sentiment: bool = Field(description="True for Happy, False for Sad")
-    score: int = Field(description="The confidence score of the analysis")
-
-    # example how a retry validator would look like:
-    @field_validator("score")
-    def check_score(cls, v: int) -> int:
-        if v < 10 or v > 100:
-            raise ValueError("Score must be between 10 and 100")
-        return v
 
 
 # define your prompt
-def analyze(topic: str) -> SentimentAnalysis:
+def analyze(text: str) -> SentimentAnalysis:
     """
-    Determines the sentiment of the topic
+    Determines the sentiment of the text.
     """
     return chain()
 
 
 if __name__ == "__main__":
     # set global LLM
-    settings.LLM = ChatLlamaCpp(
-        model_path=".models/openhermes-2.5-neural-chat-7b-v3-1-7b.Q5_K_M.gguf"
-    )
+    settings.MODEL_NAME = "thebloke/deepseek-coder-6.7b-instruct"
 
     # log tokens as stream to console
     with stream_to(print):
         # run prompt
-        poem = analyze("I really like when my dog does a trick")
+        poem = analyze("I really like when my dog does a trick!")
 
     # print final parsed output
     from rich import print
