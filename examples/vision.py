@@ -3,7 +3,8 @@ from pydantic import BaseModel, Field
 
 from funcchain import chain, settings
 
-settings.MODEL_NAME = "gpt-4-vision-preview"
+settings.MODEL_NAME = "openai/gpt-4-vision-preview"
+settings.STREAMING = True
 
 
 class AnalysisResult(BaseModel):
@@ -24,8 +25,10 @@ def analyse_image(image: Image.Image) -> AnalysisResult:
 
 if __name__ == "__main__":
     example_image = Image.open("examples/assets/old_chinese_temple.jpg")
+    from funcchain.streaming import stream_to
 
-    result = analyse_image(example_image)
+    with stream_to(print):
+        result = analyse_image(example_image)
 
     print("Theme:", result.theme)
     print("Description:", result.description)
