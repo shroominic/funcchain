@@ -23,4 +23,4 @@ jobs:
     - name: Run tests
       env:
         OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-      run: rye run pytest
+      run: rye run pytest -m "not skip_on_actions"
