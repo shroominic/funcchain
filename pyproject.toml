@@ -20,7 +20,10 @@ readme = "README.md"
 requires-python = ">= 3.10, <3.13"
 keywords = ["funcchain", "ai", "llm", "langchain", "pydantic", "pythonic", "cognitive systems", "agent framework"]
 classifiers = [
-    "Programming Language :: Python :: 3 :: Only",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
     "Topic :: Scientific/Engineering :: Artificial Intelligence",
 ]
 
