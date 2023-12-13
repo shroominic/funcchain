@@ -40,12 +40,13 @@ managed = true
 dev-dependencies = [
     "ruff",
     "mypy",
+    "isort",
+    "pytest",
     "ipython",
     "pre-commit",
     "funcchain[all]",
-    "mkdocs-material>=9.4.10",
-    "pytest>=7.4.3",
-    "beautifulsoup4>=4.12.2",
+    "mkdocs-material>=9.4",
+    "beautifulsoup4>=4.12",
 ]
 
 [project.optional-dependencies]
