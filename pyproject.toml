@@ -7,8 +7,6 @@ authors = [
 ]
 dependencies = [
     "langchain>=0.0.347",
-    "aiohttp>=3.9.0",
-    "python-dotenv>=1.0.0",
     "pydantic-settings>=2.1.0",
     "docstring-parser>=0.15",
     "rich>=13.7.0",
