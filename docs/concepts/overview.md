@@ -64,10 +64,10 @@ The `settings` object contains global settings for funcchain.
 
 Key attributes:
 
-- `LLM`: Configures the default LLM
-- `MAX_TOKENS`: Max tokens per request
-- `DEFAULT_SYSTEM_PROMPT`: Default system prompt
-- `OPENAI_API_KEY`: OpenAI API key
+- `llm`: Configures the default llm
+- `max_tokens`: Max tokens per request
+- `default_system_prompt`: Default system prompt
+- `openai_api_key`: OpenAI API key
 - `model_kwargs()`: kwargs for model like temperature
 
 Usage:
@@ -75,8 +75,8 @@ Usage:
 ```python
 from funcchain import settings
 
-settings.LLM = MyCustomLLM()
-settings.MAX_TOKENS = 2048
+settings.llm = MyCustomChatModel()
+settings.max_tokens = 2048
 ```
 
 ## BaseModel
