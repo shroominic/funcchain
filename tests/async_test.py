@@ -3,8 +3,8 @@ from funcchain import achain, settings
 from pydantic import BaseModel
 from random import shuffle
 
-settings.TEMPERATURE = 1
-settings.MODEL_NAME = "openai/gpt-3.5-turbo-1106"
+settings.temperature = 1
+settings.llm = "openai/gpt-3.5-turbo-1106"
 
 
 async def generate_answer(
