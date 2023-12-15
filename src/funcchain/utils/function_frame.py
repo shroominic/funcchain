@@ -2,7 +2,7 @@ import types
 from inspect import FrameInfo, currentframe, getouterframes
 from typing import Union
 
-from langchain.schema import BaseOutputParser, StrOutputParser
+from langchain_core.output_parsers import BaseOutputParser, StrOutputParser
 
 from ..parser import BoolOutputParser, ParserBaseModel, PydanticOutputParser
 

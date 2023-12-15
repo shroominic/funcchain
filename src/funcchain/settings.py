@@ -5,9 +5,9 @@ Automatically loads environment variables from .env file
 from typing import Optional, TypedDict
 
 from langchain.cache import InMemoryCache
-from langchain.chat_models.base import BaseChatModel
-from langchain.globals import set_llm_cache
-from langchain.schema.runnable import RunnableWithFallbacks
+from langchain_core.globals import set_llm_cache
+from langchain_core.language_models import BaseChatModel
+from langchain_core.runnables import RunnableWithFallbacks
 from pydantic import Field
 from pydantic_settings import BaseSettings
 

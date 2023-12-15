@@ -3,8 +3,8 @@ import re
 from typing import Optional
 
 from langchain.output_parsers.format_instructions import PYDANTIC_FORMAT_INSTRUCTIONS
-from langchain.schema import OutputParserException
-from langchain.schema.output_parser import BaseOutputParser
+from langchain_core.exceptions import OutputParserException
+from langchain_core.output_parsers import BaseOutputParser
 from pydantic import BaseModel, Field
 from typing_extensions import Self
 

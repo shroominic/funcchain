@@ -3,13 +3,13 @@ from contextvars import ContextVar
 from typing import Any, AsyncGenerator, Awaitable, Callable, Coroutine, Generator
 from uuid import UUID
 
-from langchain.callbacks.base import AsyncCallbackHandler
-from langchain.schema.messages import BaseMessage
-from langchain.schema.output import ChatGenerationChunk, GenerationChunk, LLMResult
+from langchain_core.callbacks.base import AsyncCallbackHandler
+from langchain_core.messages import BaseMessage
+from langchain_core.outputs import ChatGenerationChunk, GenerationChunk, LLMResult
 
 
 class AsyncStreamHandler(AsyncCallbackHandler):
-    """Async callback handler that can be used to handle callbacks from langchain."""
+    """Async callback handler that can be used to handle callbacks from langchain_core."""
 
     def __init__(
         self, fn: Callable[[str], Awaitable[None] | None], default_kwargs: dict

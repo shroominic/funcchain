@@ -1,8 +1,9 @@
 from typing import TypeVar
 
-from langchain.callbacks.base import Callbacks
-from langchain.schema import BaseMessage, BaseOutputParser
-from langchain.schema.chat_history import BaseChatMessageHistory
+from langchain_core.callbacks.base import Callbacks
+from langchain_core.chat_history import BaseChatMessageHistory
+from langchain_core.messages import BaseMessage
+from langchain_core.output_parsers import BaseOutputParser
 
 from ..settings import FuncchainSettings
 from ..utils.decorators import get_parent_frame, log_openai_callback, retry_parse

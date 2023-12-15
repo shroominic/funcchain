@@ -6,9 +6,9 @@ from typing import Any
 
 from langchain.callbacks import get_openai_callback
 from langchain.callbacks.openai_info import OpenAICallbackHandler
-from langchain.schema import AIMessage
-from langchain.schema.chat_history import BaseChatMessageHistory
-from langchain.schema.output_parser import OutputParserException
+from langchain_core.chat_history import BaseChatMessageHistory
+from langchain_core.exceptions import OutputParserException
+from langchain_core.messages import AIMessage
 from rich import print
 
 from ..exceptions import ParsingRetryException

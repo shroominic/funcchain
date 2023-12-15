@@ -1,11 +1,11 @@
 from types import UnionType
 from typing import TypeVar, Union
 
-from langchain.chat_models.base import BaseChatModel
-from langchain.prompts import ChatPromptTemplate
-from langchain.schema import AIMessage, BaseMessage, BaseOutputParser, HumanMessage
-from langchain.schema.chat_history import BaseChatMessageHistory
-from langchain.schema.runnable import RunnableSequence, RunnableSerializable, RunnableWithFallbacks
+from langchain_core.chat_models.base import BaseChatModel
+from langchain_core.prompts import ChatPromptTemplate
+from langchain_core.schema import AIMessage, BaseMessage, BaseOutputParser, HumanMessage
+from langchain_core.schema.chat_history import BaseChatMessageHistory
+from langchain_core.schema.runnable import RunnableSequence, RunnableSerializable, RunnableWithFallbacks
 from PIL import Image
 from pydantic import BaseModel
 

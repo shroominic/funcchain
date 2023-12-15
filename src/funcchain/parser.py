@@ -3,8 +3,10 @@ import json
 import re
 from typing import Callable, Optional, Type, TypeVar
 
-from langchain.schema import AIMessage, ChatGeneration, Generation, OutputParserException
-from langchain.schema.output_parser import BaseGenerationOutputParser, BaseOutputParser
+from langchain_core.exceptions import OutputParserException
+from langchain_core.messages import AIMessage
+from langchain_core.output_parsers import BaseGenerationOutputParser, BaseOutputParser
+from langchain_core.outputs import ChatGeneration, Generation
 from pydantic import BaseModel, ValidationError
 
 from .exceptions import ParsingRetryException

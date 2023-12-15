@@ -1,7 +1,7 @@
 from typing import Any
 
-from langchain.schema.messages import BaseMessage
-from langchain.schema.output_parser import OutputParserException
+from langchain_core.exceptions import OutputParserException
+from langchain_core.messages import BaseMessage
 
 
 class ParsingRetryException(OutputParserException):

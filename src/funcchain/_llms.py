@@ -4,12 +4,10 @@ import logging
 from pathlib import Path
 from typing import Any, Dict, Iterator, List, Optional, Union
 
-from langchain.callbacks.manager import CallbackManagerForLLMRun
-from langchain.chat_models.base import BaseChatModel
-from langchain.schema import ChatResult
-from langchain.schema.messages import AIMessage, AIMessageChunk, BaseMessage, ChatMessage, HumanMessage, SystemMessage
-from langchain.schema.output import ChatGeneration, ChatGenerationChunk
-from langchain_core.language_models import BaseLanguageModel
+from langchain_core.callbacks.manager import CallbackManagerForLLMRun
+from langchain_core.language_models import BaseChatModel, BaseLanguageModel
+from langchain_core.messages import AIMessage, AIMessageChunk, BaseMessage, ChatMessage, HumanMessage, SystemMessage
+from langchain_core.outputs import ChatGeneration, ChatGenerationChunk, ChatResult
 from langchain_core.pydantic_v1 import Field, root_validator
 from langchain_core.utils import get_pydantic_field_names
 from langchain_core.utils.utils import build_extra_kwargs
