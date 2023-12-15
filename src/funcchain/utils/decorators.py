@@ -29,13 +29,13 @@ def retry_parse(fn: Any) -> Any:
         async def async_wrapper(*args: Any, **kwargs: Any) -> Any:
             memory: BaseChatMessageHistory = args[4]
             settings: FuncchainSettings = args[5]
-            retry = settings.RETRY_PARSE
+            retry = settings.retry_parse
             for r in range(retry):
                 try:
                     return await fn(*args, **kwargs)
                 except ParsingRetryException as e:
                     _handle_error(e, r, retry, memory)
-                    await asleep(settings.RETRY_PARSE_SLEEP + r)
+                    await asleep(settings.retry_parse_sleep + r)
                 except OutputParserException as e:
                     if e.llm_output:
                         _handle_error(
@@ -49,7 +49,7 @@ def retry_parse(fn: Any) -> Any:
                             retry,
                             memory,
                         )
-                        sleep(settings.RETRY_PARSE_SLEEP + r)
+                        sleep(settings.retry_parse_sleep + r)
                     else:
                         raise e
 
@@ -61,13 +61,13 @@ def retry_parse(fn: Any) -> Any:
         def sync_wrapper(*args: Any, **kwargs: Any) -> Any:
             memory: BaseChatMessageHistory = args[4]
             settings: FuncchainSettings = args[5]
-            retry = settings.RETRY_PARSE
+            retry = settings.retry_parse
             for r in range(retry):
                 try:
                     return fn(*args, **kwargs)
                 except ParsingRetryException as e:
                     _handle_error(e, r, retry, memory)
-                    sleep(settings.RETRY_PARSE_SLEEP + r)
+                    sleep(settings.retry_parse_sleep + r)
                 except OutputParserException as e:
                     if e.llm_output:
                         _handle_error(
@@ -81,7 +81,7 @@ def retry_parse(fn: Any) -> Any:
                             retry,
                             memory,
                         )
-                        sleep(settings.RETRY_PARSE_SLEEP + r)
+                        sleep(settings.retry_parse_sleep + r)
                     else:
                         raise e
 
