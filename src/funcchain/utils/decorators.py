@@ -11,8 +11,8 @@ from langchain.schema.chat_history import BaseChatMessageHistory
 from langchain.schema.output_parser import OutputParserException
 from rich import print
 
-from ..settings import FuncchainSettings
 from ..exceptions import ParsingRetryException
+from ..settings import FuncchainSettings
 from .function_frame import get_parent_frame
 
 

@@ -1,5 +1,6 @@
-from funcchain import chain, settings
 from pydantic import BaseModel, Field
+
+from funcchain import chain, settings
 
 
 class Task(BaseModel):

@@ -7,14 +7,7 @@ from typing import Any, Dict, Iterator, List, Optional, Union
 from langchain.callbacks.manager import CallbackManagerForLLMRun
 from langchain.chat_models.base import BaseChatModel
 from langchain.schema import ChatResult
-from langchain.schema.messages import (
-    AIMessage,
-    AIMessageChunk,
-    BaseMessage,
-    ChatMessage,
-    HumanMessage,
-    SystemMessage,
-)
+from langchain.schema.messages import AIMessage, AIMessageChunk, BaseMessage, ChatMessage, HumanMessage, SystemMessage
 from langchain.schema.output import ChatGeneration, ChatGenerationChunk
 from langchain_core.language_models import BaseLanguageModel
 from langchain_core.pydantic_v1 import Field, root_validator

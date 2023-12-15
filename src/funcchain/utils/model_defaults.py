@@ -1,16 +1,11 @@
+from pathlib import Path
 from typing import Any
 
-from pathlib import Path
-from langchain.chat_models import (
-    AzureChatOpenAI,
-    ChatAnthropic,
-    ChatGooglePalm,
-    ChatOpenAI,
-)
+from langchain.chat_models import AzureChatOpenAI, ChatAnthropic, ChatGooglePalm, ChatOpenAI
 from langchain.chat_models.base import BaseChatModel
 
-from ..settings import FuncchainSettings
 from .._llms import ChatLlamaCpp
+from ..settings import FuncchainSettings
 
 
 def get_gguf_model(

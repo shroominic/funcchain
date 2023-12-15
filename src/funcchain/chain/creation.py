@@ -1,18 +1,15 @@
 from types import UnionType
 from typing import TypeVar, Union
 
-from funcchain._llms import ChatLlamaCpp
 from langchain.chat_models.base import BaseChatModel
 from langchain.prompts import ChatPromptTemplate
 from langchain.schema import AIMessage, BaseMessage, BaseOutputParser, HumanMessage
 from langchain.schema.chat_history import BaseChatMessageHistory
-from langchain.schema.runnable import (
-    RunnableSequence,
-    RunnableSerializable,
-    RunnableWithFallbacks,
-)
+from langchain.schema.runnable import RunnableSequence, RunnableSerializable, RunnableWithFallbacks
 from PIL import Image
 from pydantic import BaseModel
+
+from funcchain._llms import ChatLlamaCpp
 
 from ..parser import MultiToolParser, ParserBaseModel, PydanticFuncParser
 from ..settings import FuncchainSettings
@@ -24,17 +21,13 @@ from ..utils import (
     is_function_model,
     is_vision_model,
     kwargs_from_parent,
-    univeral_model_selector,
     multi_pydantic_to_functions,
     parser_for,
     pydantic_to_functions,
     pydantic_to_grammar,
+    univeral_model_selector,
 )
-from .prompt import (
-    HumanImageMessagePromptTemplate,
-    create_chat_prompt,
-    create_instruction_prompt,
-)
+from .prompt import HumanImageMessagePromptTemplate, create_chat_prompt, create_instruction_prompt
 
 ChainOutput = TypeVar("ChainOutput")
 
@@ -261,7 +254,7 @@ def _gather_llm(
         llm = settings.llm
     else:
         llm = univeral_model_selector(settings)
-    
+
     if not llm:
         raise RuntimeError(
             "No language model provided. Either set the llm environment variable or "

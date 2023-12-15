@@ -1,16 +1,13 @@
 from string import Formatter
-from typing import Any, Type, Optional
+from typing import Any, Optional, Type
 
-from PIL import Image
-from pydantic import BaseModel
 from langchain.prompts import ChatPromptTemplate
-from langchain.prompts.chat import (
-    BaseStringMessagePromptTemplate,
-    MessagePromptTemplateT,
-)
+from langchain.prompts.chat import BaseStringMessagePromptTemplate, MessagePromptTemplateT
 from langchain.prompts.prompt import PromptTemplate
 from langchain.schema import BaseMessage, HumanMessage, SystemMessage
 from langchain.schema.chat_history import BaseChatMessageHistory
+from PIL import Image
+from pydantic import BaseModel
 
 from ..utils import image_to_base64_url
 

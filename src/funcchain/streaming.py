@@ -86,6 +86,7 @@ def stream_to(
         ...     # your chain calls here
     """
     import builtins
+
     import rich
 
     if (fn is builtins.print or fn is rich.print) and kwargs == {}:

@@ -6,7 +6,6 @@ from langchain.schema import BaseOutputParser, StrOutputParser
 
 from ..parser import BoolOutputParser, ParserBaseModel, PydanticOutputParser
 
-
 FUNC_DEPTH = 8
 
 

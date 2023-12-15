@@ -1,7 +1,10 @@
-from asyncio import gather, run as _await
-from funcchain import achain, settings
-from pydantic import BaseModel
+from asyncio import gather
+from asyncio import run as _await
 from random import shuffle
+
+from pydantic import BaseModel
+
+from funcchain import achain, settings
 
 settings.temperature = 1
 settings.llm = "openai/gpt-3.5-turbo-1106"

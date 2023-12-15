@@ -8,8 +8,8 @@ from langchain.cache import InMemoryCache
 from langchain.chat_models.base import BaseChatModel
 from langchain.globals import set_llm_cache
 from langchain.schema.runnable import RunnableWithFallbacks
-from pydantic_settings import BaseSettings
 from pydantic import Field
+from pydantic_settings import BaseSettings
 
 set_llm_cache(InMemoryCache())
 
