@@ -27,14 +27,14 @@ def get_gguf_model(
     - discolm-mixtral-8x7b-v2
     ...
 
-    Raises ModelNotFound(model_name) error in case of no result.
+    Raises ModelNotFound(name) error in case of no result.
     """
     from huggingface_hub import hf_hub_download
 
     name = name.removesuffix("-GGUF")
     label = "Q5_K_M" if label == "latest" else label
 
-    model_path = Path(settings.MODEL_LIBRARY)
+    model_path = Path(settings.local_models_path)
 
     if (p := model_path / f"{name.lower()}.{label}.gguf").exists():
         return p
@@ -111,8 +111,9 @@ def univeral_model_selector(
     Raises:
     - ModelNotFoundError, when the model is not found.
     """
-    model_name = settings.MODEL_NAME
+    model_name = settings.llm if isinstance(settings.llm, str) else ""
     model_kwargs.update(settings.model_kwargs())
+
     if model_name:
         mtype, name_lable = (
             model_name.split("/") if "/" in model_name else ("", model_name)
@@ -155,14 +156,14 @@ def univeral_model_selector(
 
     model_kwargs.pop("model_name")
 
-    if settings.OPENAI_API_KEY:
+    if settings.openai_api_key:
         model_kwargs.update(settings.openai_kwargs())
         return ChatOpenAI(**model_kwargs)
-    if settings.AZURE_API_KEY:
+    if settings.azure_api_key:
         return AzureChatOpenAI(**model_kwargs)
-    if settings.ANTHROPIC_API_KEY:
+    if settings.anthropic_api_key:
         return ChatAnthropic(**model_kwargs)
-    if settings.GOOGLE_API_KEY:
+    if settings.google_api_key:
         return ChatGooglePalm(**model_kwargs)
 
     return default_model_fallback(**model_kwargs)
