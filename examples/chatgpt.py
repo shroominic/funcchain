@@ -6,7 +6,7 @@ from langchain.memory import ChatMessageHistory
 from funcchain import chain, settings
 from funcchain.streaming import stream_to
 
-settings.STREAMING = True
+settings.llm = "gguf/openchat-3.5-1210:Q8_0"
 
 history = ChatMessageHistory()
 
