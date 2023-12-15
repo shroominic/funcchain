@@ -30,7 +30,6 @@ class Item(BaseModel):
     keywords: list[str] = Field(description="Keywords for the item")
 
 class ShoppingList(BaseModel):
-    """ List of items to buy """
     items: list[Item]
     store: str = Field(description="The store to buy the items from")
 
