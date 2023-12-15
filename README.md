@@ -65,7 +65,7 @@ class TodoList(BaseModel):
     todos: list[Item]
     urgency: int = Field(description="The urgency of all tasks (1-10)")
 
-# support for union types 
+# support for union types
 def extract_list(user_input: str) -> TodoList | ShoppingList:
     """
     The user input is either a shopping List or a todo list.
