@@ -105,7 +105,7 @@ async def stream_poem_async(renderer: Renderer, topic: str) -> None:
 
 
 async def main() -> None:
-    settings.MODEL_NAME = "openai/gpt-3.5-turbo-1106"
+    settings.llm = "openai/gpt-3.5-turbo-1106"
 
     topics = ["goldfish", "spacex", "samurai", "python", "javascript", "ai"]
     renderer = Renderer()
