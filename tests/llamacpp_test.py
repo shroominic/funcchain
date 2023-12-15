@@ -21,7 +21,7 @@ def todo_list(job_title: str) -> TodoList:
 
 @pytest.mark.skip_on_actions
 def test_openhermes() -> None:
-    settings.MODEL_NAME = "gguf/openhermes-2.5-mistral-7b"
+    settings.llm = "gguf/openhermes-2.5-mistral-7b"
 
     assert isinstance(
         todo_list("software engineer"),
@@ -31,7 +31,7 @@ def test_openhermes() -> None:
 
 @pytest.mark.skip_on_actions
 def test_neural_chat() -> None:
-    settings.MODEL_NAME = "gguf/neural-chat-7b-v3-1"
+    settings.llm = "gguf/neural-chat-7b-v3-1"
 
     assert isinstance(
         todo_list("ai engineer"),
@@ -42,7 +42,7 @@ def test_neural_chat() -> None:
 # def test_vision() -> None:
 #     from PIL import Image
 
-#     settings.MODEL_NAME = "mys/ggml_llava-v1.5-13b"
+#     settings.llm = "mys/ggml_llava-v1.5-13b"
 
 #     class Analysis(BaseModel):
 #         description: str = Field(description="A description of the image")
@@ -66,7 +66,7 @@ def test_neural_chat() -> None:
 
 
 def test_model_search_failure() -> None:
-    settings.MODEL_NAME = "gguf/neural-chat-ultra-mega"
+    settings.llm = "gguf/neural-chat-ultra-mega"
 
     try:
         todo_list("software engineer")
