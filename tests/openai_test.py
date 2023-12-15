@@ -19,7 +19,7 @@ def todo_list(job_title: str) -> TodoList:
 
 
 def test_gpt_35_turbo() -> None:
-    settings.MODEL_NAME = "openai/gpt-3.5-turbo"
+    settings.llm = "openai/gpt-3.5-turbo"
 
     assert isinstance(
         todo_list("software engineer"),
@@ -28,7 +28,7 @@ def test_gpt_35_turbo() -> None:
 
 
 def test_gpt4() -> None:
-    settings.MODEL_NAME = "openai/gpt-4"
+    settings.llm = "openai/gpt-4"
 
     assert isinstance(
         todo_list("software engineer"),
@@ -39,7 +39,7 @@ def test_gpt4() -> None:
 def test_vision() -> None:
     from PIL import Image
 
-    settings.MODEL_NAME = "openai/gpt-4-vision-preview"
+    settings.llm = "openai/gpt-4-vision-preview"
 
     class Analysis(BaseModel):
         description: str = Field(description="A description of the image")
@@ -59,8 +59,8 @@ def test_vision() -> None:
 
 
 def test_api_key_failure() -> None:
-    settings.MODEL_NAME = "gpt-3.5-turbo-1106"
-    settings.OPENAI_API_KEY = "test"
+    settings.llm = "gpt-3.5-turbo-1106"
+    settings.openai_api_key = "test"
 
     try:
         print(todo_list("software engineer"))
