@@ -2,7 +2,6 @@ from funcchain import chain, settings
 from funcchain.streaming import stream_to
 
 settings.temperature = 1
-settings.streaming = True
 
 
 def generate_story_of(topic: str) -> str:
