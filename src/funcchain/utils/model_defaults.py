@@ -1,7 +1,12 @@
 from pathlib import Path
 from typing import Any
 
-from langchain.chat_models import AzureChatOpenAI, ChatAnthropic, ChatGooglePalm, ChatOpenAI
+from langchain.chat_models import (
+    AzureChatOpenAI,
+    ChatAnthropic,
+    ChatGooglePalm,
+    ChatOpenAI,
+)
 from langchain_core.language_models import BaseChatModel
 
 from .._llms import ChatLlamaCpp

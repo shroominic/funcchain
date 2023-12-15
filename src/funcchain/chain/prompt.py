@@ -4,7 +4,10 @@ from typing import Any, Optional, Type
 from langchain_core.chat_history import BaseChatMessageHistory
 from langchain_core.messages import BaseMessage, HumanMessage, SystemMessage
 from langchain_core.prompts import ChatPromptTemplate
-from langchain_core.prompts.chat import BaseStringMessagePromptTemplate, MessagePromptTemplateT
+from langchain_core.prompts.chat import (
+    BaseStringMessagePromptTemplate,
+    MessagePromptTemplateT,
+)
 from langchain_core.prompts.prompt import PromptTemplate
 from PIL import Image
 from pydantic import BaseModel

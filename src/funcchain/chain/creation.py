@@ -5,7 +5,11 @@ from langchain_core.chat_models.base import BaseChatModel
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.schema import AIMessage, BaseMessage, BaseOutputParser, HumanMessage
 from langchain_core.schema.chat_history import BaseChatMessageHistory
-from langchain_core.schema.runnable import RunnableSequence, RunnableSerializable, RunnableWithFallbacks
+from langchain_core.schema.runnable import (
+    RunnableSequence,
+    RunnableSerializable,
+    RunnableWithFallbacks,
+)
 from PIL import Image
 from pydantic import BaseModel
 
@@ -27,7 +31,11 @@ from ..utils import (
     pydantic_to_grammar,
     univeral_model_selector,
 )
-from .prompt import HumanImageMessagePromptTemplate, create_chat_prompt, create_instruction_prompt
+from .prompt import (
+    HumanImageMessagePromptTemplate,
+    create_chat_prompt,
+    create_instruction_prompt,
+)
 
 ChainOutput = TypeVar("ChainOutput")
 
