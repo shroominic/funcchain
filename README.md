@@ -1,6 +1,5 @@
 # funcchain
 
-![License](https://img.shields.io/pypi/l/funcchain)
 [![Version](https://badge.fury.io/py/funcchain.svg)](https://badge.fury.io/py/funcchain)
 [![tests](https://github.com/shroominic/funcchain/actions/workflows/code-check.yml/badge.svg)](https://github.com/shroominic/funcchain/actions/workflows/code-check.yml)
 ![PyVersion](https://img.shields.io/pypi/pyversions/funcchain)
