@@ -4,8 +4,8 @@ from funcchain.parser import CodeBlock
 from pydantic import BaseModel
 from rich import print
 
-settings.MODEL_NAME = "gpt-4-1106-preview"
-settings.CONTEXT_LENGTH = 4096 * 8
+settings.llm = "gpt-4-1106-preview"
+settings.context_lenght = 4096 * 8
 
 
 def create_model(web_page: str) -> CodeBlock:
