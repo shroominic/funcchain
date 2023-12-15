@@ -39,6 +39,7 @@ identify==2.5.32
 idna==3.4
 iniconfig==2.0.0
 ipython==8.18.1
+isort==5.13.2
 jedi==0.19.1
 jinja2==3.1.2
 jsonpatch==1.33
