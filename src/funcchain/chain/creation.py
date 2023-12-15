@@ -46,7 +46,7 @@ def create_union_chain(
     system: str,
     memory: BaseChatMessageHistory,
     context: list[BaseMessage],
-    LLM: BaseChatModel | RunnableWithFallbacks,
+    llm: BaseChatModel | RunnableWithFallbacks,
     input_kwargs: dict[str, str],
 ) -> RunnableSequence[dict[str, str], ChainOutput]:
     output_types = output_type.__args__  # type: ignore
@@ -58,16 +58,16 @@ def create_union_chain(
 
     functions = multi_pydantic_to_functions(output_types)
 
-    if isinstance(LLM, RunnableWithFallbacks):
-        LLM = LLM.runnable.bind(**functions).with_fallbacks(
+    if isinstance(llm, RunnableWithFallbacks):
+        llm = llm.runnable.bind(**functions).with_fallbacks(
             [
                 fallback.bind(**functions)
-                for fallback in LLM.fallbacks
-                if hasattr(LLM, "fallbacks")
+                for fallback in llm.fallbacks
+                if hasattr(llm, "fallbacks")
             ]
         )
     else:
-        LLM = LLM.bind(**functions)  # type: ignore
+        llm = llm.bind(**functions)  # type: ignore
 
     prompt = create_chat_prompt(
         system,
@@ -80,31 +80,31 @@ def create_union_chain(
         memory=memory,
     )
 
-    return prompt | LLM | MultiToolParser(output_types=output_types)  # type: ignore
+    return prompt | llm | MultiToolParser(output_types=output_types)  # type: ignore
 
 
 # TODO: do patch instead of seperate creation
 def create_pydanctic_chain(
     output_type: type[BaseModel],
     prompt: ChatPromptTemplate,
-    LLM: BaseChatModel | RunnableWithFallbacks,
+    llm: BaseChatModel | RunnableWithFallbacks,
     input_kwargs: dict[str, str],
 ) -> RunnableSequence[dict[str, str], ChainOutput]:
     # TODO: check these format_instructions
     input_kwargs["format_instructions"] = f"Extract to {output_type.__name__}."
     functions = pydantic_to_functions(output_type)
-    LLM = (
-        LLM.runnable.bind(**functions).with_fallbacks(  # type: ignore
+    llm = (
+        llm.runnable.bind(**functions).with_fallbacks(  # type: ignore
             [
                 fallback.bind(**functions)
-                for fallback in LLM.fallbacks
-                if hasattr(LLM, "fallbacks")
+                for fallback in llm.fallbacks
+                if hasattr(llm, "fallbacks")
             ]
         )
-        if isinstance(LLM, RunnableWithFallbacks)
-        else LLM.bind(**functions)
+        if isinstance(llm, RunnableWithFallbacks)
+        else llm.bind(**functions)
     )
-    return prompt | LLM | PydanticFuncParser(pydantic_schema=output_type)  # type: ignore
+    return prompt | llm | PydanticFuncParser(pydantic_schema=output_type)  # type: ignore
 
 
 def create_chain(
@@ -122,7 +122,7 @@ def create_chain(
     # default values
     output_type = get_output_type()
     input_kwargs.update(kwargs_from_parent())
-    system = system or settings.DEFAULT_SYSTEM_PROMPT
+    system = system or settings.default_system_prompt
     instruction = instruction or from_docstring()
     parser = parser or parser_for(output_type)
 
@@ -229,20 +229,20 @@ def _crop_large_inputs(
     for k, v in input_kwargs.copy().items():
         if isinstance(v, str):
             content_tokens = count_tokens(v)
-            if base_tokens + content_tokens > settings.CONTEXT_LENGTH:
-                input_kwargs[k] = v[: (settings.CONTEXT_LENGTH - base_tokens) * 2 // 3]
+            if base_tokens + content_tokens > settings.context_lenght:
+                input_kwargs[k] = v[: (settings.context_lenght - base_tokens) * 2 // 3]
                 print("Truncated: ", len(input_kwargs[k]))
 
 
 def _handle_images(
-    LLM: BaseChatModel | RunnableWithFallbacks,
+    llm: BaseChatModel | RunnableWithFallbacks,
     input_kwargs: dict[str, str],
 ) -> list[Image.Image]:
     """
     Handle images for vision models.
     """
     images = [v for v in input_kwargs.values() if isinstance(v, Image.Image)]
-    if is_vision_model(LLM):
+    if is_vision_model(llm):
         for k in list(input_kwargs.keys()):
             if isinstance(input_kwargs[k], Image.Image):
                 del input_kwargs[k]
@@ -255,14 +255,20 @@ def _handle_images(
 def _gather_llm(
     settings: FuncchainSettings,
 ) -> BaseChatModel | RunnableWithFallbacks:
-    llm = settings.LLM or univeral_model_selector(settings)
+    if isinstance(settings.llm, RunnableWithFallbacks) or isinstance(
+        settings.llm, BaseChatModel
+    ):
+        llm = settings.llm
+    else:
+        llm = univeral_model_selector(settings)
+    
     if not llm:
         raise RuntimeError(
-            "No language model provided. Either set the LLM environment variable or "
+            "No language model provided. Either set the llm environment variable or "
             "pass a model to the `chain` function."
         )
     if handler := stream_handler.get():
-        settings.STREAMING = True
+        settings.streaming = True
         if isinstance(llm, RunnableWithFallbacks) and isinstance(
             llm.runnable, BaseChatModel
         ):
