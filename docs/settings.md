@@ -15,32 +15,32 @@ class FuncchainSettings(BaseSettings):
 
 ### General Settings
 
-- `LLM: BaseChatModel | RunnableWithFallbacks | None = None`
-  Defines the language learning model to be used. It can be a type of `BaseChatModel`, `RunnableWithFallbacks`, or `None`.
+- `llm: BaseChatModel | RunnableWithFallbacks | str = "openai/gpt-3.5-turbo"`
+  Defines the language learning model to be used. It can be a type of `BaseChatModel`, `RunnableWithFallbacks`, or `str` (model_name).
 
-- `VERBOSE: bool = True`
+- `verbose: bool = True`
   Enables or disables verbose logging.
 
 ### Prompt Settings
 
-- `MAX_TOKENS: int = 4096`
+- `max_tokens: int = 4096`
   Specifies the maximum number of tokens for chat models.
 
-- `DEFAULT_SYSTEM_PROMPT: str = "You are a professional assistant solving tasks."`
+- `default_system_prompt: str = "You are a professional assistant solving tasks."`
   Default prompt used for initializing the system.
 
 ### API Keys
 
-- `OPENAI_API_KEY: Optional[str] = None`
+- `openai_api_key: Optional[str] = None`
   API key for the OpenAI service.
 
-- `AZURE_API_KEY: Optional[str] = None`
+- `azure_api_key: Optional[str] = None`
   API key for the Azure service.
 
-- `ANTHROPIC_API_KEY: Optional[str] = None`
+- `anthropic_api_key: Optional[str] = None`
   API key for the Anthropic service.
 
-- `GOOGLE_API_KEY: Optional[str] = None`
+- `google_api_key: Optional[str] = None`
   API key for the Google service.
 
 - `JINACHAT_API_KEY: Optional[str] = None`
@@ -62,13 +62,10 @@ class FuncchainSettings(BaseSettings):
 
 ### Model Keyword Arguments
 
-- `MODEL_NAME: str = "openai/gpt-3.5-turbo"`
-  Name of the language model.
-
-- `TEMPERATURE: float = 0.1`
+- `temperature: float = 0.1`
   Controls the randomness in the model's output.
 
-- `VERBOSE: bool = False`
+- `verbose: bool = False`
   Enables or disables verbose logging for the model.
 
 ### Additional Methods
