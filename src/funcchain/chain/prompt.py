@@ -1,6 +1,8 @@
 from string import Formatter
 from typing import Any, Type, Optional
 
+from PIL import Image
+from pydantic import BaseModel
 from langchain.prompts import ChatPromptTemplate
 from langchain.prompts.chat import (
     BaseStringMessagePromptTemplate,
@@ -9,7 +11,6 @@ from langchain.prompts.chat import (
 from langchain.prompts.prompt import PromptTemplate
 from langchain.schema import BaseMessage, HumanMessage, SystemMessage
 from langchain.schema.chat_history import BaseChatMessageHistory
-from PIL import Image
 
 from ..utils import image_to_base64_url
 
@@ -17,14 +18,13 @@ from ..utils import image_to_base64_url
 def create_instruction_prompt(
     instruction: str,
     images: list[Image.Image],
-    input_kwargs: dict[str, str],
+    input_kwargs: dict[str, Any],
 ) -> "HumanImageMessagePromptTemplate":
     template_format = _determine_format(instruction)
 
     required_f_str_vars = _extract_fstring_vars(instruction)
 
-    # if "format_instructions" in required_f_str_vars:
-    #     required_f_str_vars.remove("format_instructions")
+    _filter_fstring_vars(input_kwargs)
 
     inject_vars = [
         f"{var.upper()}:\n{{{var}}}\n"
@@ -92,6 +92,21 @@ def _extract_fstring_vars(template: str) -> list[str]:
         for _, field_name, _, _ in Formatter().parse(template)
         if field_name is not None
     ]
+
+
+def _filter_fstring_vars(
+    input_kwargs: dict[str, Any],
+) -> None:
+    """Mutate input_kwargs to filter out non-string values."""
+    keys_to_remove = [
+        key
+        for key, value in input_kwargs.items()
+        if not (
+            isinstance(value, str) or isinstance(value, BaseModel)
+        )  # TODO: remove BaseModel
+    ]
+    for key in keys_to_remove:
+        del input_kwargs[key]
 
 
 class HumanImageMessagePromptTemplate(BaseStringMessagePromptTemplate):
