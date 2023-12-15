@@ -4,7 +4,7 @@ from pydantic import BaseModel
 
 from funcchain import achain, settings
 
-settings.TEMPERATURE = 1
+settings.temperature = 1
 
 
 class StartupConcept(BaseModel):
