@@ -4,7 +4,6 @@ from pydantic import BaseModel, Field
 from funcchain import chain, settings
 
 settings.llm = "openai/gpt-4-vision-preview"
-settings.streaming = True
 
 
 class AnalysisResult(BaseModel):
