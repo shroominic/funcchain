@@ -1,7 +1,7 @@
 from funcchain import BaseModel, achain, chain, settings
 
-settings.TEMPERATURE = 0
-settings.MODEL_NAME = "gpt-3.5-turbo-1106"
+settings.temperature = 0
+settings.llm = "gpt-3.5-turbo-1106"
 
 
 class Task(BaseModel):
