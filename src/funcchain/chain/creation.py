@@ -1,11 +1,12 @@
 from types import UnionType
 from typing import TypeVar, Union
 
-from langchain_core.chat_models.base import BaseChatModel
+from langchain_core.language_models import BaseChatModel
 from langchain_core.prompts import ChatPromptTemplate
-from langchain_core.schema import AIMessage, BaseMessage, BaseOutputParser, HumanMessage
-from langchain_core.schema.chat_history import BaseChatMessageHistory
-from langchain_core.schema.runnable import (
+from langchain_core.messages import AIMessage, BaseMessage, HumanMessage
+from langchain_core.output_parsers import BaseOutputParser 
+from langchain_core.chat_history import BaseChatMessageHistory
+from langchain_core.runnables import (
     RunnableSequence,
     RunnableSerializable,
     RunnableWithFallbacks,
