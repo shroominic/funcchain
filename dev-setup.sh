@@ -17,5 +17,4 @@ rye shell
 echo "SETUP: install pre-commit hooks"
 pre-commit install
 
-echo "TESTING ..."
-pytest
+echo "Try running 'python example/chatgpt.py' to test your setup"
