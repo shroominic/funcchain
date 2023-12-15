@@ -29,14 +29,15 @@ def extract_list(user_input: str) -> TodoList | ShoppingList:
 user_input = "I need to buy apples, oranges and bananas from whole foods"
 lst = extract_list(user_input)
 
-if isinstance(lst, ShoppingList):
-    print("Here is your Shopping List: ")
-    for item in lst.items:
-        print(f"{item.name}: {item.description}")
-    print(f"You need to go to: {lst.store}")
+match lst:
+    case ShoppingList(items=items, store=store):
+        print("Here is your Shopping List: ")
+        for item in items:
+            print(f"{item.name}: {item.description}")
+        print(f"You need to go to: {store}")
 
-elif isinstance(lst, TodoList):
-    print("Here is your Todo List: ")
-    for item in lst.todos:
-        print(f"{item.name}: {item.description}")
-    print(f"Urgency: {lst.urgency}")
+    case TodoList(todos=todos, urgency=urgency):
+        print("Here is your Todo List: ")
+        for item in todos:
+            print(f"{item.name}: {item.description}")
+        print(f"Urgency: {urgency}")
