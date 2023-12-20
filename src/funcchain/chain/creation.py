@@ -1,5 +1,5 @@
 from types import UnionType
-from typing import TypeVar, Union
+from typing import TypeVar, Type
 
 from langchain_core.language_models import BaseChatModel
 from langchain_core.prompts import ChatPromptTemplate
@@ -7,7 +7,6 @@ from langchain_core.messages import AIMessage, BaseMessage, HumanMessage
 from langchain_core.output_parsers import BaseOutputParser
 from langchain_core.chat_history import BaseChatMessageHistory
 from langchain_core.runnables import (
-    RunnableSequence,
     RunnableSerializable,
     RunnableWithFallbacks,
 )
@@ -20,14 +19,11 @@ from ..parser import MultiToolParser, ParserBaseModel, PydanticFuncParser
 from ..settings import FuncchainSettings
 from ..streaming import stream_handler
 from ..utils import (
+    parser_for,
     count_tokens,
-    from_docstring,
-    get_output_type,
     is_function_model,
     is_vision_model,
-    kwargs_from_parent,
     multi_pydantic_to_functions,
-    parser_for,
     pydantic_to_functions,
     pydantic_to_grammar,
     univeral_model_selector,
@@ -43,15 +39,23 @@ ChainOutput = TypeVar("ChainOutput")
 
 # TODO: do patch instead of seperate creation
 def create_union_chain(
-    output_type: type[BaseModel],
+    output_type: UnionType,
     instruction_prompt: HumanImageMessagePromptTemplate,
     system: str,
     memory: BaseChatMessageHistory,
     context: list[BaseMessage],
     llm: BaseChatModel | RunnableWithFallbacks,
     input_kwargs: dict[str, str],
-) -> RunnableSequence[dict[str, str], ChainOutput]:
-    output_types = output_type.__args__  # type: ignore
+) -> RunnableSerializable[dict[str, str], BaseModel]:
+    """
+    Compile a langchain runnable chain from the funcchain syntax.
+    """
+    if not all(issubclass(t, BaseModel) for t in output_type.__args__):
+        raise RuntimeError(
+            "Funcchain union types are currently only supported for pydantic models."
+        )
+
+    output_types: list[Type[BaseModel]] = output_type.__args__  # type: ignore
     output_type_names = [t.__name__ for t in output_types]
 
     input_kwargs[
@@ -82,7 +86,7 @@ def create_union_chain(
         memory=memory,
     )
 
-    return prompt | llm | MultiToolParser(output_types=output_types)  # type: ignore
+    return prompt | llm | MultiToolParser(output_types=output_types)
 
 
 # TODO: do patch instead of seperate creation
@@ -91,10 +95,11 @@ def create_pydanctic_chain(
     prompt: ChatPromptTemplate,
     llm: BaseChatModel | RunnableWithFallbacks,
     input_kwargs: dict[str, str],
-) -> RunnableSequence[dict[str, str], ChainOutput]:
+) -> RunnableSerializable[dict[str, str], BaseModel]:
     # TODO: check these format_instructions
     input_kwargs["format_instructions"] = f"Extract to {output_type.__name__}."
     functions = pydantic_to_functions(output_type)
+
     llm = (
         llm.runnable.bind(**functions).with_fallbacks(  # type: ignore
             [
@@ -106,13 +111,13 @@ def create_pydanctic_chain(
         if isinstance(llm, RunnableWithFallbacks)
         else llm.bind(**functions)
     )
-    return prompt | llm | PydanticFuncParser(pydantic_schema=output_type)  # type: ignore
+    return prompt | llm | PydanticFuncParser(pydantic_schema=output_type)
 
 
 def create_chain(
-    system: str | None,
-    instruction: str | None,
-    parser: BaseOutputParser[ChainOutput] | None,
+    system: str,
+    instruction: str,
+    output_type: Type[ChainOutput],
     context: list[BaseMessage],
     memory: BaseChatMessageHistory,
     settings: FuncchainSettings,
@@ -121,15 +126,10 @@ def create_chain(
     """
     Compile a langchain runnable chain from the funcchain syntax.
     """
-    # default values
-    output_type = get_output_type()
-    input_kwargs.update(kwargs_from_parent())
-    system = system or settings.default_system_prompt
-    instruction = instruction or from_docstring()
-    parser = parser or parser_for(output_type)
-
     # large language model
     llm = _gather_llm(settings)
+
+    parser = parser_for(output_type)
 
     # add format instructions for parser
     if parser and not is_function_model(llm):
@@ -158,7 +158,11 @@ def create_chain(
     memory.add_message(instruction_prompt.format(**input_kwargs))
 
     if isinstance(llm, ChatLlamaCpp):
-        # TODO: implement Union Type grammar
+        if isinstance(output_type, UnionType):
+            # TODO: implement Union Type grammar
+            raise NotImplementedError(
+                "Union types are not yet supported for LlamaCpp models."
+            )
         if issubclass(output_type, BaseModel) and not issubclass(
             output_type, ParserBaseModel
         ):
@@ -173,9 +177,7 @@ def create_chain(
 
     # function model patches
     if is_function_model(llm):
-        if getattr(output_type, "__origin__", None) is Union or isinstance(
-            output_type, UnionType
-        ):
+        if isinstance(output_type, UnionType):
             return create_union_chain(
                 output_type,
                 instruction_prompt,
@@ -189,7 +191,7 @@ def create_chain(
         if issubclass(output_type, BaseModel) and not issubclass(
             output_type, ParserBaseModel
         ):
-            return create_pydanctic_chain(
+            return create_pydanctic_chain(  # type: ignore
                 output_type,
                 chat_prompt,
                 llm,
