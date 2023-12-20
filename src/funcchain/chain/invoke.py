@@ -1,13 +1,20 @@
-from typing import TypeVar
+from typing import TypeVar, Any
 
 from langchain_core.callbacks.base import Callbacks
 from langchain_core.chat_history import BaseChatMessageHistory
 from langchain_core.messages import BaseMessage
-from langchain_core.output_parsers import BaseOutputParser
+from langchain_core.runnables import RunnableSerializable
 
 from ..settings import FuncchainSettings
-from ..utils.decorators import get_parent_frame, log_openai_callback, retry_parse
 from .creation import create_chain
+from ..utils import (
+    from_docstring,
+    get_output_type,
+    kwargs_from_parent,
+    get_parent_frame,
+    log_openai_callback,
+    retry_parse,
+)
 
 T = TypeVar("T")
 
@@ -15,19 +22,24 @@ T = TypeVar("T")
 @retry_parse
 @log_openai_callback
 def invoke(
-    system: str,
-    instruction: str,
-    parser: BaseOutputParser[T],
+    system: str | None,
+    instruction: str | None,
     context: list[BaseMessage],
     memory: BaseChatMessageHistory,
     settings: FuncchainSettings,
     input_kw: dict[str, str] = {},
     callbacks: Callbacks = None,
-) -> T:  # type: ignore
-    chain = create_chain(
+) -> Any:  # type: ignore
+    # default values
+    output_type = get_output_type()
+    input_kw.update(kwargs_from_parent())
+    system = system or settings.default_system_prompt
+    instruction = instruction or from_docstring()
+
+    chain: RunnableSerializable[dict[str, str], Any] = create_chain(
         system,
         instruction,
-        parser,
+        output_type,
         context,
         memory,
         settings,
@@ -47,19 +59,24 @@ def invoke(
 @retry_parse
 @log_openai_callback
 async def ainvoke(
-    system: str,
-    instruction: str,
-    parser: BaseOutputParser[T],
+    system: str | None,
+    instruction: str | None,
     context: list[BaseMessage],
     memory: BaseChatMessageHistory,
     settings: FuncchainSettings,
     input_kw: dict[str, str] = {},
     callbacks: Callbacks = None,
-) -> T:
-    chain = create_chain(
+) -> Any:
+    # default values
+    output_type = get_output_type()
+    input_kw.update(kwargs_from_parent())
+    system = system or settings.default_system_prompt
+    instruction = instruction or from_docstring()
+
+    chain: RunnableSerializable[dict[str, str], Any] = create_chain(
         system,
         instruction,
-        parser,
+        output_type,
         context,
         memory,
         settings,
