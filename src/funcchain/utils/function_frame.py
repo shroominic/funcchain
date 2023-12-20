@@ -6,7 +6,7 @@ from langchain_core.output_parsers import BaseOutputParser, StrOutputParser
 
 from ..parser import BoolOutputParser, ParserBaseModel, PydanticOutputParser
 
-FUNC_DEPTH = 8
+FUNC_DEPTH = 7
 
 
 def get_parent_frame(depth: int = FUNC_DEPTH) -> FrameInfo:
