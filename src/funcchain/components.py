@@ -15,6 +15,9 @@ Routes = dict[str, Union[Route, Callable, Coroutine]]
 class ChatRouter(BaseModel):
     routes: Routes
 
+    class Config:
+        arbitrary_types_allowed = True
+
     @field_validator("routes")
     def validate_routes(cls, v: Routes) -> Routes:
         if "default" not in v.keys():
