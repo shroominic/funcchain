@@ -3,38 +3,42 @@ from typing import Any
 
 from pydantic import BaseModel, Field
 
-from funcchain import chain
+from funcchain import chain, settings
+
+settings.llm = "gguf/openhermes-2.5-mistral-7b"
 
 
-def handle_pdf_requests(user_query: str) -> None:
-    print("Handling pdf requests with user query: ", user_query)
+def handle_pdf_requests(
+    user_query: str,
+) -> None:
+    print("Handling PDF requests with user query: ", user_query)
 
 
 def handle_csv_requests(user_query: str) -> None:
-    print("Handling csv requests with user query: ", user_query)
+    print("Handling CSV requests with user query: ", user_query)
 
 
-def handle_normal_answer_requests(user_query: str) -> Any:
-    print("Handling normal answer requests with user query: ", user_query)
+def handle_default_requests(user_query: str) -> Any:
+    print("Handling DEFAULT requests with user query: ", user_query)
 
 
-class Routes(str, Enum):
+class RouteChoices(str, Enum):
     pdf = "pdf"
     csv = "csv"
-    normal_answer = "normal_answer"
-
-    def __call__(self, user_query: str) -> Any:
-        match self.value:
-            case self.pdf:
-                return handle_pdf_requests(user_query)
-            case self.csv:
-                return handle_csv_requests(user_query)
-            case self.normal_answer:
-                return handle_normal_answer_requests(user_query)
+    default = "default"
 
 
 class Router(BaseModel):
-    selector: Routes = Field(description="Enum of the available routes.")
+    selector: RouteChoices = Field(description="Enum of the available routes.")
+
+    def invoke_route(self, user_query: str) -> Any:
+        match self.selector.value:
+            case RouteChoices.pdf:
+                return handle_pdf_requests(user_query)
+            case RouteChoices.csv:
+                return handle_csv_requests(user_query)
+            case RouteChoices.default:
+                return handle_default_requests(user_query)
 
 
 def route_query(user_query: str) -> Router:
@@ -49,4 +53,4 @@ if __name__ == "__main__":
 
     routed_chain = route_query(user_query)
 
-    routed_chain.selector(user_query)
+    routed_chain.invoke_route(user_query)
