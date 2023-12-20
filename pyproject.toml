@@ -13,7 +13,7 @@ dependencies = [
     "jinja2>=3.1.2",
     "pillow>=10.1.0",
 ]
-license = { file = "LICENSE" }
+license = "MIT"
 readme = "README.md"
 requires-python = ">= 3.10, <3.13"
 keywords = ["funcchain", "ai", "llm", "langchain", "pydantic", "pythonic", "cognitive systems", "agent framework"]
@@ -45,6 +45,7 @@ dev-dependencies = [
     "funcchain[all]",
     "mkdocs-material>=9.4",
     "beautifulsoup4>=4.12",
+    "python-dotenv>=1",
 ]
 
 [project.optional-dependencies]
@@ -63,6 +64,9 @@ all = [
 
 [tool.hatch.metadata]
 allow-direct-references = true
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/funcchain"]
 
 [tool.pytest.ini_options]
 addopts = "-p no:warnings"
