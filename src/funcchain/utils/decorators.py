@@ -27,8 +27,8 @@ def retry_parse(fn: Any) -> Any:
 
         @wraps(fn)
         async def async_wrapper(*args: Any, **kwargs: Any) -> Any:
-            memory: BaseChatMessageHistory = args[4]
-            settings: FuncchainSettings = args[5]
+            memory: BaseChatMessageHistory = args[3]
+            settings: FuncchainSettings = args[4]
             retry = settings.retry_parse
             for r in range(retry):
                 try:
@@ -59,8 +59,8 @@ def retry_parse(fn: Any) -> Any:
 
         @wraps(fn)
         def sync_wrapper(*args: Any, **kwargs: Any) -> Any:
-            memory: BaseChatMessageHistory = args[4]
-            settings: FuncchainSettings = args[5]
+            memory: BaseChatMessageHistory = args[3]
+            settings: FuncchainSettings = args[4]
             retry = settings.retry_parse
             for r in range(retry):
                 try:
