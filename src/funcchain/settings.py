@@ -37,10 +37,14 @@ class FuncchainSettings(BaseSettings):
 
     # MODEL KWARGS
     verbose: bool = False
+    streaming: bool = False
     max_tokens: int = 2048
     temperature: float = 0.1
+
+    # LLAMA KWARGS
     context_lenght: int = 8196
-    streaming: bool = False
+    n_gpu_layers: int = 50
+    keep_loaded: bool = False
 
     def model_kwargs(self) -> dict:
         return {
@@ -58,6 +62,8 @@ class FuncchainSettings(BaseSettings):
     def llama_kwargs(self) -> dict:
         return {
             "n_ctx": self.context_lenght,
+            "use_mlock": self.keep_loaded,
+            "n_gpu_layers": self.n_gpu_layers,
         }
 
 
@@ -78,3 +84,12 @@ def get_settings(override: Optional[SettingsOverride] = None) -> FuncchainSettin
     if override:
         return settings.model_copy(update=dict(override))
     return settings
+
+
+# load langsmith logging vars
+try:
+    import dotenv
+except ImportError:
+    pass
+else:
+    dotenv.load_dotenv()
