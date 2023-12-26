@@ -13,7 +13,7 @@ def handle_default_requests(user_query: str) -> str:
     return f"Handling DEFAULT requests with user query: {user_query}"
 
 
-router = ChatRouter(
+router = ChatRouter[str](
     routes={
         "pdf": {
             "handler": handle_pdf_requests,
@@ -33,7 +33,11 @@ def test_router() -> None:
 
     assert "Handling PDF" in router.invoke_route("Can you summarize this pdf?")
 
-    assert "Handling DEFAULT" in router.invoke_route("Hey, whatsup?")
+    assert "Handling DEFAULT" in router.invoke_route("whatsup")
+
+    assert "Handling DEFAULT" in router.invoke_route(
+        "I want to book a flight how to do this?"
+    )
 
 
 if __name__ == "__main__":
