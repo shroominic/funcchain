@@ -11,6 +11,8 @@ def runnable(
     instruction: str,
     output_type: Type[T],
     input_args: list[str] = [],
+    context: list = [],
+    system: str = "",
     settings_override: SettingsOverride | None = None,
 ) -> RunnableSerializable[dict[str, str], T]:
     """
@@ -18,11 +20,11 @@ def runnable(
     """
     instruction = "\n" + instruction
     chain: RunnableSerializable[dict[str, str], T] = create_chain(
-        "",
-        instruction,
-        output_type,
-        [],
-        ChatMessageHistory(),
+        system=system,
+        instruction=instruction,
+        output_type=output_type,
+        context=context,
+        memory=ChatMessageHistory(),
         settings=get_settings(settings_override),
         input_kwargs={k: "" for k in input_args},
     )
