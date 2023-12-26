@@ -19,6 +19,7 @@ def create_instruction_prompt(
     instruction: str,
     images: list[Image.Image],
     input_kwargs: dict[str, Any],
+    format_instructions: Optional[str] = None,
 ) -> "HumanImageMessagePromptTemplate":
     template_format = _determine_format(instruction)
 
@@ -40,6 +41,9 @@ def create_instruction_prompt(
         template=instruction,
         template_format=template_format,
         images=images,
+        partial_variables={"format_instructions": format_instructions}
+        if format_instructions
+        else None,
     )
 
 
