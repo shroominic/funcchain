@@ -5,7 +5,8 @@ from pydantic import BaseModel, Field
 
 from funcchain import chain, settings
 
-settings.llm = "gguf/openhermes-2.5-mistral-7b"
+settings.console_stream = True
+# settings.llm = "ollama/openhermes2.5-mistral"
 
 
 def handle_pdf_requests(
