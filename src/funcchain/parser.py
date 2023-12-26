@@ -1,5 +1,6 @@
 import copy
 import json
+import yaml  # type: ignore
 import re
 from typing import Callable, Optional, Type, TypeVar
 
@@ -229,12 +230,12 @@ class PydanticOutputParser(BaseOutputParser[M]):
         if "type" in reduced_schema:
             del reduced_schema["type"]
         # Ensure json in context is well-formed with double quotes.
-        schema_str = json.dumps(reduced_schema)
+        schema_str = yaml.dump(reduced_schema)
 
         return (
-            "Please respond with a JSON object matching the following schema:"
-            f"\n\n```json_schema\n{schema_str}\n```"
-            "Only respond with the object, not the schema."
+            "Please respond with a json result matching the following schema:"
+            f"\n\n```schema\n{schema_str}\n```\n"
+            "Do not repeat the schema. Only respond with the result."
         )
 
     @property
