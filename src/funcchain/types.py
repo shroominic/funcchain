@@ -2,7 +2,6 @@ import json
 import re
 from typing import Optional
 
-from langchain.output_parsers.format_instructions import PYDANTIC_FORMAT_INSTRUCTIONS
 from langchain_core.exceptions import OutputParserException
 from langchain_core.output_parsers import BaseOutputParser
 from pydantic import BaseModel, Field
@@ -26,11 +25,19 @@ class ParserBaseModel(BaseModel):
         if match:
             json_str = match.group()
         json_object = json.loads(json_str, strict=False)
-        return cls.parse_obj(json_object)
+        return cls.model_validate(json_object)
 
     @staticmethod
     def format_instructions() -> str:
-        return PYDANTIC_FORMAT_INSTRUCTIONS
+        return (
+            "Please respond with a json result matching the following schema:"
+            "\n\n```schema\n{schema}\n```\n"
+            "Do not repeat the schema. Only respond with the result."
+        )
+
+    @staticmethod
+    def custom_grammar() -> str | None:
+        return None
 
 
 class CodeBlock(ParserBaseModel):
@@ -62,6 +69,10 @@ class CodeBlock(ParserBaseModel):
     @staticmethod
     def format_instructions() -> str:
         return "Answer with a codeblock."
+
+    @staticmethod
+    def custom_grammar() -> str | None:
+        return 'root ::= "```" ([^`] | "`" [^`] | "``" [^`])* "```"'
 
     def __str__(self) -> str:
         return self.code
