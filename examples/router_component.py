@@ -1,19 +1,22 @@
 from funcchain.components import ChatRouter
+from funcchain.settings import settings
+
+settings.llm = "ollama/openchat"
 
 
-def handle_pdf_requests(user_query: str) -> None:
-    print("Handling PDF requests with user query: ", user_query)
+def handle_pdf_requests(user_query: str) -> str:
+    return "Handling PDF requests with user query: " + user_query
 
 
-def handle_csv_requests(user_query: str) -> None:
-    print("Handling CSV requests with user query: ", user_query)
+def handle_csv_requests(user_query: str) -> str:
+    return "Handling CSV requests with user query: " + user_query
 
 
-def handle_default_requests(user_query: str) -> None:
-    print("Handling DEFAULT requests with user query: ", user_query)
+def handle_default_requests(user_query: str) -> str:
+    return "Handling DEFAULT requests with user query: " + user_query
 
 
-router = ChatRouter(
+router = ChatRouter[str](
     routes={
         "pdf": {
             "handler": handle_pdf_requests,
