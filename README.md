@@ -132,7 +132,7 @@ from pydantic import BaseModel, Field
 from funcchain import chain, settings
 
 # auto-download the model from huggingface
-settings.llm = "gguf/openhermes-2.5-mistral-7b"
+settings.llm = "ollama/openchat"
 
 class SentimentAnalysis(BaseModel):
     analysis: str
