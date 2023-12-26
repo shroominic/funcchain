@@ -1,6 +1,8 @@
-from funcchain import chain, settings
-from pydantic import BaseModel
 from enum import Enum
+
+from pydantic import BaseModel
+
+from funcchain import chain, settings
 
 
 class Answer(str, Enum):
@@ -20,6 +22,6 @@ def make_decision(question: str) -> Decision:
 
 
 if __name__ == "__main__":
-    settings.llm = "gguf/phi-2"
+    settings.llm = "ollama/phi-2"
 
     print(make_decision("Do you like apples?"))
