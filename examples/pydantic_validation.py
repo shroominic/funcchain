@@ -3,7 +3,7 @@ from pydantic import BaseModel, field_validator
 from funcchain import chain, settings
 from funcchain.streaming import stream_to
 
-settings.llm = "gguf/dolphin-2.5-mixtral-8x7b:Q3_K_M"
+settings.llm = "ollama/dolphin-2.5-mixtral-8x7b:Q3_K_M"
 
 
 class Task(BaseModel):
