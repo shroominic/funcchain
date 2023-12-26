@@ -67,6 +67,15 @@ class SchemaConverter:
             )
             return self._add_rule(rule_name, rule)
 
+        elif "allOf" in schema:
+            rule = " ".join(
+                (
+                    self.visit(sub_schema, f'{name}{"-" if name else ""}{i}')
+                    for i, sub_schema in enumerate(schema["allOf"])
+                )
+            )
+            return self._add_rule(rule_name, rule)
+
         elif "const" in schema:
             return self._add_rule(rule_name, self._format_literal(schema["const"]))
 
