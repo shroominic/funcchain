@@ -21,16 +21,15 @@ You can also set the `settings.llm` with a string identifier of a ChatModel incl
 ### Providers
 
 - `openai`: OpenAI Chat Models
-- `gguf`: Huggingface GGUF Models from TheBloke using LlamaCpp
-- `local` | `thebloke` | `huggingface`: alias for `gguf`
+- `ollama`: Run local models through Ollama(llamacpp)
 
 ### Examples
 
 - `openai/gpt-3.5-turbo`: Classic ChatGPT
-- `gguf/deepseek-llm-7b-chat`: DeepSeek LLM 7B Chat
-- `gguf/OpenHermes-2.5-7B`: OpenHermes 2.5
-- `TheBloke/deepseek-llm-7B-chat-GGUF:Q3_K_M`: (eg thebloke huggingface identifier)
-- `local/neural-chat-7B-v3-1`: Neural Chat 7B (local as alias for gguf)
+- `openai/gpt-4-1106-preview`: GPT-4-Turbo
+- `ollama/openchat-3.5-
+- `ollama/openchat`: OpenChat3.5-1210
+- `ollama/openhermes2.5-mistral`: OpenHermes 2.5
 
 ### additional notes
 
