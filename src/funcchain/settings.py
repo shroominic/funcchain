@@ -2,27 +2,23 @@
 Funcchain Settings:
 Automatically loads environment variables from .env file
 """
-from typing import Optional, TypedDict
+from typing import Optional
+from typing_extensions import TypedDict
 
-from langchain.cache import InMemoryCache
-from langchain_core.globals import set_llm_cache
 from langchain_core.language_models import BaseChatModel
-from langchain_core.runnables import RunnableWithFallbacks
 from pydantic import Field
 from pydantic_settings import BaseSettings
-
-set_llm_cache(InMemoryCache())
 
 
 class FuncchainSettings(BaseSettings):
     debug: bool = True
 
-    llm: BaseChatModel | RunnableWithFallbacks | str = Field(
+    llm: BaseChatModel | str = Field(
         default="openai/gpt-3.5-turbo-1106",
         validate_default=False,
     )
 
-    local_models_path: str = "./.models"
+    console_stream: bool = False
 
     default_system_prompt: str = ""
 
@@ -41,7 +37,7 @@ class FuncchainSettings(BaseSettings):
     max_tokens: int = 2048
     temperature: float = 0.1
 
-    # LLAMA KWARGS
+    # OLLAMA KWARGS
     context_lenght: int = 8196
     n_gpu_layers: int = 50
     keep_loaded: bool = False
@@ -59,7 +55,7 @@ class FuncchainSettings(BaseSettings):
             "openai_api_key": self.openai_api_key,
         }
 
-    def llama_kwargs(self) -> dict:
+    def ollama_kwargs(self) -> dict:
         return {
             "n_ctx": self.context_lenght,
             "use_mlock": self.keep_loaded,
@@ -71,17 +67,19 @@ settings = FuncchainSettings()
 
 
 class SettingsOverride(TypedDict, total=False):
-    llm: BaseChatModel | RunnableWithFallbacks | str
+    llm: BaseChatModel | str | None
 
     verbose: bool
     temperature: float
     max_tokens: int
     streaming: bool
-    # TODO: context_length: int
+    context_lenght: int
 
 
 def get_settings(override: Optional[SettingsOverride] = None) -> FuncchainSettings:
     if override:
+        if override["llm"] is None:
+            override["llm"] = settings.llm
         return settings.model_copy(update=dict(override))
     return settings
 
