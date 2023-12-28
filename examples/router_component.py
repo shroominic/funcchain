@@ -26,7 +26,10 @@ router = ChatRouter[str](
             "handler": handle_csv_requests,
             "description": "Call this for requests including CSV Files.",
         },
-        "default": handle_default_requests,
+        "default": {
+            "handler": handle_default_requests,
+            "description": "Call this for all other requests.",
+        },
     },
 )
 

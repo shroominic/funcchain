@@ -1,43 +1,90 @@
 from enum import Enum
-from typing import Iterator, Union, Callable, Any, TypeVar, Optional, AsyncIterator
+from typing import AsyncIterator, Callable, Any, Iterator, TypeVar, Optional
 from typing_extensions import TypedDict
-from langchain_core.pydantic_v1 import validator as field_validator
 from langchain_core.chat_history import BaseChatMessageHistory
 from langchain_core.language_models import BaseChatModel
-from langchain_core.messages import HumanMessage
-from langchain_core.runnables import Runnable, RunnableConfig, RunnableSerializable
+from langchain_core.messages import AIMessage, HumanMessage
+from langchain_core.runnables import (
+    Runnable,
+    RunnableSerializable,
+    RouterRunnable,
+    RunnableLambda,
+)
+from langchain_core.runnables.config import RunnableConfig
+from langchain_core.runnables.router import RouterInput
 from funcchain import runnable
-from .utils.msg_tools import msg_to_str
+from funcchain.utils.msg_tools import msg_to_str
 
 
 class Route(TypedDict):
-    handler: Callable
+    handler: Callable | Runnable
     description: str
 
 
-Routes = dict[str, Union[Route, Callable]]
+Routes = dict[str, Route]
 
 ResponseType = TypeVar("ResponseType")
 
 
-class ChatRouter(RunnableSerializable[HumanMessage, ResponseType]):
-    routes: Routes
-    history: BaseChatMessageHistory | None = None
-    llm: BaseChatModel | str | None = None
+class ChatRouter(RouterRunnable[ResponseType]):
+    """A router component that can be used to route user requests to different handlers."""
+
+    def __init__(
+        self,
+        *,
+        routes: Routes,
+        history: Optional[BaseChatMessageHistory] = None,
+        llm: Optional[BaseChatModel | str] = None,
+        add_default: bool = False,
+        **kwargs: Any,
+    ) -> None:
+        super().__init__(
+            runnables={name: run["handler"] for name, run in routes.items()},
+            **kwargs,
+        )
+        self.llm = llm
+        self.history = history
+        self.routes = self._add_default_handler(routes) if add_default else routes
 
     class Config:
         arbitrary_types_allowed = True
+        extra = "allow"
 
-    @field_validator("routes")
-    def validate_routes(cls, v: Routes) -> Routes:
-        if "default" not in v.keys():
-            raise ValueError("`default` route is missing")
-        return v
+    @classmethod
+    def create_router(
+        cls,
+        *,
+        routes: Routes,
+        history: Optional[BaseChatMessageHistory] = None,
+        llm: Optional[BaseChatModel | str] = None,
+        **kwargs: Any,
+    ) -> RunnableSerializable[Any, ResponseType]:
+        router = cls(
+            routes=routes, llm=llm, history=history, add_default=True, **kwargs
+        )
+        return {
+            "input": lambda x: x,
+            "key": (
+                lambda x: {
+                    # "image": x.images[0],
+                    # "user_request": x.__str__(),
+                    "user_request": x.content,
+                    "routes": router._routes_repr(),
+                }
+            )
+            | cls._selector(routes, llm, history)
+            | RunnableLambda(lambda x: x.selector.__str__()),
+        } | router
 
-    def create_route(self) -> Runnable[dict[str, str], Any]:
+    @staticmethod
+    def _selector(
+        routes: Routes,
+        llm: BaseChatModel | str | None = None,
+        history: BaseChatMessageHistory | None = None,
+    ) -> Runnable[dict[str, str], Any]:
         RouteChoices = Enum(  # type: ignore
             "RouteChoices",
-            {r: r for r in self.routes.keys()},
+            {r: r for r in routes.keys()},
             type=str,
         )
         from pydantic import BaseModel, Field
@@ -50,205 +97,95 @@ class ChatRouter(RunnableSerializable[HumanMessage, ResponseType]):
 
         return runnable(
             instruction="Given the user request select the appropriate route.",
-            input_args=["user_request", "routes"],  # todo: optional image
+            input_args=["user_request", "routes"],  # todo: optional images
             output_type=RouterModel,
-            context=self.history.messages if self.history else [],
-            settings_override={"llm": self.llm},
+            context=history.messages if history else [],
+            settings_override={"llm": llm},
         )
 
-    def show_routes(self) -> str:
+    def _add_default_handler(self, routes: Routes) -> Routes:
+        if "default" not in routes.keys():
+            routes["default"] = {
+                "handler": (
+                    RunnableLambda(lambda x: msg_to_str(x))
+                    | runnable(
+                        instruction="{user_request}",
+                        input_args=["user_request"],
+                        output_type=str,
+                        settings_override={"llm": self.llm},
+                    )
+                    | RunnableLambda(lambda x: AIMessage(content=x))
+                ),
+                "description": (
+                    "Choose this for everything else like "
+                    "normal questions or random things.\n"
+                    "As example: 'How does this work?' or "
+                    "'Whatsup' or 'What is the meaning of life?'"
+                ),
+            }
+        return routes
+
+    def _routes_repr(self) -> str:
         return "\n".join(
             [
                 f"{route_name}: {route['description']}"
-                if isinstance(route, dict)
-                else f"{route_name}: {route.__name__}"
                 for route_name, route in self.routes.items()
             ]
         )
 
+    def post_update_history(self, input: RouterInput, output: ResponseType) -> None:
+        input = input["input"]
+        if self.history:
+            if isinstance(input, HumanMessage):
+                self.history.add_message(input)
+            if isinstance(output, AIMessage):
+                self.history.add_message(output)
+
+    # TODO: deprecate
     def invoke_route(self, user_query: str, /, **kwargs: Any) -> ResponseType:
-        route_query = self.create_route()
+        """Deprecated. Use invoke instead."""
+        route_query = self._selector(self.routes)
 
         selected_route = route_query.invoke(
-            input={
-                "user_request": user_query,
-                "routes": self.show_routes(),
-            },
-            config={"run_name": "ChatRouter"},
+            input={"user_request": user_query, "routes": self._routes_repr()}
         ).selector
-        assert isinstance(selected_route, str)
-
-        if isinstance(self.routes[selected_route], dict):
-            return self.routes[selected_route]["handler"](user_query, **kwargs)  # type: ignore
-        return self.routes[selected_route](user_query, **kwargs)  # type: ignore
-
-    async def ainvoke_route(self, user_query: str, /, **kwargs: Any) -> Any:
-        import asyncio
-
-        if not all(
-            [
-                asyncio.iscoroutinefunction(route["handler"])
-                if isinstance(route, dict)
-                else asyncio.iscoroutinefunction(route)
-                for route in self.routes.values()
-            ]
-        ):
-            raise ValueError("All routes must be awaitable when using `ainvoke_route`")
-
-        route_query = self.create_route()
-        selected_route = route_query.invoke(
-            input={
-                "user_request": user_query,
-                "routes": self.show_routes(),
-            },
-            config={"run_name": "ChatRouter"},
-        ).selector
-        assert isinstance(selected_route, str)
-
-        if isinstance(self.routes[selected_route], dict):
-            return await self.routes[selected_route]["handler"](user_query, **kwargs)  # type: ignore
-        return await self.routes[selected_route](user_query, **kwargs)  # type: ignore
+        return self.routes[selected_route]["handler"](user_query, **kwargs)  # type: ignore
 
     def invoke(
-        self,
-        input: HumanMessage,
-        config: Optional[RunnableConfig] = None,
-        **kwargs: Any,
+        self, input: RouterInput, config: RunnableConfig | None = None
     ) -> ResponseType:
-        user_query = msg_to_str(input)
-        route_query = self.create_route()
-
-        selected_route = route_query.invoke(
-            input={
-                "user_request": user_query,
-                "routes": self.show_routes(),
-            },
-            config=config.update({"run_name": "ChatRouter"}) if config else None,
-        ).selector
-        assert isinstance(selected_route, str)
-
-        if isinstance(self.routes[selected_route], dict):
-            if hasattr(self.routes[selected_route]["handler"], "invoke"):  # type: ignore
-                return self.routes[selected_route]["handler"].invoke(  # type: ignore
-                    input, config, **kwargs
-                )
-            return self.routes[selected_route]["handler"](user_query, **kwargs)  # type: ignore
-
-        if hasattr(self.routes[selected_route], "invoke"):
-            return self.routes[selected_route].invoke(input, config, **kwargs)  # type: ignore
-        return self.routes[selected_route](user_query, **kwargs)  # type: ignore
+        output = super().invoke(input, config)
+        self.post_update_history(input, output)
+        return output
 
     async def ainvoke(
         self,
-        input: HumanMessage,
-        config: Optional[RunnableConfig] = None,
-        **kwargs: Any,
+        input: RouterInput,
+        config: RunnableConfig | None = None,
+        **kwargs: Any | None,
     ) -> ResponseType:
-        user_query = msg_to_str(input)
-        import asyncio
-
-        if not all(
-            [
-                asyncio.iscoroutinefunction(route["handler"])
-                if isinstance(route, dict)
-                else asyncio.iscoroutinefunction(route)
-                for route in self.routes.values()
-            ]
-        ):
-            raise ValueError("All routes must be awaitable when using `ainvoke_route`")
-
-        route_query = self.create_route()
-        selected_route = route_query.invoke(
-            input={
-                "user_request": user_query,
-                "routes": self.show_routes(),
-            },
-            config=config.update({"run_name": "ChatRouter"}) if config else None,
-        ).selector
-        assert isinstance(selected_route, str)
-
-        if isinstance(self.routes[selected_route], dict):
-            if hasattr(self.routes[selected_route]["handler"], "ainvoke"):  # type: ignore
-                return await self.routes[selected_route]["handler"].ainvoke(  # type: ignore
-                    input, config, **kwargs
-                )
-            return await self.routes[selected_route]["handler"](user_query, **kwargs)  # type: ignore
-
-        if hasattr(self.routes[selected_route], "ainvoke"):
-            return await self.routes[selected_route].ainvoke(input, config, **kwargs)  # type: ignore
-        return await self.routes[selected_route](user_query, **kwargs)  # type: ignore
+        output = await super().ainvoke(input, config, **kwargs)
+        self.post_update_history(input, output)
+        return output
 
     def stream(
         self,
-        input: HumanMessage,
+        input: RouterInput,
         config: RunnableConfig | None = None,
         **kwargs: Any | None,
     ) -> Iterator[ResponseType]:
-        user_query = msg_to_str(input)
-        route_query = self.create_route()
-
-        selected_route = route_query.invoke(
-            input={
-                "user_request": user_query,
-                "routes": self.show_routes(),
-            },
-            config=config.update({"run_name": "ChatRouter"}) if config else None,
-        ).selector
-        assert isinstance(selected_route, str)
-
-        if isinstance(self.routes[selected_route], dict):
-            if hasattr(self.routes[selected_route]["handler"], "stream"):  # type: ignore
-                yield from self.routes[selected_route]["handler"].stream(  # type: ignore
-                    input, config, **kwargs
-                )
-            yield self.routes[selected_route]["handler"](user_query, **kwargs)  # type: ignore
-
-        if hasattr(self.routes[selected_route], "stream"):
-            yield from self.routes[selected_route].stream(input, config, **kwargs)  # type: ignore
-        yield self.routes[selected_route](user_query, **kwargs)  # type: ignore
+        for i in super().stream(input, config, **kwargs):
+            yield (last := i)
+        if last:
+            self.post_update_history(input, last)
 
     async def astream(
         self,
-        input: HumanMessage,
+        input: RouterInput,
         config: RunnableConfig | None = None,
         **kwargs: Any | None,
     ) -> AsyncIterator[ResponseType]:
-        user_query = msg_to_str(input)
-        import asyncio
-
-        if not all(
-            [
-                asyncio.iscoroutinefunction(route["handler"])
-                if isinstance(route, dict)
-                else asyncio.iscoroutinefunction(route)
-                for route in self.routes.values()
-            ]
-        ):
-            raise ValueError("All routes must be awaitable when using `ainvoke_route`")
-
-        route_query = self.create_route()
-        selected_route = (
-            await route_query.ainvoke(
-                input={
-                    "user_request": user_query,
-                    "routes": self.show_routes(),
-                },
-                config=config.update({"run_name": "ChatRouter"}) if config else None,
-            )
-        ).selector
-        assert isinstance(selected_route, str)
-
-        if isinstance(self.routes[selected_route], dict):
-            if hasattr(self.routes[selected_route]["handler"], "astream"):  # type: ignore
-                async for item in self.routes[selected_route]["handler"].astream(  # type: ignore
-                    input, config, **kwargs
-                ):
-                    yield item
-            yield await self.routes[selected_route]["handler"](user_query, **kwargs)  # type: ignore
-
-        if hasattr(self.routes[selected_route], "astream"):
-            async for item in self.routes[selected_route].astream(  # type: ignore
-                input, config, **kwargs
-            ):
-                yield item
-        yield await self.routes[selected_route](user_query, **kwargs)  # type: ignore
+        async for ai in super().astream(input, config, **kwargs):
+            yield (last := ai)
+        if last:
+            self.post_update_history(input, last)

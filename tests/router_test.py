@@ -9,10 +9,6 @@ def handle_csv_requests(user_query: str) -> str:
     return f"Handling CSV requests with user query: {user_query}"
 
 
-def handle_default_requests(user_query: str) -> str:
-    return f"Handling DEFAULT requests with user query: {user_query}"
-
-
 router = ChatRouter[str](
     routes={
         "pdf": {
@@ -23,7 +19,10 @@ router = ChatRouter[str](
             "handler": handle_csv_requests,
             "description": "Call this for requests including CSV Files.",
         },
-        "default": handle_default_requests,
+        "default": {
+            "handler": lambda x: f"Handling DEFAULT with user query: {x}",
+            "description": "Call this for all other requests.",
+        },
     },
 )
 
