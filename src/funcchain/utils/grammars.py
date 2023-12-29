@@ -127,7 +127,7 @@ class SchemaConverter:
 
 def schema_to_grammar(json_schema: dict) -> str:
     schema = json_schema
-    prop_order = {name: idx for idx, name in enumerate(schema.keys())}
+    prop_order = {name: idx for idx, name in enumerate(schema["properties"].keys())}
     defs = schema.get("$defs", {})
     converter = SchemaConverter(prop_order, defs)
     converter.visit(schema, "")
