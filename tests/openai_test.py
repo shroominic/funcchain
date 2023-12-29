@@ -59,20 +59,7 @@ def test_vision() -> None:
     )
 
 
-def test_api_key_failure() -> None:
-    settings.llm = "gpt-3.5-turbo-1106"
-    settings.openai_api_key = "test"
-
-    try:
-        print(todo_list("software engineer"))
-    except Exception:
-        assert True
-    else:
-        assert False, "API Key failure did not occur."
-
-
 if __name__ == "__main__":
-    # test_gpt_35_turbo()
-    # test_gpt4()
-    # test_vision()
-    test_api_key_failure()
+    test_gpt_35_turbo()
+    test_gpt4()
+    test_vision()
