@@ -8,7 +8,7 @@
 [![Twitter Follow](https://img.shields.io/twitter/follow/shroominic?style=social)](https://x.com/shroominic)
 
 ```bash
-> pip install funcchain
+> pip install "funcchain[all]"
 ```
 
 ## Introduction
