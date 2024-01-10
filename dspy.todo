@@ -1,0 +1,9 @@
+To make this possible I need to:
+- rewrite funcchain to be more dynamic
+  - modular backends
+  - unify syntax and schemas
+  - invent new syntax for special dspy modules (COT, FewShot, ...)
+  - seperate string and structured types logic
+  - 
+
+booth are cutting edge ml libraries
