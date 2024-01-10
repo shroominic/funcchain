@@ -1,7 +1,6 @@
 import pytest
-from pydantic import BaseModel
-
 from funcchain import chain, settings
+from pydantic import BaseModel
 
 
 class Task(BaseModel):
