@@ -56,18 +56,14 @@ def generate_pp(answered_questions: list[str]) -> str:
 
 
 if __name__ == "__main__":
-    print(
-        "Please answer the following questions to generate a Terms of Service and Privacy Policy."
-    )
+    print("Please answer the following questions to generate a Terms of Service and Privacy Policy.")
     print("To skip a question, press enter without typing anything.")
 
     legal_questions = example_legal_questions.copy()
     # or from scratch using generate_legal_questions()
 
     for i, question in enumerate(legal_questions):
-        answer = (
-            input(f"{i+1}/{len(legal_questions)}: {question} ") or "No answer provided."
-        )
+        answer = input(f"{i+1}/{len(legal_questions)}: {question} ") or "No answer provided."
 
         legal_questions[i] = f"Q: {question}\nA: {answer}\n"
 
