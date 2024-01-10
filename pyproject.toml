@@ -79,3 +79,7 @@ ignore_missing_imports = true
 disallow_untyped_defs = true
 disallow_untyped_calls = true
 disallow_incomplete_defs = true
+
+[tool.ruff]
+select = ["E", "F", "I"]
+line-length = 120
