@@ -3,14 +3,13 @@ from contextlib import asynccontextmanager
 from typing import AsyncGenerator
 from uuid import uuid4
 
+from funcchain import achain, settings
+from funcchain.backend.streaming import astream_to
+from funcchain.utils.funcs import count_tokens
 from rich.console import Console
 from rich.layout import Layout
 from rich.live import Live
 from rich.panel import Panel
-
-from funcchain import achain, settings
-from funcchain.streaming import astream_to
-from funcchain.utils import count_tokens
 
 
 class RenderChain:
@@ -39,9 +38,7 @@ class Renderer:
         if not self.live.is_started:
             self.live.start()
         self.console.height = (len(self.layout.children) + 1) * self.column_height
-        self.layout.split_column(
-            *self.layout.children, Layout(name=chain.id, size=self.column_height)
-        )
+        self.layout.split_column(*self.layout.children, Layout(name=chain.id, size=self.column_height))
         self.chains.append(chain)
 
     def render_stream(self, token: str, chain: RenderChain) -> None:
@@ -49,9 +46,7 @@ class Renderer:
         tokens: int = 0
         max_width: int = self.console.width
         content_width: int = 0
-        if isinstance(panel := self.layout[chain.id]._renderable, Panel) and isinstance(
-            panel.renderable, str
-        ):
+        if isinstance(panel := self.layout[chain.id]._renderable, Panel) and isinstance(panel.renderable, str):
             content_width = self.console.measure(panel.renderable).maximum
             if isinstance(panel.title, str) and " " in panel.title:
                 tokens = int(panel.title.split(" ")[1])
@@ -63,16 +58,12 @@ class Renderer:
                 prev += token
         else:
             prev += token
-        self.layout[chain.id].update(
-            Panel(prev, title=f"({chain.name}) {tokens} tokens")
-        )
+        self.layout[chain.id].update(Panel(prev, title=f"({chain.name}) {tokens} tokens"))
         self.live.update(self.layout)
 
     def remove(self, chain: RenderChain) -> None:
         self.chains.remove(chain)
-        self.layout.split_column(
-            *(child for child in self.layout.children if child.name != chain.id)
-        )
+        self.layout.split_column(*(child for child in self.layout.children if child.name != chain.id))
         self.console.height = (len(self.layout.children)) * self.column_height
         self.live.update(self.layout)
         if not self.chains:
