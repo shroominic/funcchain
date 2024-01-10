@@ -1,9 +1,8 @@
 from enum import Enum
 from typing import Any
 
-from pydantic import BaseModel, Field
-
 from funcchain import chain, settings
+from pydantic import BaseModel, Field
 
 settings.console_stream = True
 # settings.llm = "ollama/openhermes2.5-mistral"
