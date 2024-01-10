@@ -1,8 +1,7 @@
 import asyncio
 
-from pydantic import BaseModel
-
 from funcchain import achain, settings
+from pydantic import BaseModel
 
 settings.temperature = 1
 
