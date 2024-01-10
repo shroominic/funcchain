@@ -1,6 +1,5 @@
-from pydantic import BaseModel, Field
-
 from funcchain import chain
+from pydantic import BaseModel, Field
 
 
 class Item(BaseModel):
