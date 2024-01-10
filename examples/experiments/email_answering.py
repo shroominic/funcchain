@@ -20,9 +20,7 @@ def get_emails_from_inbox() -> List[Tuple[str, str]]:
     """
 
     # Run AppleScript and collect output
-    process = subprocess.Popen(
-        ["osascript", "-e", apple_script], stdout=subprocess.PIPE
-    )
+    process = subprocess.Popen(["osascript", "-e", apple_script], stdout=subprocess.PIPE)
     out, _ = process.communicate()
     raw_output = out.decode("utf-8").strip()
 
