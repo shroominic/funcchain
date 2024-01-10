@@ -1,9 +1,8 @@
+from funcchain import chain, settings
+from funcchain.syntax.types import CodeBlock
 from langchain.document_loaders import WebBaseLoader
 from pydantic import BaseModel
 from rich import print
-
-from funcchain import chain, settings
-from funcchain.parser import CodeBlock
 
 settings.llm = "gpt-4-1106-preview"
 settings.context_lenght = 4096 * 8
