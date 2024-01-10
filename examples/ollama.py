@@ -1,7 +1,6 @@
-from pydantic import BaseModel, Field
-
 from funcchain import chain, settings
-from funcchain.streaming import stream_to
+from pydantic import BaseModel, Field
+from rich import print
 
 
 # define your model
@@ -21,13 +20,11 @@ def analyze(text: str) -> SentimentAnalysis:
 if __name__ == "__main__":
     # set global llm
     settings.llm = "ollama/wizardcoder:34b-python-q3_K_M"
-
     # log tokens as stream to console
-    with stream_to(print):
-        # run prompt
-        poem = analyze("I really like when my dog does a trick!")
+    settings.console_stream = True
 
-    # print final parsed output
-    from rich import print
+    # run prompt
+    poem = analyze("I really like when my dog does a trick!")
 
+    # show final parsed output
     print(poem)
