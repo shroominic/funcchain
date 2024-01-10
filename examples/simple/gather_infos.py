@@ -1,6 +1,8 @@
+from funcchain import chain, settings
 from pydantic import BaseModel
 
-from funcchain import chain
+settings.llm = "ollama/openchat"
+settings.console_stream = True
 
 
 class Task(BaseModel):
@@ -25,7 +27,7 @@ def plan_task(task: Task) -> str:
 
 
 def main() -> None:
-    task_input = input("\nEnter task input: ")
+    task_input = "I need to buy apples, oranges and bananas from whole foods"
 
     task = gather_infos(task_input)
 
