@@ -1,4 +1,5 @@
 from typing import Literal
+
 from funcchain import chain
 from pydantic import BaseModel
 
