@@ -1,7 +1,8 @@
 from enum import Enum
-from typing import Callable, TypedDict, Any
-from pydantic import BaseModel, Field
+from typing import Any, Callable, TypedDict
+
 from funcchain import runnable
+from pydantic import BaseModel, Field
 
 # Dynamic Router Definition:
 
@@ -15,12 +16,7 @@ class DynamicChatRouter(BaseModel):
     routes: dict[str, Route]
 
     def _routes_repr(self) -> str:
-        return "\n".join(
-            [
-                f"{route_name}: {route['description']}"
-                for route_name, route in self.routes.items()
-            ]
-        )
+        return "\n".join([f"{route_name}: {route['description']}" for route_name, route in self.routes.items()])
 
     def invoke_route(self, user_query: str, /, **kwargs: Any) -> Any:
         RouteChoices = Enum(  # type: ignore
