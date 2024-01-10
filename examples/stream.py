@@ -1,5 +1,5 @@
 from funcchain import chain, settings
-from funcchain.streaming import stream_to
+from funcchain.backend.streaming import stream_to
 
 settings.temperature = 1
 
