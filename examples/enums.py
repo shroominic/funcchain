@@ -1,8 +1,7 @@
 from enum import Enum
 
-from pydantic import BaseModel
-
 from funcchain import chain, settings
+from pydantic import BaseModel
 
 
 class Answer(str, Enum):
