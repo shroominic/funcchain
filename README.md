@@ -14,7 +14,7 @@
 ## Introduction
 
 `funcchain` is the *most pythonic* way of writing cognitive systems. Leveraging pydantic models as output schemas combined with langchain in the backend allows for a seamless integration of llms into your apps.
-It works perfect with OpenAI Functions and soon with other models using JSONFormer.
+It works perfect with OpenAI Functions or LlamaCpp grammars (json-schema-mode).
 
 [![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/ricklamers/funcchain-demo)
 
