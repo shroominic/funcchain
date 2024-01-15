@@ -1,8 +1,6 @@
 from typing import Any, Generic, TypeVar
 
 from langchain.pydantic_v1 import BaseModel, Field
-
-# from langchain_core.language_models import BaseChatModel
 from langchain_core.messages import BaseMessage
 
 from ..backend.settings import FuncchainSettings, settings
