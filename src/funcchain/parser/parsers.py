@@ -241,9 +241,9 @@ class RetryPydanticOutputParser(BaseOutputParser[M]):
 
     @property
     def retry_chain(self) -> Runnable:
-        from ..syntax.executable import runnable
+        from ..syntax.executable import compile_runnable
 
-        return runnable(
+        return compile_runnable(
             instruction="Retry parsing the output by fixing the error.",
             input_args=["output", "error"],
             output_type=self.pydantic_object,
