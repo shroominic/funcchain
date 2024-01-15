@@ -20,7 +20,7 @@ class FuncchainSettings(BaseSettings):
 
     console_stream: bool = False
 
-    default_system_prompt: str = ""
+    system_prompt: str = ""
 
     retry_parse: int = 3
     retry_parse_sleep: float = 0.1
@@ -37,7 +37,7 @@ class FuncchainSettings(BaseSettings):
     max_tokens: int = 2048
     temperature: float = 0.1
 
-    # OLLAMA KWARGS
+    # LLAMACPP KWARGS
     context_lenght: int = 8196
     n_gpu_layers: int = 50
     keep_loaded: bool = False
@@ -56,6 +56,9 @@ class FuncchainSettings(BaseSettings):
         }
 
     def ollama_kwargs(self) -> dict:
+        return {}
+
+    def llamacpp_kwargs(self) -> dict:
         return {
             "n_ctx": self.context_lenght,
             "use_mlock": self.keep_loaded,
@@ -67,7 +70,7 @@ settings = FuncchainSettings()
 
 
 class SettingsOverride(TypedDict, total=False):
-    llm: BaseChatModel | str
+    llm: BaseChatModel | str | None
 
     verbose: bool
     temperature: float
@@ -75,6 +78,7 @@ class SettingsOverride(TypedDict, total=False):
     streaming: bool
     retry_parse: int
     context_lenght: int
+    system_prompt: str
 
 
 def create_local_settings(override: Optional[SettingsOverride] = None) -> FuncchainSettings:
