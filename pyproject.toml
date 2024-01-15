@@ -45,6 +45,7 @@ dev-dependencies = [
     "pre-commit",
     "langchain>=0.1",
     "funcchain[all]",
+    "types-PyYAML>=6",
     "mkdocs-material>=9.4",
     "beautifulsoup4>=4.12",
     "python-dotenv>=1",
