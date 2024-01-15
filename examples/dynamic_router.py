@@ -1,7 +1,7 @@
 from enum import Enum
 from typing import Any, Callable, TypedDict
 
-from funcchain import runnable
+from funcchain.syntax.executable import compile_runnable
 from pydantic import BaseModel, Field
 
 # Dynamic Router Definition:
@@ -31,7 +31,7 @@ class DynamicChatRouter(BaseModel):
                 description="Enum of the available routes.",
             )
 
-        route_query = runnable(
+        route_query = compile_runnable(
             instruction="Given the user query select the best query handler for it.",
             input_args=["user_query", "query_handlers"],
             output_type=RouterModel,
