@@ -1,6 +1,6 @@
 from typing import Any, Dict, Optional
 
-from langchain.chat_models import ChatOllama as _ChatOllama
+from langchain_community.chat_models import ChatOllama as _ChatOllama
 from langchain_core.pydantic_v1 import validator
 
 
