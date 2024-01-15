@@ -41,23 +41,23 @@ def univeral_model_selector(
         try:
             match mtype:
                 case "openai":
-                    from langchain.chat_models import ChatOpenAI
+                    from langchain_openai.chat_models import ChatOpenAI
 
                     model_kwargs.update(settings.openai_kwargs())
                     return ChatOpenAI(**model_kwargs)
 
                 case "anthropic":
-                    from langchain.chat_models import ChatAnthropic
+                    from langchain_community.chat_models import ChatAnthropic
 
                     return ChatAnthropic(**model_kwargs)
 
                 case "google":
-                    from langchain.chat_models import ChatGooglePalm
+                    from langchain_community.chat_models import ChatGooglePalm
 
                     return ChatGooglePalm(**model_kwargs)
 
                 case "ollama":
-                    from ..utils._llms import ChatOllama
+                    from .llm_overrides import ChatOllama
 
                     model = model_kwargs.pop("model_name")
                     model_kwargs.update(settings.ollama_kwargs())
@@ -69,7 +69,7 @@ def univeral_model_selector(
 
         try:
             if "gpt-4" in name or "gpt-3.5" in name:
-                from langchain.chat_models import ChatOpenAI
+                from langchain_openai.chat_models import ChatOpenAI
 
                 model_kwargs.update(settings.openai_kwargs())
                 return ChatOpenAI(**model_kwargs)
@@ -80,23 +80,23 @@ def univeral_model_selector(
     model_kwargs.pop("model_name")
 
     if settings.openai_api_key:
-        from langchain.chat_models import ChatOpenAI
+        from langchain_openai.chat_models import ChatOpenAI
 
         model_kwargs.update(settings.openai_kwargs())
         return ChatOpenAI(**model_kwargs)
 
     if settings.azure_api_key:
-        from langchain.chat_models import AzureChatOpenAI
+        from langchain_openai.chat_models import AzureChatOpenAI
 
         return AzureChatOpenAI(**model_kwargs)
 
     if settings.anthropic_api_key:
-        from langchain.chat_models import ChatAnthropic
+        from langchain_community.chat_models import ChatAnthropic
 
         return ChatAnthropic(**model_kwargs)
 
     if settings.google_api_key:
-        from langchain.chat_models import ChatGooglePalm
+        from langchain_community.chat_models import ChatGooglePalm
 
         return ChatGooglePalm(**model_kwargs)
 
