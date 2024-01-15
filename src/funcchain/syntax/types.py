@@ -3,14 +3,14 @@ import re
 from typing import Optional
 
 from langchain_core.exceptions import OutputParserException
-from langchain_core.output_parsers import BaseOutputParser
+from langchain_core.output_parsers import BaseLLMOutputParser
 from pydantic import BaseModel, Field
 from typing_extensions import Self
 
 
 class ParserBaseModel(BaseModel):
     @classmethod
-    def output_parser(cls) -> BaseOutputParser[Self]:
+    def output_parser(cls) -> BaseLLMOutputParser[Self]:
         from ..parser.parsers import CustomPydanticOutputParser
 
         return CustomPydanticOutputParser(pydantic_object=cls)
