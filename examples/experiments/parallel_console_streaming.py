@@ -5,7 +5,7 @@ from uuid import uuid4
 
 from funcchain import achain, settings
 from funcchain.backend.streaming import astream_to
-from funcchain.utils.funcs import count_tokens
+from funcchain.utils.token_counter import count_tokens
 from rich.console import Console
 from rich.layout import Layout
 from rich.live import Live
