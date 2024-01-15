@@ -5,9 +5,8 @@ from langchain_core.callbacks import Callbacks
 from langchain_core.chat_history import BaseChatMessageHistory
 from langchain_core.language_models import BaseChatModel
 from langchain_core.messages import AIMessage, BaseMessage, HumanMessage, SystemMessage
-from langchain_core.output_parsers import BaseOutputParser
-from langchain_core.prompts import ChatPromptTemplate
-from langchain_core.runnables import RunnableSerializable
+from langchain_core.output_parsers import BaseGenerationOutputParser, BaseOutputParser
+from langchain_core.runnables import Runnable
 from PIL import Image
 from pydantic import BaseModel
 
@@ -40,7 +39,7 @@ def create_union_chain(
     context: list[BaseMessage],
     llm: BaseChatModel,
     input_kwargs: dict[str, str],
-) -> RunnableSerializable[dict[str, str], BaseModel]:
+) -> Runnable[dict[str, str], BaseModel]:
     """
     Compile a langchain runnable chain from the funcchain syntax.
     """
@@ -70,20 +69,17 @@ def create_union_chain(
     return prompt | llm | MultiToolParser(output_types=output_types)
 
 
-# TODO: do patch instead of seperate creation
-def create_pydanctic_chain(
-    output_type: type[BaseModel],
-    prompt: ChatPromptTemplate,
+def parse_and_patch_pydanctic(
     llm: BaseChatModel,
+    output_type: type[BaseModel],
     input_kwargs: dict[str, str],
-) -> RunnableSerializable[dict[str, str], BaseModel]:
-    # TODO: check these format_instructions
+) -> BaseGenerationOutputParser:
     input_kwargs["format_instructions"] = f"Extract to {output_type.__name__}."
     functions = pydantic_to_functions(output_type)
 
     llm = llm.bind(**functions)  # type: ignore
 
-    return prompt | llm | PydanticFuncParser(pydantic_schema=output_type)
+    return PydanticFuncParser(pydantic_schema=output_type)
 
 
 def create_chain(
@@ -94,7 +90,7 @@ def create_chain(
     memory: BaseChatMessageHistory,
     settings: FuncchainSettings,
     input_kwargs: dict[str, str],
-) -> RunnableSerializable[dict[str, str], ChainOutput]:
+) -> Runnable[dict[str, str], ChainOutput]:
     """
     Compile a langchain runnable chain from the funcchain syntax.
     """
@@ -109,6 +105,8 @@ def create_chain(
     if parser and (settings.streaming or not is_function_model(llm)):
         # streaming behavior is not supported for function models
         # but for normal function models we do not need to add format instructions
+        if not isinstance(parser, BaseOutputParser):
+            raise NotImplementedError("Fix this")
         instruction, f_instructions = _add_format_instructions(
             parser,
             instruction,
@@ -157,17 +155,13 @@ def create_chain(
             if settings.streaming and hasattr(llm, "model_kwargs"):
                 llm.model_kwargs = {"response_format": {"type": "json_object"}}
             else:
-                return create_pydanctic_chain(  # type: ignore
-                    output_type,
-                    chat_prompt,
-                    llm,
-                    input_kwargs,
-                )
+                parser = parse_and_patch_pydanctic(llm, output_type, input_kwargs)
+
     assert parser is not None
     return chat_prompt | llm | parser
 
 
-def compile_chain(signature: Signature[ChainOutput]) -> RunnableSerializable[dict[str, str], ChainOutput]:
+def compile_chain(signature: Signature[ChainOutput]) -> Runnable[dict[str, str], ChainOutput]:
     """
     Compile a signature to a runnable chain.
     """
@@ -258,7 +252,7 @@ def _inject_grammar_for_local_models(llm: BaseChatModel, output_type: type) -> N
     Inject GBNF grammar into local models.
     """
     try:
-        from funcchain.utils._llms import ChatOllama
+        from funcchain.model.llm_overrides import ChatOllama
     except:  # noqa
         pass
     else:
