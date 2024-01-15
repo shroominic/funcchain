@@ -10,15 +10,16 @@ from langchain_core.runnables import Runnable
 from PIL import Image
 from pydantic import BaseModel
 
-from ..model.abilities import is_function_model, is_vision_model
+from ..model.abilities import is_openai_function_model, is_vision_model
 from ..model.defaults import univeral_model_selector
-from ..parser.grammars import pydantic_to_grammar
-from ..parser.parsers import MultiToolParser, ParserBaseModel, PydanticFuncParser
+from ..parser.openai_functions import OpenAIFunctionPydanticParser, OpenAIFunctionPydanticUnionParser
+from ..parser.schema_converter import pydantic_to_grammar
+from ..parser.selector import parser_for
 from ..schema.signature import Signature
-from ..syntax.meta_inspect import parser_for
-from ..utils.funcs import count_tokens
+from ..syntax.output_types import ParserBaseModel
 from ..utils.msg_tools import msg_to_str
 from ..utils.pydantic import multi_pydantic_to_functions, pydantic_to_functions
+from ..utils.token_counter import count_tokens
 from .prompt import (
     HumanImageMessagePromptTemplate,
     create_chat_prompt,
@@ -66,10 +67,10 @@ def create_union_chain(
         memory=memory,
     )
 
-    return prompt | llm | MultiToolParser(output_types=output_types)
+    return prompt | llm | OpenAIFunctionPydanticUnionParser(output_types=output_types)
 
 
-def parse_and_patch_pydanctic(
+def parse_function_to_pydantic(
     llm: BaseChatModel,
     output_type: type[BaseModel],
     input_kwargs: dict[str, str],
@@ -79,7 +80,7 @@ def parse_and_patch_pydanctic(
 
     llm = llm.bind(**functions)  # type: ignore
 
-    return PydanticFuncParser(pydantic_schema=output_type)
+    return OpenAIFunctionPydanticParser(pydantic_schema=output_type)
 
 
 def create_chain(
@@ -102,7 +103,7 @@ def create_chain(
 
     # add format instructions for parser
     f_instructions = None
-    if parser and (settings.streaming or not is_function_model(llm)):
+    if parser and (settings.streaming or not is_openai_function_model(llm)):
         # streaming behavior is not supported for function models
         # but for normal function models we do not need to add format instructions
         if not isinstance(parser, BaseOutputParser):
@@ -139,7 +140,7 @@ def create_chain(
     _inject_grammar_for_local_models(llm, output_type)
 
     # function model patches
-    if is_function_model(llm):
+    if is_openai_function_model(llm):
         if isinstance(output_type, UnionType):
             return create_union_chain(
                 output_type,
@@ -155,7 +156,7 @@ def create_chain(
             if settings.streaming and hasattr(llm, "model_kwargs"):
                 llm.model_kwargs = {"response_format": {"type": "json_object"}}
             else:
-                parser = parse_and_patch_pydanctic(llm, output_type, input_kwargs)
+                parser = parse_function_to_pydantic(llm, output_type, input_kwargs)
 
     assert parser is not None
     return chat_prompt | llm | parser
