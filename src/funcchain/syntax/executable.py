@@ -8,14 +8,14 @@ from langchain_core.messages import BaseMessage, SystemMessage
 from langchain_core.runnables import Runnable
 
 from ..backend.compiler import compile_chain
-from ..backend.settings import SettingsOverride, create_local_settings
-from ..schema.signature import Signature
-from .meta_inspect import (
+from ..backend.meta_inspect import (
     from_docstring,
     get_output_type,
     get_parent_frame,
     kwargs_from_parent,
 )
+from ..backend.settings import SettingsOverride, create_local_settings
+from ..schema.signature import Signature
 
 ChainOut = TypeVar("ChainOut")
 
