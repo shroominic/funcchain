@@ -1,7 +1,8 @@
 from typing import Any, Generic, TypeVar
 
 from langchain.pydantic_v1 import BaseModel, Field
-from langchain_core.language_models import BaseChatModel
+
+# from langchain_core.language_models import BaseChatModel
 from langchain_core.messages import BaseMessage
 
 from ..backend.settings import FuncchainSettings, settings
@@ -20,12 +21,17 @@ class Signature(BaseModel, Generic[T]):
     input_args: list[str] = Field(default_factory=list)
     """ List of input arguments for the prompt template. """
 
-    output_type: type[T] = Field(default=str)
-    """ Type to parse the output into. """
+    # TODO collect types from input_args
+    # -> this would allow special prompt templating based on certain types
+    # -> e.g. BaseChatMessageHistory adds a history placeholder
+    # -> e.g. BaseChatModel overrides the default language model
+    # -> e.g. SettingsOverride overrides the default settings
+    # -> e.g. Callbacks adds custom callbacks
+    # -> e.g. SystemMessage adds a system message
+    # maybe do input_args: list[tuple[str, type]] = Field(default_factory=list)
 
-    # todo: should this be defined at compile time? maybe runtime is better
-    llm: BaseChatModel | str
-    """ Chat model to use as string or langchain object. """
+    output_type: type[T]
+    """ Type to parse the output into. """
 
     # todo: is history really needed? maybe this could be a background optimization
     history: list[BaseMessage] = Field(default_factory=list)
@@ -33,8 +39,12 @@ class Signature(BaseModel, Generic[T]):
 
     # update_history: bool = Field(default=True)
 
+    # todo: should this be defined at compile time? maybe runtime is better
     settings: FuncchainSettings = Field(default=settings)
     """ Local settings to override global settings. """
+
+    auto_tune: bool = Field(default=False)
+    """ Whether to auto tune the prompt using dspy. """
 
     class Config:
         arbitrary_types_allowed = True
@@ -46,7 +56,6 @@ class Signature(BaseModel, Generic[T]):
                 self.instruction,
                 tuple(self.input_args),
                 self.output_type,
-                self.llm,
                 tuple(self.history),
                 self.settings,
             )
