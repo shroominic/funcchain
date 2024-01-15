@@ -1,9 +1,9 @@
 import types
 from inspect import FrameInfo, currentframe, getouterframes
-from typing import Union
+from typing import Any, Optional, Union
 
 from langchain_core.language_models import BaseChatModel
-from langchain_core.output_parsers import BaseOutputParser, StrOutputParser
+from langchain_core.output_parsers import BaseGenerationOutputParser, BaseOutputParser, StrOutputParser
 
 from ..parser.parsers import (
     BoolOutputParser,
@@ -38,22 +38,21 @@ def get_func_obj() -> types.FunctionType:
     return func
 
 
-def from_docstring() -> str:
+def from_docstring(f: Optional[types.FunctionType] = None) -> str:
     """
     Get the docstring of the parent caller function.
     """
-    if doc_str := get_func_obj().__doc__:
+    if doc_str := (f or get_func_obj()).__doc__:
         return "\n".join([line.lstrip() for line in doc_str.split("\n")])
     raise ValueError(f"The funcchain ({get_parent_frame().function}) must have a docstring")
 
 
-def get_output_type() -> type:
+def get_output_type(f: Optional[types.FunctionType] = None) -> type:
     """
     Get the output type annotation of the parent caller function.
     """
     try:
-        # print(get_parent_frame().frame.f_globals)
-        return get_func_obj().__annotations__["return"]
+        return (f or get_func_obj()).__annotations__["return"]
     except KeyError:
         raise ValueError("The funcchain must have a return type annotation")
 
@@ -62,7 +61,7 @@ def parser_for(
     output_type: type,
     retry: int,
     llm: BaseChatModel | str | None = None,
-) -> BaseOutputParser | None:
+) -> BaseOutputParser | BaseGenerationOutputParser:
     """
     Get the parser from the type annotation of the parent caller function.
     """
@@ -85,7 +84,7 @@ def parser_for(
     if issubclass(output_type, BaseModel):
         return RetryPydanticOutputParser(pydantic_object=output_type, retry=retry, retry_llm=llm)
     else:
-        raise RuntimeError(f"Output Type is not supported: {output_type}")
+        raise SyntaxError(f"Output Type is not supported: {output_type}")
 
 
 def kwargs_from_parent() -> dict[str, str]:
@@ -93,3 +92,14 @@ def kwargs_from_parent() -> dict[str, str]:
     Get the kwargs from the parent function.
     """
     return get_parent_frame(FUNC_DEPTH - 1).frame.f_locals
+
+
+def gather_signature(f: types.FunctionType) -> dict[str, Any]:
+    """
+    Gather the signature of the parent caller function.
+    """
+    return {
+        "instruction": from_docstring(f),
+        "input_args": list(f.__code__.co_varnames[: f.__code__.co_argcount]),
+        "output_type": get_output_type(f),
+    }
