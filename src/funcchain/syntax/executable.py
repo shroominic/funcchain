@@ -37,14 +37,13 @@ def chain(
 
     memory = memory or ChatMessageHistory()
     input_kwargs.update(kwargs_from_parent())
-    system = system or settings.default_system_prompt
+    system = system or settings.system_prompt
     instruction = instruction or from_docstring()
 
     sig: Signature = Signature(
         instruction=instruction,
         input_args=list(input_kwargs.keys()),
         output_type=output_type,
-        llm=settings_override.get("llm", settings.llm),
         history=context,
         settings=settings,
     )
@@ -75,14 +74,15 @@ async def achain(
 
     memory = memory or ChatMessageHistory()
     input_kwargs.update(kwargs_from_parent())
-    system = system or settings.default_system_prompt
+
+    # todo maybe this should be done in the prompt processor?
+    system = system or settings.system_prompt
     instruction = instruction or from_docstring()
 
     sig: Signature = Signature(
         instruction=instruction,
         input_args=list(input_kwargs.keys()),
         output_type=output_type,
-        llm=settings_override.get("llm", settings.llm),
         history=context,
         settings=settings,
     )
@@ -96,7 +96,7 @@ async def achain(
     return result
 
 
-def runnable(
+def compile_runnable(
     instruction: str,
     output_type: type[ChainOut],
     input_args: list[str] = [],
@@ -106,7 +106,7 @@ def runnable(
     settings_override: SettingsOverride = {},
 ) -> Runnable[dict[str, str], ChainOut]:
     """
-    Experimental replacement for using the funcchain syntax.
+    On the fly compilation of the funcchain syntax.
     """
     if settings_override and llm:
         settings_override["llm"] = llm
@@ -118,7 +118,6 @@ def runnable(
         instruction=instruction,
         input_args=input_args,
         output_type=output_type,
-        llm=settings_override.get("llm", settings.llm),
         history=context,
         settings=settings,
     )
