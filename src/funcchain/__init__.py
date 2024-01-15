@@ -1,7 +1,7 @@
 from pydantic import BaseModel
 
 from .backend.settings import settings
-from .syntax.executable import achain, chain, runnable
+from .syntax.executable import achain, chain
 from .syntax.types import Error
 
 __all__ = [
