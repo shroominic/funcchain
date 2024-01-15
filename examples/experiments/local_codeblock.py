@@ -1,5 +1,5 @@
 from funcchain import chain, settings
-from funcchain.syntax.types import CodeBlock
+from funcchain.syntax.output_types import CodeBlock
 
 
 def generate_code(instruction: str) -> CodeBlock:
