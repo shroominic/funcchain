@@ -5,9 +5,9 @@ from langchain_core.language_models import BaseChatModel
 from langchain_core.runnables import Runnable
 
 from ..backend.compiler import compile_chain
+from ..backend.meta_inspect import gather_signature
 from ..backend.settings import SettingsOverride, create_local_settings
 from ..schema.signature import Signature
-from .meta_inspect import gather_signature
 
 OutputT = TypeVar("OutputT")
 
