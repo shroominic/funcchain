@@ -6,7 +6,8 @@ authors = [
     { name = "Shroominic", email = "contact@shroominic.com" }
 ]
 dependencies = [
-    "langchain[openai]>=0.0.352",
+    "langchain_core>=0.1.10",
+    "langchain_openai>=0.0.2.post1",
     "pydantic-settings>=2",
     "docstring-parser>=0.15",
     "rich>=13",
@@ -42,10 +43,12 @@ dev-dependencies = [
     "pytest",
     "ipython",
     "pre-commit",
+    "langchain>=0.1",
     "funcchain[all]",
     "mkdocs-material>=9.4",
     "beautifulsoup4>=4.12",
     "python-dotenv>=1",
+    "faiss-cpu>=1.7.4",
 ]
 
 [project.optional-dependencies]
