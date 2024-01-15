@@ -14,7 +14,7 @@ from langchain_core.runnables.config import RunnableConfig
 from typing_extensions import TypedDict
 
 from ...utils.msg_tools import msg_to_str
-from ..executable import runnable
+from ..executable import compile_runnable
 
 
 class Route(TypedDict):
@@ -84,7 +84,7 @@ class RouterChat(Runnable[HumanMessage, AIMessage]):
                 description="Enum of the available routes.",
             )
 
-        return runnable(
+        return compile_runnable(
             instruction="Given the user request select the appropriate route.",
             input_args=["user_request", "routes"],  # todo: optional images
             output_type=RouterModel,
@@ -97,7 +97,7 @@ class RouterChat(Runnable[HumanMessage, AIMessage]):
             self.routes["default"] = {
                 "handler": (
                     {"user_request": lambda x: msg_to_str(x)}
-                    | runnable(
+                    | compile_runnable(
                         instruction="{user_request}",
                         input_args=["user_request"],
                         output_type=str,
