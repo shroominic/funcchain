@@ -5,6 +5,7 @@ from funcchain import chain, settings
 from funcchain.utils.memory import ChatMessageHistory
 
 settings.llm = "openai/gpt-4"
+settings.console_stream = True
 
 history = ChatMessageHistory()
 
