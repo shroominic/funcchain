@@ -1,3 +1,4 @@
+from types import UnionType
 from typing import Any, Generic, TypeVar
 
 from langchain_core.messages import BaseMessage
@@ -27,7 +28,7 @@ class Signature(BaseModel, Generic[T]):
     # -> e.g. Callbacks adds custom callbacks
     # -> e.g. SystemMessage adds a system message
 
-    output_type: type[T]
+    output_type: type[T] | UnionType
     """ Type to parse the output into. """
 
     # todo: is history really needed? maybe this could be a background optimization
