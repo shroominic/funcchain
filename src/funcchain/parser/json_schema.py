@@ -87,4 +87,5 @@ class RetryJsonPydanticParser(BaseOutputParser[M]):
 
 
 class RetryJsonPydanticUnionParser(BaseOutputParser[M]):
-    ...
+    def parse(self, text: str) -> M:
+        raise NotImplementedError
