@@ -2,7 +2,9 @@ from funcchain import chain, settings
 from PIL import Image
 from pydantic import BaseModel, Field
 
-settings.llm = "openai/gpt-4-vision-preview"
+# settings.llm = "openai/gpt-4-vision-preview"
+settings.llm = "ollama/bakllava"
+settings.console_stream = True
 
 
 class AnalysisResult(BaseModel):
@@ -23,10 +25,8 @@ def analyse_image(image: Image.Image) -> AnalysisResult:
 
 if __name__ == "__main__":
     example_image = Image.open("examples/assets/old_chinese_temple.jpg")
-    from funcchain.backend.streaming import stream_to
 
-    with stream_to(print):
-        result = analyse_image(example_image)
+    result = analyse_image(example_image)
 
     print("Theme:", result.theme)
     print("Description:", result.description)
