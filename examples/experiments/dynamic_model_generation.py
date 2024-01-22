@@ -1,6 +1,6 @@
 from funcchain import chain, settings
 from funcchain.syntax.output_types import CodeBlock
-from langchain.document_loaders import WebBaseLoader
+from langchain_community.document_loaders import WebBaseLoader
 from pydantic import BaseModel
 from rich import print
 
