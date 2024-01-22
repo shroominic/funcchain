@@ -86,7 +86,7 @@ def patch_openai_function_to_pydantic(
 def create_chain(
     system: str,
     instruction: str,
-    output_type: Type[ChainOutput],
+    output_type: Type[ChainOutput],  # | UnionType,
     context: list[BaseMessage],
     memory: BaseChatMessageHistory,
     settings: FuncchainSettings,
