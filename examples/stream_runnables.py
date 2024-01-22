@@ -1,6 +1,6 @@
 from typing import AsyncIterator, Iterator
 
-from funcchain import chain, settings
+from funcchain import chain
 from funcchain.syntax import runnable
 from funcchain.syntax.components import RouterChat
 from funcchain.syntax.components.handler import BasicChatHandler
@@ -85,7 +85,7 @@ chat = RouterChat(
 
 
 def main() -> None:
-    for chunk in chat.stream(HumanMessage(content="Hey whatsup?")):
+    for chunk in chat.stream(HumanMessage(content="Hey whatsup?"), config={"configurable": {"session_id": ""}}):
         if isinstance(chunk, AIMessage):
             print(chunk.content, flush=True)
         if isinstance(chunk, str):
