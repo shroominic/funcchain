@@ -7,10 +7,11 @@ from langchain_core.messages import AIMessage, HumanMessage
 from langchain_core.runnables import (
     RouterRunnable,
     Runnable,
+    RunnableConfig,
     RunnableLambda,
+    RunnablePassthrough,
     RunnableSerializable,
 )
-from langchain_core.runnables.config import RunnableConfig
 from typing_extensions import TypedDict
 
 from ...utils.msg_tools import msg_to_str
@@ -46,29 +47,20 @@ class RouterChat(Runnable[HumanMessage, AIMessage]):
 
     @property
     def runnable(self) -> RunnableSerializable[HumanMessage, AIMessage]:
+        # TODO: update history somewhere
         return {
-            "input": lambda x: x,
-            "output": {
-                "input": lambda x: x,
-                "key": {
-                    # todo "images": x.images,
-                    "user_request": msg_to_str,
-                    "routes": lambda _: self._routes_repr(),
-                }
-                # route selection
-                | self._selector()
-                | RunnableLambda(lambda x: x.selector.value),
+            "input": RunnablePassthrough(),
+            "key": {
+                # todo "images": x.images,
+                "user_request": msg_to_str,
+                "routes": lambda _: self._routes_repr(),
             }
-            # route invocation
-            | RouterRunnable(
-                runnables={name: run["handler"] for name, run in self.routes.items()},
-            ),
-            # update history
-        } | RunnableLambda(
-            lambda x: (self.history.add_message(x["input"]) or self.history.add_message(x["output"]) or x["output"])
-            if self.history
-            else x["output"]
-        )
+            # route selection
+            | self._selector()
+            | (lambda x: x.selector.value),
+        } | RouterRunnable(
+            runnables={name: run["handler"] for name, run in self.routes.items()},
+        )  # maybe add auto conversion of strings to AI Messages/Chunks
 
     def _selector(self) -> Runnable[dict[str, str], Any]:
         RouteChoices = Enum(  # type: ignore
