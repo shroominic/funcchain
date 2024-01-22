@@ -70,17 +70,17 @@ def create_union_chain(
     return prompt | llm | OpenAIFunctionPydanticUnionParser(output_types=output_types)
 
 
-def parse_function_to_pydantic(
+def patch_openai_function_to_pydantic(
     llm: BaseChatModel,
     output_type: type[BaseModel],
     input_kwargs: dict[str, str],
-) -> BaseGenerationOutputParser:
+) -> tuple[BaseChatModel, BaseGenerationOutputParser]:
     input_kwargs["format_instructions"] = f"Extract to {output_type.__name__}."
     functions = pydantic_to_functions(output_type)
 
     llm = llm.bind(**functions)  # type: ignore
 
-    return OpenAIFunctionPydanticParser(pydantic_schema=output_type)
+    return llm, OpenAIFunctionPydanticParser(pydantic_schema=output_type)
 
 
 def create_chain(
@@ -90,7 +90,7 @@ def create_chain(
     context: list[BaseMessage],
     memory: BaseChatMessageHistory,
     settings: FuncchainSettings,
-    input_kwargs: dict[str, str],
+    input_args: list[tuple[str, type]],
 ) -> Runnable[dict[str, str], ChainOutput]:
     """
     Compile a langchain runnable chain from the funcchain syntax.
@@ -100,6 +100,21 @@ def create_chain(
     llm = _add_custom_callbacks(_llm, settings)
 
     parser = parser_for(output_type, retry=settings.retry_parse, llm=llm)
+
+    # handle input arguments
+    prompt_args: list[str] = []
+    pydantic_args: list[str] = []
+    special_args: list[tuple[str, type]] = []
+
+    for i in input_args:
+        if i[1] is str:
+            prompt_args.append(i[0])
+        if i[1] is BaseModel:
+            pydantic_args.append(i[0])
+        else:
+            special_args.append(i)
+
+    input_kwargs = {k: "" for k in prompt_args + pydantic_args}
 
     # add format instructions for parser
     f_instructions = None
@@ -156,7 +171,7 @@ def create_chain(
             if settings.streaming and hasattr(llm, "model_kwargs"):
                 llm.model_kwargs = {"response_format": {"type": "json_object"}}
             else:
-                parser = parse_function_to_pydantic(llm, output_type, input_kwargs)
+                llm, parser = patch_openai_function_to_pydantic(llm, output_type, input_kwargs)
 
     assert parser is not None
     return chat_prompt | llm | parser
@@ -172,9 +187,8 @@ def compile_chain(signature: Signature[ChainOutput]) -> Runnable[dict[str, str],
             SystemMessage(content=""),
         ]
     ).pop()
-    input_kwargs = {k: "" for k in signature.input_args}
 
-    from langchain.memory import ChatMessageHistory
+    from ..utils.memory import ChatMessageHistory
 
     memory = ChatMessageHistory(messages=signature.history)
 
@@ -185,7 +199,7 @@ def compile_chain(signature: Signature[ChainOutput]) -> Runnable[dict[str, str],
         signature.history,
         memory,
         signature.settings,
-        input_kwargs,
+        signature.input_args,
     )
 
 
