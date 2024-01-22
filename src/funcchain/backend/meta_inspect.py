@@ -1,6 +1,6 @@
 import types
 from inspect import FrameInfo, currentframe, getouterframes
-from typing import Any, Optional
+from typing import Optional
 
 FUNC_DEPTH = 4
 
@@ -59,7 +59,7 @@ def args_from_parent() -> list[tuple[str, type]]:
     """
     Get input args with type hints from parent function
     """
-    # TODO: implement
+    return [(arg, t) for arg, t in get_func_obj().__annotations__.items() if arg != "return" and arg != "self"]
 
 
 def gather_signature(
