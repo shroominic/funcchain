@@ -62,8 +62,6 @@ class OpenAIFunctionPydanticUnionParser(BaseGenerationOutputParser[M]):
         if function_call["name"] not in output_type_names:
             raise OutputParserException("Invalid function call")
 
-        print(function_call["name"])
-
         output_type = self._get_output_type(function_call["name"])
 
         generation = result[0]
