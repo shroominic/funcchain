@@ -5,7 +5,7 @@
 You can set the `settings.llm` with any ChatModel the LangChain library.
 
 ```python
-from langchain.chat_models import AzureChatOpenAI
+from langchain_openai.chat_models import AzureChatOpenAI
 
 settings.llm = AzureChatOpenAI(...)
 ```
