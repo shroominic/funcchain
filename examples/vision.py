@@ -2,8 +2,8 @@ from funcchain import chain, settings
 from PIL import Image
 from pydantic import BaseModel, Field
 
-# settings.llm = "openai/gpt-4-vision-preview"
-settings.llm = "ollama/bakllava"
+settings.llm = "openai/gpt-4-vision-preview"
+# settings.llm = "ollama/bakllava"
 settings.console_stream = True
 
 
