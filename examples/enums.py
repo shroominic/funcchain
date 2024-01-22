@@ -1,6 +1,6 @@
 from enum import Enum
 
-from funcchain import chain, settings
+from funcchain import chain
 from pydantic import BaseModel
 
 
@@ -21,6 +21,4 @@ def make_decision(question: str) -> Decision:
 
 
 if __name__ == "__main__":
-    settings.llm = "ollama/phi-2"
-
     print(make_decision("Do you like apples?"))
