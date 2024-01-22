@@ -1,6 +1,7 @@
 import pytest
 from funcchain import chain, settings
-from pydantic import BaseModel
+from PIL import Image
+from pydantic import BaseModel, Field
 
 
 class Task(BaseModel):
@@ -39,26 +40,28 @@ def test_neural_chat() -> None:
     )
 
 
-# def test_vision() -> None:
-#     from PIL import Image
+class Analysis(BaseModel):
+    description: str = Field(description="A description of the image")
+    objects: list[str] = Field(description="A list of objects found in the image")
 
-#     settings.llm = "mys/ggml_llava-v1.5-13b"
 
-#     class Analysis(BaseModel):
-#         description: str = Field(description="A description of the image")
-#         objects: list[str] = Field(description="A list of objects found in the image")
+def analyse(image: Image.Image) -> Analysis:
+    """
+    Analyse the image and extract its
+    theme, description and objects.
+    """
+    return chain()
 
-#     def analyse(image: Image.Image) -> Analysis:
-#         """
-#         Analyse the image and extract its
-#         theme, description and objects.
-#         """
-#         return chain()
 
-#     assert isinstance(
-#         analyse(Image.open("examples/assets/old_chinese_temple.jpg")),
-#         Analysis,
-#     )
+@pytest.mark.skip_on_actions
+def test_vision() -> None:
+    settings.llm = "ollama/bakllava"
+
+    assert isinstance(
+        analyse(Image.open("examples/assets/old_chinese_temple.jpg")),
+        Analysis,
+    )  # todo check actual output
+
 
 # TODO: Test union types
 # def test_union_types() -> None:
