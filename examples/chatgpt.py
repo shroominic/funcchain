@@ -2,8 +2,7 @@
 Simple chatgpt rebuild with memory/history.
 """
 from funcchain import chain, settings
-from funcchain.backend.streaming import stream_to
-from langchain.memory import ChatMessageHistory
+from funcchain.utils.memory import ChatMessageHistory
 
 settings.llm = "openai/gpt-4"
 
@@ -31,8 +30,7 @@ def chat_loop() -> None:
             print("\033c")
             continue
 
-        with stream_to(print):
-            ask(query)
+        ask(query)
 
 
 if __name__ == "__main__":
