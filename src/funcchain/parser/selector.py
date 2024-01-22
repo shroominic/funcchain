@@ -18,8 +18,8 @@ def parser_for(
     Get the parser from the type annotation of the parent caller function.
     """
     if isinstance(output_type, types.UnionType) or getattr(output_type, "__origin__", None) is Union:
-        output_type = output_type.__args__[0]  # type: ignore
-        return RetryJsonPydanticUnionParser(pydantic_objects=output_type.__args__)  # type: ignore  # TODO: fix this
+        # output_type = output_type.__args__[0]  # type: ignore
+        return RetryJsonPydanticUnionParser()  # type: ignore  # TODO: fix this
     if output_type is str:
         return StrOutputParser()
     if output_type is bool:
