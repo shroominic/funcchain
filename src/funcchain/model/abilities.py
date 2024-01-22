@@ -1,6 +1,8 @@
 from langchain_core.language_models import BaseChatModel
 from langchain_core.messages import HumanMessage, SystemMessage
 
+from ..model.llm_overrides import ChatOllama
+
 verified_openai_function_models = [
     "gpt-4",
     "gpt-4-0613",
@@ -25,7 +27,7 @@ verified_ollama_vision_models = [
 
 
 def gather_llm_type(llm: BaseChatModel, func_check: bool = True) -> str:
-    from langchain_community.chat_models import ChatOllama, ChatOpenAI  # TODO: fix make this optional
+    from langchain_openai.chat_models import ChatOpenAI
 
     if not isinstance(llm, BaseChatModel):
         return "base_model"
