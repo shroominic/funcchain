@@ -10,7 +10,7 @@ class User(BaseModel):
 def extract_user_info(text: str) -> User | Error:
     """
     Extract the user information from the given text.
-    If you do not have enough infos, raise.
+    In case you do not have enough infos, raise.
     """
     return chain()
 
