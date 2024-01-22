@@ -1,7 +1,7 @@
 from funcchain.syntax import chain, runnable
-from langchain.embeddings.openai import OpenAIEmbeddings
 from langchain_community.vectorstores.faiss import FAISS
 from langchain_core.runnables import Runnable, RunnablePassthrough
+from langchain_openai.embeddings import OpenAIEmbeddings
 
 
 @runnable
