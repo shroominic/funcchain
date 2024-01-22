@@ -55,12 +55,21 @@ def kwargs_from_parent() -> dict[str, str]:
     return get_parent_frame(FUNC_DEPTH - 1).frame.f_locals
 
 
-def gather_signature(f: types.FunctionType) -> dict[str, Any]:
+def args_from_parent() -> list[tuple[str, type]]:
+    """
+    Get input args with type hints from parent function
+    """
+    # TODO: implement
+
+
+def gather_signature(
+    f: types.FunctionType,
+) -> dict[str, str | list[tuple[str, type]] | type]:
     """
     Gather the signature of the parent caller function.
     """
     return {
         "instruction": from_docstring(f),
-        "input_args": list(f.__code__.co_varnames[: f.__code__.co_argcount]),
+        "input_args": [(arg, f.__annotations__[arg]) for arg in f.__code__.co_varnames[: f.__code__.co_argcount]],
         "output_type": get_output_type(f),
     }
