@@ -98,6 +98,7 @@ tenacity==8.2.3
 tiktoken==0.5.2
 tqdm==4.66.1
 traitlets==5.14.0
+types-pyyaml==6.0.12.12
 typing-extensions==4.8.0
 typing-inspect==0.9.0
 urllib3==2.1.0
