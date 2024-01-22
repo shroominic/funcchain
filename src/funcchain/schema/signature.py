@@ -1,7 +1,7 @@
 from typing import Any, Generic, TypeVar
 
-from langchain.pydantic_v1 import BaseModel, Field
 from langchain_core.messages import BaseMessage
+from langchain_core.pydantic_v1 import BaseModel, Field
 
 from ..backend.settings import FuncchainSettings, settings
 
@@ -16,7 +16,7 @@ class Signature(BaseModel, Generic[T]):
     instruction: str
     """ Prompt instruction to the language model. """
 
-    input_args: list[str] = Field(default_factory=list)
+    input_args: list[tuple[str, type]] = Field(default_factory=list)
     """ List of input arguments for the prompt template. """
 
     # TODO collect types from input_args
@@ -26,7 +26,6 @@ class Signature(BaseModel, Generic[T]):
     # -> e.g. SettingsOverride overrides the default settings
     # -> e.g. Callbacks adds custom callbacks
     # -> e.g. SystemMessage adds a system message
-    # maybe do input_args: list[tuple[str, type]] = Field(default_factory=list)
 
     output_type: type[T]
     """ Type to parse the output into. """
