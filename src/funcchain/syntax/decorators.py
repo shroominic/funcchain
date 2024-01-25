@@ -50,7 +50,7 @@ def runnable(
         _signature["settings"] = create_local_settings(override=settings)
         _signature["auto_tune"] = auto_tune
 
-        sig = Signature(**_signature)
+        sig: Signature = Signature(**_signature)
         return compile_chain(sig)
 
     if callable(f):
