@@ -23,7 +23,7 @@ class RankedAnswer(BaseModel):
 
 async def rank_answers(
     question: str,
-    answers: list[tuple[int, str]],
+    answers: str,
 ) -> RankedAnswer:
     """
     Given the list of answers, select the answer
@@ -39,7 +39,7 @@ async def expert_answer(
     # Shuffle the answers to ensure randomness
     enum_answers = list(enumerate(answers))
     shuffle(enum_answers)
-    ranked_answers = await gather(*(rank_answers(question, enum_answers) for _ in range(3)))
+    ranked_answers = await gather(*(rank_answers(question, str(enum_answers)) for _ in range(3)))
     highest_ranked_answer = max(
         ranked_answers,
         key=lambda x: sum(1 for ans in ranked_answers if ans.selected_answer == x.selected_answer),
