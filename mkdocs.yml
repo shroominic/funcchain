@@ -5,21 +5,88 @@ repo_name: shroominic/funcchain
 repo_url: https://github.com/shroominic/funcchain/
 
 nav:
+  - 'Introduction':
+    - 'Funcchain': 'getting-started/introduction.md'
   - 'Getting Started':
     - 'Welcome': 'index.md'
     - 'Installation': 'getting-started/installation.md'
     - 'Usage': 'getting-started/usage.md'
   - 'Concepts':
-    - 'Overview': 'overview.md'
+    - 'Overview': 'concepts/overview.md'
     - 'Chain': 'chain.md'
     - 'Input Args': 'input.md'
     - 'Prompt Template': 'prompt.md'
     - 'Output Parser': 'parser.md'
     - 'Pydantic Models': 'models.md'
   - 'Settings': 'settings.md'
-  - 'Examples': 'examples.md'
+  - 'Examples':
+    - 'ChatGPT': 'examples/chat.md'
+    - 'Dynamic Router': 'examples/dynamic_router.md'
+    - 'Enums': 'examples/enums.md'
+    - 'Error Output': 'examples/error_output.md'
+    - 'Literals': 'examples/literals.md'
+    - 'Union Types': 'examples/union.md'
 
 theme:
   name: material
   palette:
     scheme: slate
+
+# Extensions
+markdown_extensions:
+  - abbr
+  - admonition
+  - pymdownx.details
+  - attr_list
+  - def_list
+  - footnotes
+  - md_in_html
+  - toc:
+      permalink: true
+  - pymdownx.arithmatex:
+      generic: true
+  - pymdownx.betterem:
+      smart_enable: all
+  - pymdownx.caret
+  - pymdownx.details
+  - pymdownx.emoji:
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - pymdownx.keys
+  - pymdownx.magiclink:
+      normalize_issue_symbols: true
+      repo_url_shorthand: true
+      user: jxnl 
+      repo: instructor
+  - pymdownx.mark
+  - pymdownx.smartsymbols
+  - pymdownx.snippets:
+      auto_append:
+        - includes/mkdocs.md
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+  - pymdownx.tabbed:
+      alternate_style: true
+      combine_header_slug: true
+      slugify: !!python/object/apply:pymdownx.slugs.slugify
+        kwds:
+          case: lower
+  - pymdownx.tasklist:
+      custom_checkbox: true
+  - pymdownx.tilde
+
+extra_css:
+  - css/termynal.css
+  - css/custom.css
+
+extra_javascript:
+  - js/termynal.js
+  - js/custom.js

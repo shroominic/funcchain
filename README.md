@@ -7,10 +7,11 @@
 [![Pydantic v2](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/pydantic/pydantic/main/docs/badge/v2.json)](https://docs.pydantic.dev/latest/contributing/#badges)
 [![Twitter Follow](https://img.shields.io/twitter/follow/shroominic?style=social)](https://x.com/shroominic)
 
-```bash
-> pip install funcchain
-```
-
+<div class="termy">
+    ```bash
+    $ > pip install funcchain
+    ```
+</div>
 ## Introduction
 
 `funcchain` is the *most pythonic* way of writing cognitive systems. Leveraging pydantic models as output schemas combined with langchain in the backend allows for a seamless integration of llms into your apps.
