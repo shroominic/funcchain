@@ -34,7 +34,7 @@ class DynamicChatRouter(BaseModel):
         route_query = compile_runnable(
             instruction="Given the user query select the best query handler for it.",
             input_args=["user_query", "query_handlers"],
-            output_type=RouterModel,
+            output_types=(RouterModel,),
         )
 
         selected_route = route_query.invoke(

@@ -1,6 +1,5 @@
 import pytest
-from funcchain import chain, settings
-from PIL import Image
+from funcchain import Image, chain, settings
 from pydantic import BaseModel, Field
 
 
@@ -45,7 +44,7 @@ class Analysis(BaseModel):
     objects: list[str] = Field(description="A list of objects found in the image")
 
 
-def analyse(image: Image.Image) -> Analysis:
+def analyse(image: Image) -> Analysis:
     """
     Analyse the image and extract its
     theme, description and objects.
@@ -58,7 +57,7 @@ def test_vision() -> None:
     settings.llm = "ollama/bakllava"
 
     assert isinstance(
-        analyse(Image.open("examples/assets/old_chinese_temple.jpg")),
+        analyse(Image.from_file("examples/assets/old_chinese_temple.jpg")),
         Analysis,
     )  # todo check actual output
 

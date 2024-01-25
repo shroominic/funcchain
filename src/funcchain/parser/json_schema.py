@@ -80,12 +80,16 @@ class RetryJsonPydanticParser(BaseOutputParser[M]):
         return compile_runnable(
             instruction="Retry parsing the output by fixing the error.",
             input_args=["output", "error"],
-            output_type=self.pydantic_object,
+            output_types=(self.pydantic_object,),
             llm=self.retry_llm,
             settings_override={"retry_parse": self.retry - 1},
         )
 
 
 class RetryJsonPydanticUnionParser(BaseOutputParser[M]):
+    """Parse an output using a pydantic model."""
+
+    output_types: list[Type[M]]
+
     def parse(self, text: str) -> M:
         raise NotImplementedError

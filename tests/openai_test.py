@@ -37,7 +37,7 @@ def test_gpt4() -> None:
 
 
 def test_vision() -> None:
-    from PIL import Image
+    from funcchain import Image
 
     settings.llm = "openai/gpt-4-vision-preview"
 
@@ -45,7 +45,7 @@ def test_vision() -> None:
         description: str = Field(description="A description of the image")
         objects: list[str] = Field(description="A list of objects found in the image")
 
-    def analyse(image: Image.Image) -> Analysis:
+    def analyse(image: Image) -> Analysis:
         """
         Analyse the image and extract its
         theme, description and objects.
@@ -53,7 +53,7 @@ def test_vision() -> None:
         return chain()
 
     assert isinstance(
-        analyse(Image.open("examples/assets/old_chinese_temple.jpg")),
+        analyse(Image.from_file("examples/assets/old_chinese_temple.jpg")),
         Analysis,
     )
 

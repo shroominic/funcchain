@@ -9,15 +9,14 @@ from langchain_core.prompts.chat import (
     MessagePromptTemplateT,
 )
 from langchain_core.prompts.prompt import PromptTemplate
-from PIL import Image
 from pydantic import BaseModel
 
-from ..utils.image import image_to_base64_url
+from ..syntax.input_types import Image
 
 
 def create_instruction_prompt(
     instruction: str,
-    images: list[Image.Image],
+    images: list[Image],
     input_kwargs: dict[str, Any],
     format_instructions: Optional[str] = None,
 ) -> "HumanImageMessagePromptTemplate":
@@ -28,15 +27,16 @@ def create_instruction_prompt(
     _filter_fstring_vars(input_kwargs)
 
     inject_vars = [f"{var.upper()}:\n{{{var}}}\n" for var, _ in input_kwargs.items() if var not in required_f_str_vars]
+
     added_instruction = "\n".join(inject_vars)
     instruction = added_instruction + instruction
 
-    images = [image_to_base64_url(image) for image in images]
+    _images = [image.url for image in images]
 
     return HumanImageMessagePromptTemplate.from_template(
         template=instruction,
         template_format=template_format,
-        images=images,
+        images=_images,
         partial_variables={"format_instructions": format_instructions} if format_instructions else None,
     )
 
@@ -45,7 +45,7 @@ def create_chat_prompt(
     system: str,
     instruction_template: "HumanImageMessagePromptTemplate",
     context: list[BaseMessage],
-    memory: BaseChatMessageHistory,
+    memory: BaseChatMessageHistory,  # TODO: remove and do memory placeholder
 ) -> ChatPromptTemplate:
     """
     Compose a chat prompt from a system message,
@@ -55,7 +55,9 @@ def create_chat_prompt(
     if system and memory.messages and isinstance(memory.messages[0], SystemMessage):
         memory.messages.pop(0)
 
+    # TODO: fix union type problem
     if memory.messages and isinstance(memory.messages[-1], HumanMessage):
+        print("specialchatprompt")
         return ChatPromptTemplate.from_messages(
             [
                 *([SystemMessage(content=system)] if system else []),
@@ -63,7 +65,6 @@ def create_chat_prompt(
                 *context,
             ]
         )
-
     return ChatPromptTemplate.from_messages(
         [
             *([SystemMessage(content=system)] if system else []),

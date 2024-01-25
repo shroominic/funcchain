@@ -10,29 +10,31 @@ from ..backend.compiler import compile_chain
 from ..backend.meta_inspect import (
     args_from_parent,
     from_docstring,
-    get_output_type,
+    get_output_types,
     get_parent_frame,
     kwargs_from_parent,
 )
 from ..backend.settings import SettingsOverride, create_local_settings
 from ..schema.signature import Signature
 from ..utils.memory import ChatMessageHistory
+from .input_types import Image
 
 
 def chain(
+    *,
     system: str | None = None,
     instruction: str | None = None,
     context: list[BaseMessage] = [],
     memory: BaseChatMessageHistory | None = None,
     settings_override: SettingsOverride = {},
-    **input_kwargs: str,
+    **input_kwargs: Any,
 ) -> Any:
     """
     Generate response of llm for provided instructions.
     """
     settings = create_local_settings(settings_override)
     callbacks: Callbacks = None
-    output_type = get_output_type()
+    output_types = get_output_types()
     input_args: list[tuple[str, type]] = args_from_parent()
 
     memory = memory or ChatMessageHistory()
@@ -42,14 +44,21 @@ def chain(
     system = system or settings.system_prompt
     instruction = instruction or from_docstring()
 
+    # temp image handling
+    temp_images: list[Image] = []
+    for k, v in input_kwargs.copy().items():
+        if isinstance(v, Image):
+            temp_images.append(v)
+            input_kwargs.pop(k)
+
     sig: Signature = Signature(
         instruction=instruction,
         input_args=input_args,
-        output_type=output_type,
+        output_types=output_types,
         history=context,
         settings=settings,
     )
-    chain: Runnable[dict[str, str], Any] = compile_chain(sig)
+    chain: Runnable[dict[str, Any], Any] = compile_chain(sig, temp_images)
     result = chain.invoke(input_kwargs, {"run_name": get_parent_frame(3).function, "callbacks": callbacks})
 
     if memory and isinstance(result, str):
@@ -60,19 +69,20 @@ def chain(
 
 
 async def achain(
+    *,
     system: str | None = None,
     instruction: str | None = None,
     context: list[BaseMessage] = [],
     memory: BaseChatMessageHistory | None = None,
     settings_override: SettingsOverride = {},
-    **input_kwargs: str,
+    **input_kwargs: Any,
 ) -> Any:
     """
     Asyncronously generate response of llm for provided instructions.
     """
     settings = create_local_settings(settings_override)
     callbacks: Callbacks = None
-    output_type = get_output_type()
+    output_types = get_output_types()
     input_args: list[tuple[str, type]] = args_from_parent()
 
     memory = memory or ChatMessageHistory()
@@ -82,14 +92,21 @@ async def achain(
     system = system or settings.system_prompt
     instruction = instruction or from_docstring()
 
+    # temp image handling
+    temp_images: list[Image] = []
+    for v, k in input_kwargs.copy().items():
+        if isinstance(v, Image):
+            temp_images.append(v)
+            input_kwargs.pop(k)
+
     sig: Signature = Signature(
         instruction=instruction,
         input_args=input_args,
-        output_type=output_type,
+        output_types=output_types,
         history=context,
         settings=settings,
     )
-    chain: Runnable[dict[str, str], Any] = compile_chain(sig)
+    chain: Runnable[dict[str, str], Any] = compile_chain(sig, temp_images)
     result = await chain.ainvoke(input_kwargs, {"run_name": get_parent_frame(5).function, "callbacks": callbacks})
 
     if memory and isinstance(result, str):
@@ -103,8 +120,9 @@ ChainOut = TypeVar("ChainOut")
 
 
 def compile_runnable(
+    *,
     instruction: str,
-    output_type: type[ChainOut],
+    output_types: tuple[type[ChainOut]],
     input_args: list[str] = [],
     context: list = [],
     llm: BaseChatModel | str | None = None,
@@ -124,9 +142,9 @@ def compile_runnable(
     sig: Signature = Signature(
         instruction=instruction,
         input_args=_input_args,
-        output_type=output_type,
+        output_types=output_types,
         history=context,
         settings=settings,
     )
 
-    return compile_chain(sig)
+    return compile_chain(sig, temp_images=[])

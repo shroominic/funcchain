@@ -54,7 +54,7 @@ def pydantic_to_functions(pydantic_type: Type[BaseModel]) -> dict[str, Any]:
 
 
 def multi_pydantic_to_functions(
-    pydantic_types: list[Type[BaseModel]],
+    pydantic_types: tuple[Type[BaseModel]],
 ) -> dict[str, Any]:
     functions: list[dict[str, Any]] = [
         pydantic_to_functions(pydantic_type)["functions"][0] for pydantic_type in pydantic_types

@@ -95,7 +95,7 @@ match lst:
 ## Vision Models
 
 ```python
-from PIL import Image
+from funcchain import Image
 from pydantic import BaseModel, Field
 from funcchain import chain, settings
 
