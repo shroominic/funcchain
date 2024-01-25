@@ -1,5 +1,4 @@
-from types import UnionType
-from typing import Type, TypeVar
+from typing import Any, TypeVar
 
 from langchain_core.callbacks import Callbacks
 from langchain_core.chat_history import BaseChatMessageHistory
@@ -7,15 +6,15 @@ from langchain_core.language_models import BaseChatModel
 from langchain_core.messages import AIMessage, BaseMessage, HumanMessage, SystemMessage
 from langchain_core.output_parsers import BaseGenerationOutputParser, BaseOutputParser
 from langchain_core.runnables import Runnable
-from PIL import Image
 from pydantic import BaseModel
 
 from ..model.abilities import is_openai_function_model, is_vision_model
 from ..model.defaults import univeral_model_selector
-from ..parser.openai_functions import OpenAIFunctionPydanticParser, OpenAIFunctionPydanticUnionParser
+from ..parser.openai_functions import RetryOpenAIFunctionPydanticParser, RetryOpenAIFunctionPydanticUnionParser
 from ..parser.schema_converter import pydantic_to_grammar
 from ..parser.selector import parser_for
 from ..schema.signature import Signature
+from ..syntax.input_types import Image
 from ..syntax.output_types import ParserBaseModel
 from ..utils.msg_tools import msg_to_str
 from ..utils.pydantic import multi_pydantic_to_functions, pydantic_to_functions
@@ -33,28 +32,28 @@ ChainOutput = TypeVar("ChainOutput")
 
 # TODO: do patch instead of seperate creation
 def create_union_chain(
-    output_type: UnionType,
+    output_types: tuple[type],
     instruction_prompt: HumanImageMessagePromptTemplate,
     system: str,
     memory: BaseChatMessageHistory,
     context: list[BaseMessage],
     llm: BaseChatModel,
-    input_kwargs: dict[str, str],
-) -> Runnable[dict[str, str], BaseModel]:
+    input_kwargs: dict[str, Any],
+) -> Runnable[dict[str, str], Any]:
     """
     Compile a langchain runnable chain from the funcchain syntax.
     """
-    if not all(issubclass(t, BaseModel) for t in output_type.__args__):
+    if not all(issubclass(t, BaseModel) for t in output_types):
         raise RuntimeError("Funcchain union types are currently only supported for pydantic models.")
 
-    output_types: list[Type[BaseModel]] = output_type.__args__  # type: ignore
     output_type_names = [t.__name__ for t in output_types]
 
     input_kwargs["format_instructions"] = f"Extract to one of these output types: {output_type_names}."
 
     functions = multi_pydantic_to_functions(output_types)
 
-    llm = llm.bind(**functions)  # type: ignore
+    _llm = llm
+    llm = _llm.bind(**functions)  # type: ignore
 
     prompt = create_chat_prompt(
         system,
@@ -67,7 +66,7 @@ def create_union_chain(
         memory=memory,
     )
 
-    return prompt | llm | OpenAIFunctionPydanticUnionParser(output_types=output_types)
+    return prompt | llm | RetryOpenAIFunctionPydanticUnionParser(output_types=output_types, retry=3, retry_llm=_llm)
 
 
 def patch_openai_function_to_pydantic(
@@ -78,19 +77,21 @@ def patch_openai_function_to_pydantic(
     input_kwargs["format_instructions"] = f"Extract to {output_type.__name__}."
     functions = pydantic_to_functions(output_type)
 
+    _llm = llm
     llm = llm.bind(**functions)  # type: ignore
 
-    return llm, OpenAIFunctionPydanticParser(pydantic_schema=output_type)
+    return llm, RetryOpenAIFunctionPydanticParser(pydantic_schema=output_type, retry=3, retry_llm=_llm)
 
 
 def create_chain(
     system: str,
     instruction: str,
-    output_type: Type[ChainOutput],  # | UnionType,
+    output_types: tuple[type[ChainOutput]],
     context: list[BaseMessage],
     memory: BaseChatMessageHistory,
     settings: FuncchainSettings,
     input_args: list[tuple[str, type]],
+    temp_images: list[Image] = [],
 ) -> Runnable[dict[str, str], ChainOutput]:
     """
     Compile a langchain runnable chain from the funcchain syntax.
@@ -99,7 +100,7 @@ def create_chain(
     _llm = _gather_llm(settings)
     llm = _add_custom_callbacks(_llm, settings)
 
-    parser = parser_for(output_type, retry=settings.retry_parse, llm=llm)
+    parser = parser_for(output_types, retry=settings.retry_parse, llm=llm)
 
     # handle input arguments
     prompt_args: list[str] = []
@@ -109,12 +110,13 @@ def create_chain(
     for i in input_args:
         if i[1] is str:
             prompt_args.append(i[0])
-        if i[1] is BaseModel:
+        if issubclass(i[1], BaseModel):
             pydantic_args.append(i[0])
         else:
             special_args.append(i)
 
-    input_kwargs = {k: "" for k in prompt_args + pydantic_args}
+    # TODO: change this into input_args
+    input_kwargs = {k: "" for k in (prompt_args + pydantic_args)}
 
     # add format instructions for parser
     f_instructions = None
@@ -139,6 +141,7 @@ def create_chain(
 
     # for vision models
     images = _handle_images(llm, memory, input_kwargs)
+    images.extend(temp_images)
 
     # create prompts
     instruction_prompt = create_instruction_prompt(
@@ -149,16 +152,17 @@ def create_chain(
     )
     chat_prompt = create_chat_prompt(system, instruction_prompt, context, memory)
 
-    # add formatted instruction to chat history
-    memory.add_message(instruction_prompt.format(**input_kwargs))
+    # TODO: think why this was needed
+    # # add formatted instruction to chat history
+    # memory.add_message(instruction_prompt.format(**input_kwargs))
 
-    _inject_grammar_for_local_models(llm, output_type)
+    _inject_grammar_for_local_models(llm, output_types)
 
     # function model patches
     if is_openai_function_model(llm):
-        if isinstance(output_type, UnionType):
+        if len(output_types) > 1:
             return create_union_chain(
-                output_type,
+                output_types,
                 instruction_prompt,
                 system,
                 memory,
@@ -166,7 +170,7 @@ def create_chain(
                 llm,
                 input_kwargs,
             )
-
+        output_type = output_types[0]
         if issubclass(output_type, BaseModel) and not issubclass(output_type, ParserBaseModel):
             if settings.streaming and hasattr(llm, "model_kwargs"):
                 llm.model_kwargs = {"response_format": {"type": "json_object"}}
@@ -177,7 +181,9 @@ def create_chain(
     return chat_prompt | llm | parser
 
 
-def compile_chain(signature: Signature[ChainOutput]) -> Runnable[dict[str, str], ChainOutput]:
+def compile_chain(
+    signature: Signature[ChainOutput], temp_images: list[Image] = []
+) -> Runnable[dict[str, str], ChainOutput]:
     """
     Compile a signature to a runnable chain.
     """
@@ -195,11 +201,12 @@ def compile_chain(signature: Signature[ChainOutput]) -> Runnable[dict[str, str],
     return create_chain(
         msg_to_str(system),
         signature.instruction,
-        signature.output_type,
+        signature.output_types,
         signature.history,
         memory,
         signature.settings,
         signature.input_args,
+        temp_images,
     )
 
 
@@ -243,15 +250,15 @@ def _crop_large_inputs(
 def _handle_images(
     llm: BaseChatModel,
     memory: BaseChatMessageHistory,
-    input_kwargs: dict[str, str],
-) -> list[Image.Image]:
+    input_kwargs: dict[str, Any],
+) -> list[Image]:
     """
     Handle images for vision models.
     """
-    images = [v for v in input_kwargs.values() if isinstance(v, Image.Image)]
+    images = [v for v in input_kwargs.values() if isinstance(v, Image)]
     if is_vision_model(llm):
         for k in list(input_kwargs.keys()):
-            if isinstance(input_kwargs[k], Image.Image):
+            if isinstance(input_kwargs[k], Image):
                 del input_kwargs[k]
     elif images:
         raise RuntimeError("Images as input are only supported for vision models.")
@@ -262,7 +269,10 @@ def _handle_images(
     return images
 
 
-def _inject_grammar_for_local_models(llm: BaseChatModel, output_type: type) -> None:
+def _inject_grammar_for_local_models(
+    llm: BaseChatModel,
+    output_types: tuple[type],
+) -> None:
     """
     Inject GBNF grammar into local models.
     """
@@ -272,9 +282,9 @@ def _inject_grammar_for_local_models(llm: BaseChatModel, output_type: type) -> N
         pass
     else:
         if isinstance(llm, ChatOllama):
-            if isinstance(output_type, UnionType):
+            if len(output_types) > 1:
                 raise NotImplementedError("Union types are not yet supported for LlamaCpp models.")  # TODO: implement
-
+            output_type = output_types[0]
             if issubclass(output_type, BaseModel) and not issubclass(output_type, ParserBaseModel):
                 llm.grammar = pydantic_to_grammar(output_type)
             if issubclass(output_type, ParserBaseModel):
