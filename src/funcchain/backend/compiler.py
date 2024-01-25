@@ -188,11 +188,8 @@ def compile_chain(
     Compile a signature to a runnable chain.
     """
     system = (
-        [msg for msg in signature.history if isinstance(msg, SystemMessage)]
-        or [
-            SystemMessage(content=""),
-        ]
-    ).pop()
+        [msg for msg in signature.history if isinstance(msg, SystemMessage)] or [None]  # type: ignore
+    )[0]
 
     from ..utils.memory import ChatMessageHistory
 
