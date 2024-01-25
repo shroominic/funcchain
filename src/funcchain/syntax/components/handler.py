@@ -1,3 +1,5 @@
+from typing import Union
+
 from langchain_core.chat_history import BaseChatMessageHistory
 from langchain_core.language_models import BaseChatModel
 from langchain_core.messages import AIMessage, HumanMessage
@@ -9,7 +11,7 @@ from ...backend.settings import settings
 from ...model.defaults import univeral_model_selector
 from ...utils.msg_tools import msg_to_str
 
-UniversalLLM = BaseChatModel | str | None
+UniversalLLM = Union[BaseChatModel, str, None]
 
 
 def load_universal_llm(llm: UniversalLLM) -> BaseChatModel:

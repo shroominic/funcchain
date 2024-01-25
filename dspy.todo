@@ -4,6 +4,6 @@ To make this possible I need to:
   - unify syntax and schemas
   - invent new syntax for special dspy modules (COT, FewShot, ...)
   - seperate string and structured types logic
-  - 
+  -
 
 booth are cutting edge ml libraries

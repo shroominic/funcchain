@@ -2,7 +2,7 @@ import json
 import re
 from typing import Type, TypeVar
 
-import yaml
+import yaml  # type: ignore
 from langchain_core.exceptions import OutputParserException
 from langchain_core.language_models import BaseChatModel
 from langchain_core.output_parsers import BaseOutputParser
