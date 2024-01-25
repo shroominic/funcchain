@@ -1,7 +1,7 @@
 from funcchain import chain, settings
 from pydantic import BaseModel
 
-settings.llm = "ollama/openchat"
+# settings.llm = "ollama/openchat"
 settings.console_stream = True
 
 
