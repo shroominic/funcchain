@@ -55,7 +55,6 @@ def analyse(image: Image) -> Analysis:
 @pytest.mark.skip_on_actions
 def test_vision() -> None:
     settings.llm = "ollama/bakllava"
-    settings.console_stream = True
 
     assert isinstance(
         analyse(Image.from_file("examples/assets/old_chinese_temple.jpg")),
