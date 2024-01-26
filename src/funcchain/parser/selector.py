@@ -1,14 +1,17 @@
+from enum import Enum
+from typing import Literal, get_origin
+
 from langchain_core.language_models import BaseChatModel
 from langchain_core.output_parsers import BaseGenerationOutputParser, BaseOutputParser, StrOutputParser
 from pydantic import BaseModel
 
 from ..parser.json_schema import RetryJsonPydanticParser, RetryJsonPydanticUnionParser
-from ..parser.parsers import BoolOutputParser
+from ..parser.primitive_types import RetryJsonPrimitiveTypeParser
 from ..syntax.output_types import ParserBaseModel
 
 
 def parser_for(
-    output_types: tuple[type],
+    output_types: list[type],
     retry: int,
     llm: BaseChatModel | str | None = None,
 ) -> BaseOutputParser | BaseGenerationOutputParser:
@@ -23,8 +26,18 @@ def parser_for(
     if output_type is str:
         return StrOutputParser()
 
-    if output_type is bool:
-        return BoolOutputParser()
+    if (
+        ((t := get_origin(output_type)) is int)
+        or (t is bool)
+        or (t is float)
+        or (t is list)
+        or (t is dict)
+        or (t is set)
+        or (t is tuple)
+        or (t is Literal)
+        or (t is Enum)
+    ):
+        return RetryJsonPrimitiveTypeParser(primitive_type=output_type, retry=retry, retry_llm=llm)
 
     if issubclass(output_type, ParserBaseModel):
         return output_type.output_parser()  # type: ignore
