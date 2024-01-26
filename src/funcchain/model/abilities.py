@@ -1,7 +1,7 @@
 from langchain_core.language_models import BaseChatModel
 from langchain_core.messages import HumanMessage, SystemMessage
 
-from ..model.llm_overrides import ChatOllama
+from .patches.ollama import ChatOllama
 
 verified_openai_function_models = [
     "gpt-4",
@@ -23,7 +23,7 @@ verified_openai_vision_models = [
 verified_ollama_vision_models = [
     "llava",
     "bakllava",
-]
+]  # TODO: llamacpp
 
 
 def gather_llm_type(llm: BaseChatModel, func_check: bool = True) -> str:
