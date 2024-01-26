@@ -59,14 +59,14 @@ class RetryOpenAIFunctionPydanticParser(BaseGenerationOutputParser[M]):
         return compile_runnable(
             instruction="Retry parsing the output by fixing the error.",
             input_args=["output", "error"],
-            output_types=(self.pydantic_schema,),
+            output_types=[self.pydantic_schema],
             llm=self.retry_llm,
             settings_override={"retry_parse": self.retry - 1},
         )
 
 
 class RetryOpenAIFunctionPydanticUnionParser(BaseGenerationOutputParser[M]):
-    output_types: tuple[Type[M]]
+    output_types: list[type[M]]
     args_only: bool = False
     retry: int
     retry_llm: BaseChatModel | str | None = None
