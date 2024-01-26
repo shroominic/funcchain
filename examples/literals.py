@@ -6,7 +6,6 @@ from pydantic import BaseModel
 
 # just a silly example to schowcase the Literal type
 class Ranking(BaseModel):
-    chain_of_thought: str
     score: Literal[11, 22, 33, 44, 55]
     error: Literal["no_input", "all_good", "invalid"]
 
