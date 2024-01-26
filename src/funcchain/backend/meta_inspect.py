@@ -38,17 +38,17 @@ def from_docstring(f: Optional[FunctionType] = None) -> str:
     raise ValueError(f"The funcchain ({get_parent_frame().function}) must have a docstring")
 
 
-def get_output_types(f: Optional[FunctionType] = None) -> tuple[type]:
+def get_output_types(f: Optional[FunctionType] = None) -> list[type]:
     """
     Get the output type annotation of the parent caller function.
     Returns a list of types in case of a union, otherwise a list with one type.
-    """  # TODO: implement union type lists
+    """
     try:
         return_type = (f or get_func_obj()).__annotations__["return"]
         if isinstance(return_type, UnionType):
             return return_type.__args__  # type: ignore
         else:
-            return (return_type,)
+            return [return_type]
     except KeyError:
         raise ValueError("The funcchain must have a return type annotation")
 
@@ -69,7 +69,7 @@ def args_from_parent() -> list[tuple[str, type]]:
 
 def gather_signature(
     f: FunctionType,
-) -> dict[str, str | list[tuple[str, type]] | tuple[type]]:
+) -> dict[str, str | list[tuple[str, type]] | list[type]]:
     """
     Gather the signature of the parent caller function.
     """
