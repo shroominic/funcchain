@@ -79,7 +79,7 @@ class RouterChat(Runnable[HumanMessage, AIMessage]):
         return compile_runnable(
             instruction="Given the user request select the appropriate route.",
             input_args=["user_request", "routes"],  # todo: optional images
-            output_types=(RouterModel,),
+            output_types=[RouterModel],
             context=self.history.messages if self.history else [],
             llm=self.llm,
         )
@@ -92,7 +92,7 @@ class RouterChat(Runnable[HumanMessage, AIMessage]):
                     | compile_runnable(
                         instruction="{user_request}",
                         input_args=["user_request"],
-                        output_types=(str,),
+                        output_types=[str],
                         llm=self.llm,
                     )
                     | RunnableLambda(lambda x: AIMessage(content=x))
