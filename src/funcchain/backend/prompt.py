@@ -1,6 +1,7 @@
 from string import Formatter
 from typing import Any, Optional, Type
 
+from jinja2 import Environment, meta
 from langchain_core.chat_history import BaseChatMessageHistory
 from langchain_core.messages import BaseMessage, HumanMessage, SystemMessage
 from langchain_core.prompts import ChatPromptTemplate
@@ -22,7 +23,7 @@ def create_instruction_prompt(
 ) -> "HumanImageMessagePromptTemplate":
     template_format = _determine_format(instruction)
 
-    required_f_str_vars = _extract_fstring_vars(instruction)
+    required_f_str_vars = _extract_template_vars(instruction, template_format)
 
     _filter_fstring_vars(input_kwargs)
 
@@ -81,9 +82,20 @@ def _determine_format(
     return "jinja2" if "{{" in instruction or "{%" in instruction else "f-string"
 
 
+def _extract_template_vars(
+    template: str,
+    template_format: str,
+) -> list[str]:
+    """
+    Function to extract variables from a string template.
+    """
+    if template_format == "jinja2":
+        return _extract_jinja_vars(template)
+    return _extract_fstring_vars(template)
+
+
 def _extract_fstring_vars(template: str) -> list[str]:
     """
-    TODO: enable jinja2 check
     Function to extract f-string variables from a string.
     """
     return [
@@ -91,6 +103,15 @@ def _extract_fstring_vars(template: str) -> list[str]:
         for _, field_name, _, _ in Formatter().parse(template)
         if field_name is not None
     ]
+
+
+def _extract_jinja_vars(template: str) -> list[str]:
+    """
+    Function to extract variables from a Jinja2 template.
+    """
+    env = Environment()
+    parsed_content = env.parse(template)
+    return list(meta.find_undeclared_variables(parsed_content))
 
 
 def _filter_fstring_vars(
