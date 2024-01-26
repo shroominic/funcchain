@@ -41,6 +41,7 @@ class FuncchainSettings(BaseSettings):
     context_lenght: int = 8196
     n_gpu_layers: int = 50
     keep_loaded: bool = False
+    local_models_path: str = "./.models"
 
     def model_kwargs(self) -> dict:
         return {
