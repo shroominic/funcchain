@@ -1,4 +1,4 @@
-from typing import Any, Type
+from typing import Any
 
 from docstring_parser import parse
 from pydantic import BaseModel
@@ -14,7 +14,7 @@ def _remove_a_key(d: dict, remove_key: str) -> None:
                 _remove_a_key(d[key], remove_key)
 
 
-def pydantic_to_functions(pydantic_type: Type[BaseModel]) -> dict[str, Any]:
+def pydantic_to_functions(pydantic_type: type[BaseModel]) -> dict[str, Any]:
     schema = pydantic_type.model_json_schema()
 
     docstring = parse(pydantic_type.__doc__ or "")
@@ -54,7 +54,7 @@ def pydantic_to_functions(pydantic_type: Type[BaseModel]) -> dict[str, Any]:
 
 
 def multi_pydantic_to_functions(
-    pydantic_types: tuple[Type[BaseModel]],
+    pydantic_types: list[type[BaseModel]],
 ) -> dict[str, Any]:
     functions: list[dict[str, Any]] = [
         pydantic_to_functions(pydantic_type)["functions"][0] for pydantic_type in pydantic_types
