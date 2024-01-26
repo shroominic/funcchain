@@ -9,8 +9,6 @@ from langchain_core.output_parsers import BaseOutputParser
 from langchain_core.runnables import Runnable
 from pydantic import BaseModel, ValidationError
 
-from ..syntax.output_types import CodeBlock as CodeBlock
-
 M = TypeVar("M", bound=BaseModel)
 
 
@@ -80,7 +78,7 @@ class RetryJsonPydanticParser(BaseOutputParser[M]):
         return compile_runnable(
             instruction="Retry parsing the output by fixing the error.",
             input_args=["output", "error"],
-            output_types=(self.pydantic_object,),
+            output_types=[self.pydantic_object],
             llm=self.retry_llm,
             settings_override={"retry_parse": self.retry - 1},
         )
