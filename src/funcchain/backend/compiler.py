@@ -10,7 +10,9 @@ from pydantic import BaseModel
 
 from ..model.abilities import is_openai_function_model, is_vision_model
 from ..model.defaults import univeral_model_selector
+from ..parser.json_schema import RetryJsonPydanticParser
 from ..parser.openai_functions import RetryOpenAIFunctionPydanticParser, RetryOpenAIFunctionPydanticUnionParser
+from ..parser.primitive_types import RetryJsonPrimitiveTypeParser
 from ..parser.schema_converter import pydantic_to_grammar
 from ..parser.selector import parser_for
 from ..schema.signature import Signature
@@ -32,7 +34,7 @@ ChainOutput = TypeVar("ChainOutput")
 
 # TODO: do patch instead of seperate creation
 def create_union_chain(
-    output_types: tuple[type],
+    output_types: list[type],
     instruction_prompt: HumanImageMessagePromptTemplate,
     system: str,
     memory: BaseChatMessageHistory,
@@ -86,7 +88,7 @@ def patch_openai_function_to_pydantic(
 def create_chain(
     system: str,
     instruction: str,
-    output_types: tuple[type[ChainOutput]],
+    output_types: list[type[ChainOutput]],
     context: list[BaseMessage],
     memory: BaseChatMessageHistory,
     settings: FuncchainSettings,
@@ -101,6 +103,14 @@ def create_chain(
     llm = _add_custom_callbacks(_llm, settings)
 
     parser = parser_for(output_types, retry=settings.retry_parse, llm=llm)
+
+    # TODO collect types from input_args
+    # -> this would allow special prompt templating based on certain types
+    # -> e.g. BaseChatMessageHistory adds a history placeholder
+    # -> e.g. BaseChatModel overrides the default language model
+    # -> e.g. SettingsOverride overrides the default settings
+    # -> e.g. Callbacks adds custom callbacks
+    # -> e.g. SystemMessage adds a system message
 
     # handle input arguments
     prompt_args: list[str] = []
@@ -156,7 +166,7 @@ def create_chain(
     # # add formatted instruction to chat history
     # memory.add_message(instruction_prompt.format(**input_kwargs))
 
-    _inject_grammar_for_local_models(llm, output_types)
+    _inject_grammar_for_local_models(llm, output_types, parser)
 
     # function model patches
     if is_openai_function_model(llm):
@@ -170,20 +180,20 @@ def create_chain(
                 llm,
                 input_kwargs,
             )
-        output_type = output_types[0]
-        if issubclass(output_type, BaseModel) and not issubclass(output_type, ParserBaseModel):
-            if settings.streaming and hasattr(llm, "model_kwargs"):
-                llm.model_kwargs = {"response_format": {"type": "json_object"}}
-            else:
-                llm, parser = patch_openai_function_to_pydantic(llm, output_type, input_kwargs)
+        if isinstance(parser, RetryJsonPydanticParser) or isinstance(parser, RetryJsonPrimitiveTypeParser):
+            output_type = parser.pydantic_object
+            if issubclass(output_type, BaseModel) and not issubclass(output_type, ParserBaseModel):
+                if settings.streaming and hasattr(llm, "model_kwargs"):
+                    llm.model_kwargs = {"response_format": {"type": "json_object"}}
+                else:
+                    assert isinstance(parser, RetryJsonPydanticParser)
+                    llm, parser = patch_openai_function_to_pydantic(llm, output_type, input_kwargs)
 
     assert parser is not None
     return chat_prompt | llm | parser
 
 
-def compile_chain(
-    signature: Signature[ChainOutput], temp_images: list[Image] = []
-) -> Runnable[dict[str, str], ChainOutput]:
+def compile_chain(signature: Signature, temp_images: list[Image] = []) -> Runnable[dict[str, str], ChainOutput]:
     """
     Compile a signature to a runnable chain.
     """
@@ -196,7 +206,7 @@ def compile_chain(
     memory = ChatMessageHistory(messages=signature.history)
 
     return create_chain(
-        msg_to_str(system),
+        msg_to_str(system) if system else "",
         signature.instruction,
         signature.output_types,
         signature.history,
@@ -268,13 +278,14 @@ def _handle_images(
 
 def _inject_grammar_for_local_models(
     llm: BaseChatModel,
-    output_types: tuple[type],
+    output_types: list[type],
+    parser: BaseOutputParser | BaseGenerationOutputParser,
 ) -> None:
     """
     Inject GBNF grammar into local models.
     """
     try:
-        from funcchain.model.llm_overrides import ChatOllama
+        from funcchain.model.patches.ollama import ChatOllama
     except:  # noqa
         pass
     else:
@@ -283,9 +294,38 @@ def _inject_grammar_for_local_models(
                 raise NotImplementedError("Union types are not yet supported for LlamaCpp models.")  # TODO: implement
             output_type = output_types[0]
             if issubclass(output_type, BaseModel) and not issubclass(output_type, ParserBaseModel):
+                assert isinstance(parser, RetryJsonPydanticParser)
+                output_type = parser.pydantic_object
                 llm.grammar = pydantic_to_grammar(output_type)
             if issubclass(output_type, ParserBaseModel):
                 llm.grammar = output_type.custom_grammar()
+    try:
+        from llama_cpp import LlamaGrammar
+
+        from ..model.patches.llamacpp import ChatLlamaCpp
+    except:  # noqa
+        pass
+    else:
+        if isinstance(llm, ChatLlamaCpp):
+            if len(output_types) > 1:  # TODO: implement
+                raise NotImplementedError("Union types are not yet supported for LlamaCpp models.")
+
+            output_type = output_types[0]
+            if isinstance(parser, RetryJsonPydanticParser) or isinstance(parser, RetryJsonPrimitiveTypeParser):
+                output_type = parser.pydantic_object
+
+                if issubclass(output_type, BaseModel) and not issubclass(output_type, ParserBaseModel):
+                    assert isinstance(parser, RetryJsonPydanticParser)
+                    output_type = parser.pydantic_object
+                    grammar: str | None = pydantic_to_grammar(output_type)
+                if issubclass(output_type, ParserBaseModel):
+                    grammar = output_type.custom_grammar()
+                if grammar:
+                    setattr(
+                        llm,
+                        "grammar",
+                        LlamaGrammar.from_string(grammar, verbose=False),
+                    )
 
 
 def _gather_llm(settings: FuncchainSettings) -> BaseChatModel:
