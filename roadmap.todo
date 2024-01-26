@@ -1,3 +1,13 @@
+IMPORTANT:
+[ ] - enable union type without function calling  (6h)
+[ ] - improve docs  (8h)
+
+COMING SOON:
+
+[ ] - pydantic model streaming  (6h)
+
+[ ] - cookbooks folder with jupyter notebook tutorials  (8h)
+
 [ ] - depends functionality to create nested chains and compile into runnables  (10h)
         # add a deps thing to put into funcchain defs that takes another chain and compiles it into a runnable
         # so langsmith shows nested chains
@@ -11,32 +21,14 @@
         # So anything that is additional can be compressed to fit in the context but when other things that are important are not compressed.
         # Optionally you can define how to compress and where to leave the gaps (default in the middle with [...])
 
-[ ] - enable union type without function calling (8h)
-
 [ ] - enable Error type for non union calls  (4h)
 
-[ ] - funcchain Agent Framework with Task Dependencies  (30h)
+[ ] - LLMCompiler written in funcchain example  (30h)
 
 [ ] - convert langchain tools to funcchain agent/router  (8h)
 
 [ ] - vscode extension for custom syntax highlighting  (30h)
 
-[ ] - migrate to jinja2  (6h)
-
-[ ] - allow images as urls  (2h)
-
-[ ] - brainstorm easy async helpers  (4h)
-
-[ ] - cookbooks folder with jupyter notebook tutorials (6h)
-
 [ ] - parallel function calling  (8h)
 
 [ ] - FuncUnion and str output  (6h)
-
-[ ] - implement vision over llamacpp  (8h)
-
-[ ] - document examples  (6h)
-
-[ ] - split required/optional deps for only local or only openai ...
-
-[ ] - opt in token counting callback handler as setting to log tokens
