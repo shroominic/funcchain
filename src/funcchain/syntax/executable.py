@@ -122,7 +122,7 @@ ChainOut = TypeVar("ChainOut")
 def compile_runnable(
     *,
     instruction: str,
-    output_types: tuple[type[ChainOut]],
+    output_types: list[type[ChainOut]],
     input_args: list[str] = [],
     context: list = [],
     llm: BaseChatModel | str | None = None,
