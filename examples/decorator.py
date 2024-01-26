@@ -28,6 +28,4 @@ retrieval_chain: Runnable = {
 } | generate_poem
 
 
-result = retrieval_chain.invoke("love")
-
-print(result)
+print(retrieval_chain.invoke("love"))
