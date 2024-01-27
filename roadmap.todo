@@ -32,3 +32,5 @@ COMING SOON:
 [ ] - parallel function calling  (8h)
 
 [ ] - FuncUnion and str output  (6h)
+
+[ ] - think of new syntax for special dspy modules (COT, FewShot, ...)
