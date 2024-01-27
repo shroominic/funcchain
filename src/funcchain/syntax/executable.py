@@ -59,7 +59,7 @@ def chain(
         settings=settings,
     )
     chain: Runnable[dict[str, Any], Any] = compile_chain(sig, temp_images)
-    result = chain.invoke(input_kwargs, {"run_name": get_parent_frame(3).function, "callbacks": callbacks})
+    result = chain.invoke(input_kwargs, {"run_name": get_parent_frame(2).function, "callbacks": callbacks})
 
     if memory and isinstance(result, str):
         # TODO: function calls?
@@ -107,7 +107,7 @@ async def achain(
         settings=settings,
     )
     chain: Runnable[dict[str, str], Any] = compile_chain(sig, temp_images)
-    result = await chain.ainvoke(input_kwargs, {"run_name": get_parent_frame(5).function, "callbacks": callbacks})
+    result = await chain.ainvoke(input_kwargs, {"run_name": get_parent_frame(2).function, "callbacks": callbacks})
 
     if memory and isinstance(result, str):
         # TODO: function calls?
