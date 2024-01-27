@@ -31,7 +31,7 @@ def test_openhermes() -> None:
 
 @pytest.mark.skip_on_actions
 def test_neural_chat() -> None:
-    settings.llm = "llamacpp/openchat-3.5-1210:Q3_K_M"
+    settings.llm = "llamacpp/openchat-3.5-0106:Q3_K_M"
 
     assert isinstance(
         todo_list("ai engineer"),
