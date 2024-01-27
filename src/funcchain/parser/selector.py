@@ -26,10 +26,12 @@ def parser_for(
     if output_type is str:
         return StrOutputParser()
 
+    # TODO: write tests for each of these cases
     if (
-        ((t := get_origin(output_type)) is int)
-        or (t is bool)
-        or (t is float)
+        (output_type is bool)
+        or (output_type is int)
+        or (output_type is float)
+        or ((t := get_origin(output_type)) is list)
         or (t is list)
         or (t is dict)
         or (t is set)
