@@ -7,15 +7,15 @@
 [![Pydantic v2](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/pydantic/pydantic/main/docs/badge/v2.json)](https://docs.pydantic.dev/latest/contributing/#badges)
 [![Twitter Follow](https://img.shields.io/twitter/follow/shroominic?style=social)](https://x.com/shroominic)
 
-<div class="termy">
-    ```bash
-    $ > pip install funcchain
-    ```
-</div>
+```bash
+pip install funcchain
+```
+
 ## Introduction
 
 `funcchain` is the *most pythonic* way of writing cognitive systems. Leveraging pydantic models as output schemas combined with langchain in the backend allows for a seamless integration of llms into your apps.
-It works perfect with OpenAI Functions and soon with other models using JSONFormer.
+It utilizes perfect with OpenAI Functions or LlamaCpp grammars (json-schema-mode) for efficient structured output.
+In the backend it compiles the funcchain syntax into langchain runnables so you can easily invoke, stream or batch process your pipelines.
 
 [![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/ricklamers/funcchain-demo)
 
@@ -154,32 +154,38 @@ print(poem.analysis)
 
 ## Features
 
-- minimalistic and easy to use
-- easy swap between openai and local models
-- write prompts as python functions
-- pydantic models for output schemas
-- langchain core in the backend
-- fstrings or jinja templates for prompts
-- fully utilises OpenAI Functions or LlamaCpp Grammars
+- pythonic
+- easy swap between openai or local models
+- dynamic output types (pydantic models, or primitives)
+- vision llm support
+- langchain_core as backend
+- jinja templating for prompts
+- reliable structured output
+- auto retry parsing
 - langsmith support
-- async and pythonic
-- auto gguf model download from huggingface
-- streaming support
+- sync, async, streaming, parallel, fallbacks
+- gguf download from huggingface
+- type hints for all functions and mypy support
+- chat router component
+- composable with langchain LCEL
+- easy error handling
+- enums and literal support
+- custom parsing types
 
 ## Documentation
 
-Highly recommend to try out the examples in the `./examples` folder.
+[Checkout the docs here](https://shroominic.github.io/funcchain/) 👈
 
-Coming soon... feel free to add helpful .md files :)
+Also highly recommend to try and run the examples in the `./examples` folder.
 
 ## Contribution
 
-You want to contribute? That's great! Please run the dev setup to get started:
+You want to contribute? Thanks, that's great!
+For more information checkout the [Contributing Guide](docs/contributing/dev-setup.md).
+Please run the dev setup to get started:
 
 ```bash
-> git clone https://github.com/shroominic/funcchain.git && cd funcchain
+git clone https://github.com/shroominic/funcchain.git && cd funcchain
 
-> ./dev_setup.sh
+./dev_setup.sh
 ```
-
-Thanks!
