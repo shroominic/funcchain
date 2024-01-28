@@ -1,8 +1,9 @@
 IMPORTANT NOW:
-[ ] - enable union type without function calling  (6h)
 [ ] - improve docs  (8h)
 
 TODO:
+
+[ ] - enable union type without function calling  (6h)
 
 [ ] - pydantic model streaming  (6h)
 
