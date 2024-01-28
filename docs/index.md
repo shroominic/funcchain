@@ -1,27 +1,14 @@
-# Getting Started
+# Introduction
 
 [![Version](https://badge.fury.io/py/funcchain.svg)](https://badge.fury.io/py/funcchain)
 [![code-check](https://github.com/shroominic/funcchain/actions/workflows/code-check.yml/badge.svg)](https://github.com/shroominic/funcchain/actions/workflows/code-check.yml)
 ![Downloads](https://img.shields.io/pypi/dm/funcchain)
 [![Discord](https://img.shields.io/discord/1192334452110659664?label=discord)](https://discord.gg/TrwWWMXdtR)
-![License](https://img.shields.io/pypi/l/funcchain)
 ![PyVersion](https://img.shields.io/pypi/pyversions/funcchain)
 
-## Welcome
-
-!!! Description
-    funcchain is the *most pythonic* way of writing cognitive systems. Leveraging pydantic models as output schemas combined with langchain in the backend allows for a seamless integration of llms into your apps.
-    It works perfect with OpenAI Functions and soon with other models using JSONFormer.
-
-Key features:
-
-- increased productivity
-- prompts as Python functions
-- pydantic models as output schemas
-- langchain schemas in the backend
-- fstrings or jinja templates for prompts
-- fully utilises OpenAI Functions
-- minimalistic and easy to use
+`funcchain` is the *most pythonic* way of writing cognitive systems. Leveraging pydantic models as output schemas combined with langchain in the backend allows for a seamless integration of llms into your apps.
+It utilizes perfect with OpenAI Functions or LlamaCpp grammars (json-schema-mode) for efficient structured output.
+In the backend it compiles the funcchain syntax into langchain runnables so you can easily invoke, stream or batch process your pipelines.
 
 ## Installation
 
@@ -35,11 +22,32 @@ $ pip install funcchain
 </div>
 
 !!! Important
-    Make sure to have an OpenAI API key in your environment variables. For example,
+    Make sure to have an OpenAI API key in your environment variables:
 
-```bash
-export OPENAI_API_KEY=sk-**********
-```
+    ```bash
+    export OPENAI_API_KEY="sk-rnUPxirSQ4bmz2He4qyaiKShdXJcsOsTg"
+    ```
+    (not needed for local models of course)
+
+## Key Features
+
+- pythonic
+- easy swap between openai or local models
+- dynamic output types (pydantic models, or primitives)
+- vision llm support
+- langchain_core as backend
+- jinja templating for prompts
+- reliable structured output
+- auto retry parsing
+- langsmith support
+- sync, async, streaming, parallel, fallbacks
+- gguf download from huggingface
+- type hints for all functions and mypy support
+- chat router component
+- composable with langchain LCEL
+- easy error handling
+- enums and literal support
+- custom parsing types
 
 ## Usage
 
