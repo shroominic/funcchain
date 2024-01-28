@@ -1,8 +1,10 @@
 # Installation
 
+<div class="termy">
 ```bash
 pip install funcchain
 ```
+</div>
 
 For additional features you can also install:
 

@@ -9,8 +9,9 @@
 
 ## Welcome
 
-funcchain is the *most pythonic* way of writing cognitive systems. Leveraging pydantic models as output schemas combined with langchain in the backend allows for a seamless integration of llms into your apps.
-It works perfect with OpenAI Functions and soon with other models using JSONFormer.
+!!! Description
+    funcchain is the *most pythonic* way of writing cognitive systems. Leveraging pydantic models as output schemas combined with langchain in the backend allows for a seamless integration of llms into your apps.
+    It works perfect with OpenAI Functions and soon with other models using JSONFormer.
 
 Key features:
 
@@ -24,15 +25,18 @@ Key features:
 
 ## Installation
 
+<div class="termy">
 ```bash
-pip install funcchain
+# pip install funcchain
 ```
+</div>
 
-Make sure to have an OpenAI API key in your environment variables. For example,
+!!! Important
+    Make sure to have an OpenAI API key in your environment variables. For example,
 
-```bash
-export OPENAI_API_KEY=sk-**********
-```
+    ```bash
+    export OPENAI_API_KEY=sk-**********
+    ```
 
 ## Usage
 
