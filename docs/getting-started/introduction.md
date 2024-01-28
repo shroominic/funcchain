@@ -9,6 +9,7 @@
 
     ```bash
     $ pip install funcchain
+    ---> 100%
     ```
 
 </div>
@@ -17,7 +18,7 @@
     Dont forget to setup your API if needed for your LLM of choice
 
     ```bash
-    export OPENAI_API_KEY="sk-XXX"
+    export OPENAI_API_KEY="sk-rnUPxirSQ4bmz2He4qyaiKShdXJcsOsTg"
     ```
 
     Or funcchain will automatically detect a .env file.
