@@ -5,6 +5,7 @@
 You can set the `settings.llm` with any LangChain ChatModel.
 
 ```python
+from funcchain import settings
 from langchain_openai.chat_models import AzureChatOpenAI
 
 settings.llm = AzureChatOpenAI(...)
@@ -13,6 +14,14 @@ settings.llm = AzureChatOpenAI(...)
 ## String Model Identifiers
 
 You can also set the `settings.llm` with a string identifier of a ChatModel including local models.
+
+```python
+from funcchain import settings
+
+settings.llm = "llamacpp/openchat-3.5-1210"
+
+# ...
+```
 
 ### Schema
 
