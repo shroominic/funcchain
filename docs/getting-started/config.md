@@ -32,6 +32,12 @@ def analyse_output(
     Analyse the output and determine if the goal is reached.
     """
     return chain(settings_override=settings)
+
+result = analyse_output(
+    "healthy outpout",
+    "Hello World!",
+    settings_override={"llm": "openai/gpt-4-vision-preview"},
+)
 ```
 
 The `settings_override` argument is a `SettingsOverride` object which is a dict-like object that can be used to override the global settings.
