@@ -26,17 +26,20 @@ Key features:
 ## Installation
 
 <div class="termy">
+
 ```bash
-# pip install funcchain
+$ pip install funcchain
+---> 100%
 ```
+
 </div>
 
 !!! Important
     Make sure to have an OpenAI API key in your environment variables. For example,
 
-    ```bash
-    export OPENAI_API_KEY=sk-**********
-    ```
+```bash
+export OPENAI_API_KEY=sk-**********
+```
 
 ## Usage
 
