@@ -11,6 +11,7 @@ annotated-types==0.6.0
 anyio==4.2.0
 certifi==2023.11.17
 charset-normalizer==3.3.2
+colorama==0.4.6
 distro==1.9.0
 docstring-parser==0.15
 h11==0.14.0

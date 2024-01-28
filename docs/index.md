@@ -8,8 +8,11 @@
 
 ## Welcome
 
-funcchain is the *most pythonic* way of writing cognitive systems. Leveraging pydantic models as output schemas combined with langchain in the backend allows for a seamless integration of llms into your apps.
-It works perfect with OpenAI Functions and soon with other models using JSONFormer.
+
+!!! Description
+    funcchain is the *most pythonic* way of writing cognitive systems. Leveraging pydantic models as output schemas combined with langchain in the backend allows for a seamless integration of llms into your apps.
+    It works perfect with OpenAI Functions and soon with other models using JSONFormer.
+
 
 Key features:
 
@@ -23,28 +26,31 @@ Key features:
 
 ## Installation
 
-```bash
-pip install funcchain
-```
+<div class="termy">
+    ```bash
+    # pip install funcchain
+    ```
+</div>
 
-Make sure to have an OpenAI API key in your environment variables. For example,
+!!! Important
+    Make sure to have an OpenAI API key in your environment variables. For example,
 
-```bash
-export OPENAI_API_KEY=sk-**********
-```
+    ```bash
+    export OPENAI_API_KEY=sk-**********
+    ```
 
 ## Usage
 
-```python
-from funcchain import chain
+    ```python
+     from funcchain import chain
 
-def hello() -> str:
-    """Say hello in 3 languages"""
-    return chain()
+     def hello() -> str:
+       """Say hello in 3 languages"""
+     return chain()
 
-print(hello()) # -> Hello, Bonjour, Hola
-```
-
+     print(hello()) # -> Hello, Bonjour, Hola
+    ```
++
 This will call the OpenAI API and return the response.
 
 The `chain` function extracts the docstring as the prompt and the return type for parsing the response.
@@ -53,10 +59,11 @@ The `chain` function extracts the docstring as the prompt and the return type fo
 
 To contribute, clone the repo and run:
 
+<div class="termy">
 ```bash
-./dev_setup.sh
+# ./dev_setup.sh
 ```
-
+</div>
 This will install pre-commit hooks, dependencies and set up the environment.
 
 To activate the virtual environment managed by poetry, you can use the following command:
