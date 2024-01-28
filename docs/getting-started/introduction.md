@@ -6,9 +6,11 @@
 [![Twitter Follow](https://img.shields.io/twitter/follow/shroominic?style=social)](https://x.com/shroominic)
 
 <div class="termy">
+
     ```bash
-    $ > pip install funcchain
+    $ pip install funcchain
     ```
+
 </div>
 
 !!! Important
@@ -305,7 +307,7 @@ for obj in result.objects:
     ```
 
     **Define Model**
-    set global llm using model identifiers see [MODELS.md]((https://github.com/shroominic/funcchain/blob/main/MODELS.md))
+    set global llm using model identifiers see [MODELS.md](https://github.com/shroominic/funcchain/blob/main/MODELS.md)
     ```python
     settings.llm = "openai/gpt-4-vision-preview"
     ```
