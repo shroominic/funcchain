@@ -1,4 +1,4 @@
-#Example of raising an error 
+# Example of raising an error
 
 !!! Example
     error_output.py [Example](https://github.com/shroominic/funcchain/blob/main/examples/error_output.py)
@@ -10,7 +10,7 @@
 
     The main functionality is to take a string of text and attempt to extract user information, such as name and email, and return a User object. If the information is insufficient, an Error is returned instead.
 
-##Full Code Example
+## Full Code Example
 
 ```python
 from funcchain import BaseModel, Error, chain
@@ -50,21 +50,21 @@ Demo
     ```
 </div>
 
-##Instructions
+## Instructions
 
 !!! Step-by-Step
 
     **Necessary Imports**
     ```python
     from funcchain import BaseModel, Error, chain
-	from rich import print
+ from rich import print
     ```
 
     **Define the User Model**
     ```python
     class User(BaseModel):
-	    name: str
-	    email: str | None
+     name: str
+     email: str | None
     ```
     The User class is a Pydantic model that defines the structure of the user information to be extracted, with fields for `name` and an email.
     Change the fields to experiment and alignment with your project.
@@ -86,6 +86,6 @@ Demo
     This conditional block is used to execute the extraction function and print the results when the script is run directly.
     ```python
     if __name__ == "__main__":
-	    print(extract_user_info("hey"))  # returns Error
-	    print(extract_user_info("I'm John and my mail is john@gmail.com"))  # returns a User object
+     print(extract_user_info("hey"))  # returns Error
+     print(extract_user_info("I'm John and my mail is john@gmail.com"))  # returns a User object
     ```
