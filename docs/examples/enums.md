@@ -10,7 +10,7 @@
 
 ##Full Code Example
 A simple system that takes a question and decides a 'yes' or 'no' answer based on the input.
-
+<pre><code id="codeblock">
 ```python
 from enum import Enum
 from funcchain import chain
@@ -32,6 +32,7 @@ def make_decision(question: str) -> Decision:
 if __name__ == "__main__":
     print(make_decision("Do you like apples?"))
 ```
+</code></pre>
 
 #Demo
 <div class="termy">

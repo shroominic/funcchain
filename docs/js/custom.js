@@ -106,8 +106,38 @@ function setupTermynal() {
     loadVisibleTermynals();
 }
 
-async function main() {
-    setupTermynal()
+function addCopyButtons() {
+    document.querySelectorAll('pre code').forEach(function (codeBlock) {
+        var button = document.createElement('button');
+        button.className = 'copy-code-button';
+        button.type = 'button';
+        button.innerText = 'Copy';
+        button.addEventListener('click', function () {
+            navigator.clipboard.writeText(codeBlock.innerText).then(function () {
+                /* clipboard successfully set */
+                button.innerText = 'Copied!';
+                setTimeout(function () {
+                    button.innerText = 'Copy';
+                }, 2000);
+            }, function () {
+                /* clipboard write failed */
+                button.innerText = 'Failed to copy';
+            });
+        });
+
+        var pre = codeBlock.parentNode;
+        if (pre.parentNode.classList.contains('highlight')) {
+            var highlight = pre.parentNode;
+            highlight.parentNode.insertBefore(button, highlight);
+        }
+    });
 }
+
+// Call addCopyButtons in your main function or after the DOM content is fully loaded
+async function main() {
+    setupTermynal();
+    addCopyButtons(); // Add this line to your existing main function
+}
+
 
 main()

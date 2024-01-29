@@ -21,10 +21,16 @@ nav:
   - 'Settings': 'settings.md'
   - 'Examples':
     - 'ChatGPT': 'examples/chat.md'
+    - 'Structured vision output': 'examples/vision.md'
+    - 'Streaming Output': 'examples/stream.md'
+    - 'Ollama (And other models)': 'examples/ollama.md'
     - 'Dynamic Router': 'examples/dynamic_router.md'
+    - 'Static Router': 'examples/static_router.md'
     - 'Enums': 'examples/enums.md'
     - 'Error Output': 'examples/error_output.md'
     - 'Literals': 'examples/literals.md'
+    - 'Pydantic Models': 'examples/pydantic_validation.md'
+    - 'OpenAI JSON Output': 'examples/openai_json_mode.md'
     - 'Union Types': 'examples/union.md'
 
 theme:

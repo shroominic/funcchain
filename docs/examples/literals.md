@@ -9,7 +9,7 @@
     You can adapt this for your own usage.
 
 ##Full Code Example
-
+<pre><code id="codeblock">
 ```python
 from typing import Literal
 from funcchain import chain
@@ -30,6 +30,7 @@ if __name__ == "__main__":
     rank = rank_output("The quick brown fox jumps over the lazy dog.")
     print(rank)
 ```
+</code></pre>
 
 Demo
 <div class="termy">

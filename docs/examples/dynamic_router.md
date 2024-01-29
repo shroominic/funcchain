@@ -11,7 +11,7 @@ This should serve as an example of how to archive complex structures using funcc
 A dynamic chat router that selects the appropriate handler for user queries based on predefined routes.
 
 ## Full Code Example
-
+<pre><code id="codeblock">
 ```python
 from enum import Enum
 from typing import Any, Callable, TypedDict
@@ -98,6 +98,7 @@ router = DynamicChatRouter(
 
 router.invoke_route("Can you summarize this csv?")
 ```  
+</code></pre>
 
 Demo
 <div class="termy">

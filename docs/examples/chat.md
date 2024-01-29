@@ -10,7 +10,7 @@
     
     
 ## Code Example
-
+<pre><code id="codeblock">
 ```python
 from funcchain import chain, settings
 from funcchain.utils.memory import ChatMessageHistory
@@ -49,6 +49,7 @@ if __name__ == "__main__":
     print("Hey! How can I help you?\n")
     chat_loop()
 ```
+</code></pre>
 
 
 
