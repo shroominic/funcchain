@@ -1,6 +1,6 @@
 # TODOs for writing the documentation
 
-- [ ] write out all scratched docs .md  files
+- [ ] write out all scratched docs .md files
 
 - [ ] look into other repos for mkdocs inspiration
 

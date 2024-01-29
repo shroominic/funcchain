@@ -9,7 +9,9 @@
     This serves as an example of how to implement decision-making logic using enums and the funcchain library.
 
 ## Full Code Example
+
 A simple system that takes a question and decides a 'yes' or 'no' answer based on the input.
+
 <pre><code id="codeblock">
 ```python
 from enum import Enum
@@ -35,6 +37,7 @@ if __name__ == "__main__":
 </code></pre>
 
 # Demo
+
 <div class="termy">
     ```terminal
     User:
@@ -48,26 +51,27 @@ if __name__ == "__main__":
 
 !!! Step-by-Step
     **Necessary Imports**
+
     ```python
     from enum import Enum
- from funcchain import chain
- from pydantic import BaseModel
-```
+    from funcchain import chain
+    from pydantic import BaseModel
+    ```
 
     **Define the Answer Enum**
     The Answer enum defines possible answers as 'yes' and 'no', which are the only valid responses for the decision-making system. Experiment by using and describing other enums.
 
     ```python
     class Answer(str, Enum):
-    yes = "yes"
-    no = "no"
+        yes = "yes"
+        no = "no"
     ```
     **Create the Decision Model**
     The Decision class uses Pydantic to model a decision, ensuring that the answer is always an instance of the Answer enum.
 
     ```python
- class Decision(BaseModel):
-     answer: Answer
+    class Decision(BaseModel):
+        answer: Answer
     ```
 
     **Implement the Decision Function**
@@ -75,11 +79,11 @@ if __name__ == "__main__":
     When using your own enums you want to edit this accordingly.
 
     ```python
- def make_decision(question: str) -> Decision:
-     """
-     Based on the question decide yes or no.
-     """
-     return chain()
+    def make_decision(question: str) -> Decision:
+        """
+        Based on the question decide yes or no.
+        """
+        return chain()
     ```
 
     **Run the Decision System**
@@ -88,6 +92,6 @@ if __name__ == "__main__":
 
     ```python
     if __name__ == "__main__":
-    print(make_decision("Do you like apples?"))
+        print(make_decision("Do you like apples?"))
 
     ```

@@ -2,9 +2,9 @@
 
 We would like to acknowledge the contributions of the following people:
 
- Name | Contribution |
-------|--------------|
-      |              |
+| Name | Contribution |
+| ---- | ------------ |
+|      |
 
 ## How to Contribute
 

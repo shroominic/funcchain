@@ -1,4 +1,4 @@
-## Simple chatgpt rebuild with memory/history
+# ChatGPT rebuild with memory/history
 
 !!! Example
     chatgpt.py [Example](https://github.com/shroominic/funcchain/blob/main/examples/chatgpt.py)
@@ -6,11 +6,12 @@
 !!! Important
     Ensure you have set up your API key for the LLM of your choice, or Funcchain will look for a `.env` file. So in `.env` set up your key.
 
-        ```bash
-        OPENAI_API_KEY="sk-rnUBxirFQ4bmz2Ae4qyaiLShdCJcsOsTg"
-        ```
+    ```bash
+    OPENAI_API_KEY="sk-rnUBxirFQ4bmz2Ae4qyaiLShdCJcsOsTg"
+    ```
 
 ## Code Example
+
 <pre><code id="codeblock">
 ```python
 from funcchain import chain, settings
@@ -21,14 +22,12 @@ settings.console_stream = True
 
 history = ChatMessageHistory()
 
-
 def ask(question: str) -> str:
     return chain(
         system="You are an advanced AI Assistant.",
         instruction=question,
         memory=history,
     )
-
 
 def chat_loop() -> None:
     while True:
@@ -44,7 +43,6 @@ def chat_loop() -> None:
             continue
 
         ask(query)
-
 
 if __name__ == "__main__":
     print("Hey! How can I help you?\n")
@@ -64,6 +62,7 @@ if __name__ == "__main__":
     assistant terminal asnwer:
     $ Funcchain is cool.
     ```
+
 </div>
 
 ## Instructions

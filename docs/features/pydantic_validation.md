@@ -1,4 +1,4 @@
-#Task Creation with Validated Fields
+# Task Creation with Validated Fields
 
 !!! Example
     [pydantic_validation.py](https://github.com/shroominic/funcchain/blob/main/examples/pydantic_validation.py)
@@ -8,7 +8,8 @@
 
     The main functionality is to parse a user description, validate the task details, and create a new Task object with unique keywords and a difficulty level within a specified range.
 
-##Full Code Example
+## Full Code Example
+
 <pre><code id="codeblock">
 ```python
 from funcchain import chain, settings
@@ -48,6 +49,7 @@ if __name__ == "__main__":
 </code></pre>
 
 Demo
+
 <div class="termy">
 ```python
 User:
@@ -57,6 +59,7 @@ task=Task
 name='cleanup',
 difficulty=30,
 keywords=['kitchen', 'cleanup']
+
 ```
 </div>
 
@@ -65,8 +68,8 @@ keywords=['kitchen', 'cleanup']
 !!! Step-by-Step
     **Necessary Imports**
     ```python
-	from funcchain import chain, settings
-	from pydantic import BaseModel, field_validator
+    from funcchain import chain, settings
+    from pydantic import BaseModel, field_validator
     ```
 
     **Define the Task Model with Validators**
@@ -102,17 +105,17 @@ keywords=['kitchen', 'cleanup']
 
     ```python
     def gather_infos(user_description: str) -> Task:
-	    """
-	    Based on the user description,
-	    create a new task to put on the todo list.
-	    """
-	    return chain()
+        """
+        Based on the user description,
+        create a new task to put on the todo list.
+        """
+        return chain()
     ```
 
     **Execute the Script**
     Runs gather_infos with a sample and prints the Task.
     ```python
-	if __name__ == "__main__":
-	    task = gather_infos("cleanup the kitchen")
-	    print(f"{task=}")
+    if __name__ == "__main__":
+        task = gather_infos("cleanup the kitchen")
+        print(f"{task=}")
     ```

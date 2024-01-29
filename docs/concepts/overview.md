@@ -4,12 +4,12 @@ TODO: rewrite this
 
 ## Concepts Overview
 
-| name | description |
-|-|-|
-| chain | Main funcchain to get responses from the assistant |
-| achain | Async version of chain |
-| settings | Global settings object |
-| BaseModel | Pydantic model base class |
+| name      | description                                        |
+| --------- | -------------------------------------------------- |
+| chain     | Main funcchain to get responses from the assistant |
+| achain    | Async version of chain                             |
+| settings  | Global settings object                             |
+| BaseModel | Pydantic model base class                          |
 
 ## chain
 

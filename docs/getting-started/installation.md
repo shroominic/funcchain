@@ -11,11 +11,11 @@ $ pip install funcchain
 
 For additional features you can also install:
 
-- `funcchain`  (langchain_core + openai)
-- `funcchain[ollama]`  (you need to install this [ollama fork](https://github.com/ollama/ollama/pull/1606) for grammar support)
-- `funcchain[llamacpp]`  (using llama-cpp-python)
-- `funcchain[pillow]`  (for vision model features)
-- `funcchain[all]`  (includes everything)
+- `funcchain` (langchain_core + openai)
+- `funcchain[ollama]` (you need to install this [ollama fork](https://github.com/ollama/ollama/pull/1606) for grammar support)
+- `funcchain[llamacpp]` (using llama-cpp-python)
+- `funcchain[pillow]` (for vision model features)
+- `funcchain[all]` (includes everything)
 
 To enter this in your terminal you need to write it like this:
 `pip install "funcchain[all]"`

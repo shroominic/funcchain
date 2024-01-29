@@ -29,7 +29,7 @@
 
 ## Introduction
 
-`funcchain` is the *most pythonic* way of writing cognitive systems. Leveraging pydantic models as output schemas combined with langchain in the backend allows for a seamless integration of llms into your apps.
+`funcchain` is the _most pythonic_ way of writing cognitive systems. Leveraging pydantic models as output schemas combined with langchain in the backend allows for a seamless integration of llms into your apps.
 It works perfect with OpenAI Functions and soon with other models using JSONFormer.
 
 [![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/ricklamers/funcchain-demo)
@@ -67,6 +67,7 @@ print(recipe.ingredients)
         ingredients: list[str]
         instructions: list[str]
         duration: int
+
 ```
 
     A Recipe class is defined, inheriting from BaseModel (pydantic library). This class
@@ -252,6 +253,7 @@ match lst:
     Urgency: 10
     //add real output
     ```
+
 </div>
 
 ## Vision Models
@@ -355,6 +357,7 @@ for obj in result.objects:
     Found this object: grass
 
     ```
+
 </div>
 
 ## Seamless local model support
@@ -388,9 +391,11 @@ print(poem.analysis)
 
 !!! Step-by-Step
     **Nececary Imports**
+
     ```python
     from pydantic import BaseModel, Field
     from funcchain import chain, settings
+
 ```
 
     **Choose and enjoy**
@@ -429,7 +434,9 @@ print(poem.analysis)
     # promised structured output (for local models!)
     print(poem.analysis)
     ```
+
 # Demo
+
 <div class="termy">
     ```
     poem = analyze("I really like when my dog does a trick!")

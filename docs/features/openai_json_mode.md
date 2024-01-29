@@ -1,4 +1,4 @@
-#JSON structured Output using Funcchain with OenAI
+# JSON structured Output using Funcchain with OenAI
 
 !!! Example
     See [openai_json_mode.py](https://github.com/shroominic/funcchain/blob/main/examples/openai_json_mode.py)
@@ -7,7 +7,8 @@
 
     This example demonstrates using the funcchain library and pydantic to create a FruitSalad model, sum its contents, and output the total in a Result model as an integer.
 
-##Full Code Example
+## Full Code Example
+
 <pre><code id="codeblock">
 ```python
 from funcchain import chain, settings

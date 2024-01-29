@@ -34,6 +34,7 @@ if __name__ == "__main__":
 </code></pre>
 
 Demo
+
 <div class="termy">
 ```python
 $ rank = rank_output("The quick brown fox jumps over the lazy dog.")
@@ -48,9 +49,11 @@ Ranking(chain_of_thought='...', score=33, error='all_good')
 
     **Necessary Imports**
     ```python
- from typing import Literal
- from funcchain import chain
- from pydantic import BaseModel
+
+    from typing import Literal
+    from funcchain import chain
+    from pydantic import BaseModel
+
     ```
 
     **Define the Ranking Model**
@@ -59,10 +62,10 @@ Ranking(chain_of_thought='...', score=33, error='all_good')
     The LLM will be forced to deliver one of the defined output.
 
     ```python
- class Ranking(BaseModel):
-     chain_of_thought: str
-     score: Literal[11, 22, 33, 44, 55]
-     error: Literal["no_input", "all_good", "invalid"]
+    class Ranking(BaseModel):
+        chain_of_thought: str
+        score: Literal[11, 22, 33, 44, 55]
+        error: Literal["no_input", "all_good", "invalid"]
     ```
 
     **Implement the Ranking Function**
@@ -80,7 +83,8 @@ Ranking(chain_of_thought='...', score=33, error='all_good')
     **Execute the Ranking System**
     This block is used to execute the ranking function and print the results when the script is run directly.
     ```python
- if __name__ == "__main__":
-     rank = rank_output("The quick brown fox jumps over the lazy dog.")
-     print(rank)
+
+    if __name__ == "__main__":
+        rank = rank_output("The quick brown fox jumps over the lazy dog.")
+        print(rank)
     ```

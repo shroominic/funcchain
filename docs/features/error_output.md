@@ -36,6 +36,7 @@ if __name__ == "__main__":
 </code></pre>
 
 Demo
+
 <div class="termy">
     ```python
     $ print(extract_user_info("hey"))
@@ -50,6 +51,7 @@ Demo
 
     //update example
     ```
+
 </div>
 
 ## Instructions
@@ -59,7 +61,7 @@ Demo
     **Necessary Imports**
     ```python
     from funcchain import BaseModel, Error, chain
- from rich import print
+    from rich import print
     ```
 
     **Define the User Model**

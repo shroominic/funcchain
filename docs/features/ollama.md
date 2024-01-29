@@ -1,4 +1,4 @@
-#Different LLMs with funcchain EASY TO USE
+# Different LLMs with funcchain EASY TO USE
 
 !!! Example
     See [ollama.py](https://github.com/shroominic/funcchain/blob/main/examples/ollama.py)
@@ -8,7 +8,8 @@
 
     This is particularly useful for developers looking to integrate different models in a single application or just experimenting with different models.
 
-##Full Code Example
+## Full Code Example
+
 <pre><code id="codeblock">
 ```python
 from funcchain import chain, settings
@@ -41,7 +42,8 @@ if __name__ == "__main__":
 ```
 </code></pre>
 
-#Demo
+# Demo
+
 <div class="termy">
     ```
     poem = analyze("I really like when my dog does a trick!")
@@ -51,9 +53,10 @@ if __name__ == "__main__":
     Add demo
 
     ```
+
 </div>
 
-##Instructions
+## Instructions
 !!! Step-by-Step
 
     **Necessary Imports**
