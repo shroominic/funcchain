@@ -51,7 +51,7 @@ Ranking(chain_of_thought='...', score=33, error='all_good')
  from pydantic import BaseModel
     ```
 
-    
+
     **Define the Ranking Model**
     The Ranking class is a Pydantic model that uses the Literal type to ensure that the score and error fields can only contain certain predefined values.
     So experiment with changing those but keeping this structure of the class.
