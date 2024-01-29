@@ -84,7 +84,7 @@ markdown_extensions:
   - pymdownx.magiclink:
       normalize_issue_symbols: true
       repo_url_shorthand: true
-      user: jxnl 
+      user: jxnl
       repo: instructor
   - pymdownx.mark
   - pymdownx.smartsymbols
