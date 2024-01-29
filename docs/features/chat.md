@@ -74,7 +74,7 @@ if __name__ == "__main__":
     from funcchain import chain, settings
     from funcchain.utils.memory import ChatMessageHistory
     ```
-    
+
     **Settings**
 
     ```python
@@ -103,7 +103,7 @@ if __name__ == "__main__":
 
     See [memory.py] //Todo: Insert Link
 
-    
+
     **Define ask function**
     See how funcchain uses `chain()` with an input `str` to return an output of type  `str`
 
