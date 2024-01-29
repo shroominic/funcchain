@@ -10,6 +10,7 @@
 
 ## Full Code Example
 
+<pre><code id="codeblock">
 ```python
 from typing import Literal
 from funcchain import chain
@@ -30,6 +31,7 @@ if __name__ == "__main__":
     rank = rank_output("The quick brown fox jumps over the lazy dog.")
     print(rank)
 ```
+</code></pre>
 
 Demo
 <div class="termy">
@@ -50,7 +52,6 @@ Ranking(chain_of_thought='...', score=33, error='all_good')
  from funcchain import chain
  from pydantic import BaseModel
     ```
-
 
     **Define the Ranking Model**
     The Ranking class is a Pydantic model that uses the Literal type to ensure that the score and error fields can only contain certain predefined values.

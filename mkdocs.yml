@@ -5,50 +5,62 @@ repo_name: shroominic/funcchain
 repo_url: https://github.com/shroominic/funcchain/
 
 nav:
-  - 'Funcchain': 'index.md'
-  - 'Getting Started':
-    - 'Introduction': 'getting-started/introduction.md'
-    - 'Installation': 'getting-started/installation.md'
-    - 'Usage': 'getting-started/usage.md'
-    - 'Configuration': 'getting-started/config.md'
-    - 'Models': 'getting-started/models.md'
-  - 'Concepts':
-    - 'Overview': 'concepts/overview.md'
-    - 'Chain': 'concepts/chain.md'
-    - 'Input Args': 'concepts/input.md'
-    - 'Prompting': 'concepts/prompting.md'
-    - 'Output Parsing': 'concepts/parser.md'
-    - 'Pydantic Models': 'concepts/pydantic.md'
-    - 'Errors': 'concepts/errors.md'
-    - 'Langchain': 'concepts/langchain.md'
-    - 'Local Models': 'concepts/local-models.md'
-    - 'Pydantic': 'concepts/pydantic.md'
-    - 'Streaming': 'concepts/streaming.md'
-    - 'Unions': 'concepts/unions.md'
-    - 'Vision': 'concepts/vision.md'
-  - 'Features':
-    - 'ChatGPT': 'features/chat.md'
-    - 'Dynamic Router': 'features/dynamic_router.md'
-    - 'Enums': 'features/enums.md'
-    - 'Error Output': 'features/error_output.md'
-    - 'Literals': 'features/literals.md'
-  - 'Advanced':
-    - 'Async': 'advanced/async.md'
-    - 'Signature': 'advanced/signature.md'
-    - 'Runnables': 'advanced/runnables.md'
-    - 'Codebase Scaling': 'advanced/codebase-scaling.md'
-    - 'Customization': 'advanced/customization.md'
-    - 'Stream Parsing': 'advanced/stream-parsing.md'
-  - 'Contributing':
-    - 'Contributing': 'contributing/dev-setup.md'
-    - 'Codebase Structure': 'contributing/codebase-structure.md'
-    - 'Code of Conduct': 'contributing/code-of-conduct.md'
-    - 'Contributors': 'contributing/contributors.md'
-    - 'Security': 'contributing/security.md'
-    - 'Roadmap': 'contributing/roadmap.md'
-    - 'License': 'contributing/license.md'
-  - 'Changelog': 'changelog.md'
-  - 'API Reference': 'api.md'
+  - "Funcchain": "index.md"
+  - "Getting Started":
+      - "Introduction": "getting-started/introduction.md"
+      - "Installation": "getting-started/installation.md"
+      - "Usage": "getting-started/usage.md"
+      - "Configuration": "getting-started/config.md"
+      - "Models": "getting-started/models.md"
+  - "Concepts":
+      - "Overview": "concepts/overview.md"
+      - "Chain": "concepts/chain.md"
+      - "Input Args": "concepts/input.md"
+      - "Prompting": "concepts/prompting.md"
+      - "Output Parsing": "concepts/parser.md"
+      - "Pydantic Models": "concepts/pydantic.md"
+      - "Errors": "concepts/errors.md"
+      - "Langchain": "concepts/langchain.md"
+      - "Local Models": "concepts/local-models.md"
+      - "Pydantic": "concepts/pydantic.md"
+      - "Streaming": "concepts/streaming.md"
+      - "Unions": "concepts/unions.md"
+      - "Vision": "concepts/vision.md"
+  - "Features":
+      - "ChatGPT": "features/chat.md"
+      - "Dynamic Router": "features/dynamic_router.md"
+      - "Enums": "features/enums.md"
+      - "Error Output": "features/error_output.md"
+      - "Literals": "features/literals.md"
+  - "Advanced":
+      - "Async": "advanced/async.md"
+      - "Signature": "advanced/signature.md"
+      - "Runnables": "advanced/runnables.md"
+      - "Codebase Scaling": "advanced/codebase-scaling.md"
+      - "Customization": "advanced/customization.md"
+      - "Stream Parsing": "advanced/stream-parsing.md"
+  - "Contributing":
+      - "Contributing": "contributing/dev-setup.md"
+      - "Codebase Structure": "contributing/codebase-structure.md"
+      - "Code of Conduct": "contributing/code-of-conduct.md"
+      - "Contributors": "contributing/contributors.md"
+      - "Security": "contributing/security.md"
+      - "Roadmap": "contributing/roadmap.md"
+      - "License": "contributing/license.md"
+  - "Changelog": "changelog.md"
+  - "Examples":
+      - "ChatGPT": "examples/chat.md"
+      - "Structured vision output": "examples/vision.md"
+      - "Streaming Output": "examples/stream.md"
+      - "Ollama (And other models)": "examples/ollama.md"
+      - "Dynamic Router": "examples/dynamic_router.md"
+      - "Static Router": "examples/static_router.md"
+      - "Enums": "examples/enums.md"
+      - "Error Output": "examples/error_output.md"
+      - "Literals": "examples/literals.md"
+      - "Pydantic Models": "examples/pydantic_validation.md"
+      - "OpenAI JSON Output": "examples/openai_json_mode.md"
+  - "API Reference": "api.md"
 
 theme:
   name: material

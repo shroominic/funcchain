@@ -12,6 +12,7 @@
 
 ## Full Code Example
 
+<pre><code id="codeblock">
 ```python
 from funcchain import BaseModel, Error, chain
 from rich import print
@@ -32,6 +33,7 @@ if __name__ == "__main__":
     print(extract_user_info("I'm John and my mail is john@gmail.com"))  # returns a User object
 
 ```
+</code></pre>
 
 Demo
 <div class="termy">
