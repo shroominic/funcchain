@@ -80,7 +80,7 @@ Demo
         return chain()
     ```
     For experiments and adoptions also change the `str` that will be used in chain() to identify what you defined earlier in the `User(BaseModel)`
-    
+
 
     **Run the Extraction System**
     This conditional block is used to execute the extraction function and print the results when the script is run directly.
