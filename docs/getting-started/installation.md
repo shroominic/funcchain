@@ -27,7 +27,7 @@ Make sure to have an OpenAI API key in your environment variables. For example,
 <div class="termy">
 
 ```bash
-$ export OPENAI_API_KEY="sk-rnUPxirSQ4bmz2He4qyaiKShdXJcsOsTg"
+export OPENAI_API_KEY="sk-rnUPxirSQ4bmz2He4qyaiKShdXJcsOsTg"
 ```
 
 </div>
