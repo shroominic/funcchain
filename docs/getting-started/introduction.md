@@ -69,7 +69,7 @@ print(recipe.ingredients)
         duration: int
 ```
 
-    A Recipe class is defined, inheriting from BaseModel (pydantic library). This class 
+    A Recipe class is defined, inheriting from BaseModel (pydantic library). This class
     specifies the structure of the output data, which you can customize.
     In the example it includes a list of ingredients, a list of instructions, and an integer
     representing the duration
@@ -88,7 +88,7 @@ print(recipe.ingredients)
     Meaning it will turn your function into usable LLM input.
 
     The `chain()` function does the interaction with the language model to generate a recipe. It accepts several parameters: `system` to specify the model, `instruction` for model directives, `context` to provide relevant background information, `memory` to maintain conversational state, `settings_override` for custom settings, and `**input_kwargs` for additional inputs. Within `generate_recipe`, `chain()` is called with arguments derived from the function's parameters, the function's docstring, or the library's default settings. It compiles these into a Runnable, which then prompts the language model to produce the output. This output is automatically structured into a `Recipe` instance, conforming to the Pydantic model's schema.
-    
+
     # Get your response
     ```python
     # generate llm response
@@ -104,7 +104,7 @@ print(recipe.ingredients)
     ```
     $ print(generate_recipe("christmas dinner").ingredients
 
-    ['turkey', 'potatoes', 'carrots', 'brussels sprouts', 'cranberry sauce', 'gravy', 
+    ['turkey', 'potatoes', 'carrots', 'brussels sprouts', 'cranberry sauce', 'gravy',
     'butter', 'salt', 'pepper', 'rosemary']
 
     ```
@@ -183,10 +183,10 @@ match lst:
 
     ```
 
-    In this example, Funcchain utilizes Pydantic models to create structured data schemas that facilitate the processing of programmatic inputs. 
+    In this example, Funcchain utilizes Pydantic models to create structured data schemas that facilitate the processing of programmatic inputs.
 
     You can define new Pydantic models or extend existing ones by adding additional fields or methods. The general approach is to identify the data attributes relevant to your application and create corresponding model classes with these attributes.
-    
+
 
     **Union types**
     ```python
@@ -212,7 +212,7 @@ match lst:
     )
 
     ```
-    
+
     **Define your custom handlers**
 
     And now its time to define what happens with the result.
@@ -242,8 +242,8 @@ match lst:
     )
 
     User:
-    $ Complete project report, Prepare for meeting, Respond to emails; 
-    $ if I don't respond I will be fired    
+    $ Complete project report, Prepare for meeting, Respond to emails;
+    $ if I don't respond I will be fired
 
     Output:
     $ ...............
@@ -317,7 +317,7 @@ for obj in result.objects:
         objects: list[str] = Field(description="A list of objects found in the image")
     ```
     Adjsut the fields as needed. Play around with the example, feel free to experiment.
-    You can customize the analysis by modifying the fields of the `AnalysisResult` model. 
+    You can customize the analysis by modifying the fields of the `AnalysisResult` model.
 
     **Function to start the analysis**
 
@@ -409,7 +409,7 @@ print(poem.analysis)
     Experiment yourself by adding different descriptions for the true and false case.
 
     **Use `chain()` to analize**
-    Defines with natural language the analysis 
+    Defines with natural language the analysis
     ```python
     def analyze(text: str) -> SentimentAnalysis:
     """
@@ -436,7 +436,7 @@ print(poem.analysis)
 
     $ ..................
 
-    Add demo 
+    Add demo
 
     ```
 </div>
