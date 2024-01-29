@@ -1,4 +1,4 @@
-#Literal Type Enforcement in Funcchain
+# Literal Type Enforcement in Funcchain
 
 !!! Example
     literals.py [Example](https://github.com/shroominic/funcchain/blob/main/examples/literals.py)
@@ -8,7 +8,7 @@
 
     You can adapt this for your own usage.
 
-##Full Code Example
+## Full Code Example
 
 ```python
 from typing import Literal
@@ -40,15 +40,15 @@ Ranking(chain_of_thought='...', score=33, error='all_good')
 ```
 </div>
 
-##Instructions
+## Instructions
 
 !!! Step-by-Step
 
     **Necessary Imports**
     ```python
-	from typing import Literal
-	from funcchain import chain
-	from pydantic import BaseModel
+ from typing import Literal
+ from funcchain import chain
+ from pydantic import BaseModel
     ```
 
     
@@ -58,10 +58,10 @@ Ranking(chain_of_thought='...', score=33, error='all_good')
     The LLM will be forced to deliver one of the defined output.
 
     ```python
-	class Ranking(BaseModel):
-	    chain_of_thought: str
-	    score: Literal[11, 22, 33, 44, 55]
-	    error: Literal["no_input", "all_good", "invalid"]
+ class Ranking(BaseModel):
+     chain_of_thought: str
+     score: Literal[11, 22, 33, 44, 55]
+     error: Literal["no_input", "all_good", "invalid"]
     ```
 
     **Implement the Ranking Function**
@@ -70,19 +70,16 @@ Ranking(chain_of_thought='...', score=33, error='all_good')
 
     ```python
     def rank_output(output: str) -> Ranking:
-	    """
-	    Analyze and rank the output.
-	    """
-	    return chain()
+     """
+     Analyze and rank the output.
+     """
+     return chain()
     ```
 
     **Execute the Ranking System**
     This block is used to execute the ranking function and print the results when the script is run directly.
     ```python
-	if __name__ == "__main__":
-	    rank = rank_output("The quick brown fox jumps over the lazy dog.")
-	    print(rank)
+ if __name__ == "__main__":
+     rank = rank_output("The quick brown fox jumps over the lazy dog.")
+     print(rank)
     ```
-
-
-
