@@ -1,14 +1,15 @@
-## Simple chatgpt rebuild with memory/history.
+## Simple chatgpt rebuild with memory/history
+
 !!! Example
     chatgpt.py [Example](https://github.com/shroominic/funcchain/blob/main/examples/chatgpt.py)
 
 !!! Important
     Ensure you have set up your API key for the LLM of your choice, or Funcchain will look for a `.env` file. So in `.env` set up your key.
-    ```python
-    OPENAI_API_KEY="sk-XXX"
-    ```
-    
-    
+
+        ```bash
+        OPENAI_API_KEY="sk-rnUBxirFQ4bmz2Ae4qyaiLShdCJcsOsTg"
+        ```
+
 ## Code Example
 
 ```python
@@ -50,13 +51,11 @@ if __name__ == "__main__":
     chat_loop()
 ```
 
-
-
 <div class="termy">
     ```terminal
     initial print function:
     $ Hey! How can I help you?
-    $ > 
+    $ >
 
     userprompt:
     $ > Say that Funcchain is cool
@@ -64,7 +63,7 @@ if __name__ == "__main__":
     assistant terminal asnwer:
     $ Funcchain is cool.
     ```
-</div> 
+</div>
 
 ## Instructions
 
