@@ -14,25 +14,17 @@
 
 </div>
 
-!!! Important
-    Dont forget to setup your API if needed for your LLM of choice
+!!! Useful: Langsmith integration
+
+    Add those lines to .env and funcchain will use langsmith tracing.
 
     ```bash
-    export OPENAI_API_KEY="sk-rnUPxirSQ4bmz2He4qyaiKShdXJcsOsTg"
+    LANGCHAIN_TRACING_V2=true
+    LANGCHAIN_API_KEY="ls__api_key"
+    LANGCHAIN_PROJECT="PROJECT_NAME"
     ```
 
-    Or funcchain will automatically detect a .env file.
-
-    Also Useful: Langsmith integration
-        ```bash
-        LANGCHAIN_TRACING_V2=true
-        LANGCHAIN_ENDPOINT="https://api.smith.langchain.com"
-        LANGCHAIN_API_KEY="ls__XXX"
-        LANGCHAIN_PROJECT="YOUR_PROJECT"
-        ```
-    Add those lines to .env; funcchain will use Langsmith trace.
-
-    Langsmith is used to understand what happens under the hood of your AI project.
+    Langsmith is used to understand what happens under the hood of your LLM generations.
     When multiple LLM calls are used for an output they can be logged for debugging.
 
 ## Introduction
@@ -67,6 +59,7 @@ recipe = generate_recipe("christmas dinner")
 # recipe is automatically converted as pydantic model
 print(recipe.ingredients)
 ```
+
 !!! Step-by-Step
     ```python
     # define your output shape
@@ -74,7 +67,7 @@ print(recipe.ingredients)
         ingredients: list[str]
         instructions: list[str]
         duration: int
-    ```
+```
 
     A Recipe class is defined, inheriting from BaseModel (pydantic library). This class 
     specifies the structure of the output data, which you can customize.
@@ -105,7 +98,8 @@ print(recipe.ingredients)
     print(recipe.ingredients)
     ```
 
-#Demo
+## Demo
+
 <div class="termy">
     ```
     $ print(generate_recipe("christmas dinner").ingredients
@@ -165,6 +159,7 @@ match lst:
 
 !!! Step-by-Step
     **Nececary Imports**
+
     ```python
     from pydantic import BaseModel, Field
     from funcchain import chain
@@ -240,7 +235,6 @@ match lst:
 
     ```
 
-#Demo
 <div class="termy">
     ```
     lst = extract_list(
@@ -259,12 +253,6 @@ match lst:
     //add real output
     ```
 </div>
-
-
-
-    
-
-
 
 ## Vision Models
 
@@ -299,8 +287,10 @@ print("Description:", result.description)
 for obj in result.objects:
     print("Found this object:", obj)
 ```
+
 !!! Step-by-Step
     **Nececary Imports**
+
     ```python
     from PIL import Image
     from pydantic import BaseModel, Field
@@ -348,7 +338,8 @@ for obj in result.objects:
     Its important that the fields defined earlier are mentioned here with the prompt
     `Analyse the image and extract its`...
 
-#Demo
+## Demo
+
 <div class="termy">
     ```
     print(analyse_image(image: Image.Image))
@@ -366,10 +357,10 @@ for obj in result.objects:
     ```
 </div>
 
-
 ## Seamless local model support
+
 Yes you can use funcchain without internet connection.
-Start heating up your device. 
+Start heating up your device.
 
 ```python
 from pydantic import BaseModel, Field
@@ -394,12 +385,13 @@ poem = analyze("I really like when my dog does a trick!")
 # promised structured output (for local models!)
 print(poem.analysis)
 ```
+
 !!! Step-by-Step
     **Nececary Imports**
     ```python
     from pydantic import BaseModel, Field
     from funcchain import chain, settings
-    ```
+```
 
     **Choose and enjoy**
     ```python
@@ -437,7 +429,7 @@ print(poem.analysis)
     # promised structured output (for local models!)
     print(poem.analysis)
     ```
-#Demo
+# Demo
 <div class="termy">
     ```
     poem = analyze("I really like when my dog does a trick!")
@@ -449,9 +441,8 @@ print(poem.analysis)
     ```
 </div>
 
-
 ## Features
-    
+
 - **🎨 Minimalistic and Easy to Use**: Designed with simplicity in mind for straightforward usage.
 - **🔄 Model Flexibility**: Effortlessly switch between OpenAI and local models.
 - **📝 Pythonic Prompts**: Craft natural language prompts as intuitive Python functions.
