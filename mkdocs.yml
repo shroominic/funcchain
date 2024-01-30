@@ -7,9 +7,9 @@ repo_url: https://github.com/shroominic/funcchain/
 nav:
   - "Funcchain": "index.md"
   - "Getting Started":
-      - "Introduction": "getting-started/introduction.md"
       - "Installation": "getting-started/installation.md"
       - "Usage": "getting-started/usage.md"
+      - "Demos": "getting-started/demos.md"
       - "Configuration": "getting-started/config.md"
       - "Models": "getting-started/models.md"
   - "Concepts":
@@ -91,8 +91,8 @@ markdown_extensions:
   - pymdownx.magiclink:
       normalize_issue_symbols: true
       repo_url_shorthand: true
-      user: jxnl
-      repo: instructor
+      user: shroominic
+      repo: funcchain
   - pymdownx.mark
   - pymdownx.smartsymbols
   - pymdownx.snippets:
