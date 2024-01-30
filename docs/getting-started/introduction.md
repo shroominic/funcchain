@@ -68,7 +68,7 @@ print(recipe.ingredients)
         instructions: list[str]
         duration: int
 
-```
+    ```
 
     A Recipe class is defined, inheriting from BaseModel (pydantic library). This class
     specifies the structure of the output data, which you can customize.
