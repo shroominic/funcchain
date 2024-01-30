@@ -32,6 +32,12 @@ nav:
       - "Enums": "features/enums.md"
       - "Error Output": "features/error_output.md"
       - "Literals": "features/literals.md"
+      - "Structured vision output": "features/vision.md"
+      - "Streaming Output": "features/stream.md"
+      - "Ollama (And other models)": "features/ollama.md"
+      - "Static Router": "features/static_router.md"
+      - "Pydantic Models": "features/pydantic_validation.md"
+      - "OpenAI JSON Output": "features/openai_json_mode.md"
   - "Advanced":
       - "Async": "advanced/async.md"
       - "Signature": "advanced/signature.md"
@@ -39,6 +45,7 @@ nav:
       - "Codebase Scaling": "advanced/codebase-scaling.md"
       - "Customization": "advanced/customization.md"
       - "Stream Parsing": "advanced/stream-parsing.md"
+      - "Custom Parsers": "advanced/custom-parser-types.md"
   - "Contributing":
       - "Contributing": "contributing/dev-setup.md"
       - "Codebase Structure": "contributing/codebase-structure.md"
@@ -48,19 +55,7 @@ nav:
       - "Roadmap": "contributing/roadmap.md"
       - "License": "contributing/license.md"
   - "Changelog": "changelog.md"
-  - "Examples":
-      - "ChatGPT": "examples/chat.md"
-      - "Structured vision output": "examples/vision.md"
-      - "Streaming Output": "examples/stream.md"
-      - "Ollama (And other models)": "examples/ollama.md"
-      - "Dynamic Router": "examples/dynamic_router.md"
-      - "Static Router": "examples/static_router.md"
-      - "Enums": "examples/enums.md"
-      - "Error Output": "examples/error_output.md"
-      - "Literals": "examples/literals.md"
-      - "Pydantic Models": "examples/pydantic_validation.md"
-      - "OpenAI JSON Output": "examples/openai_json_mode.md"
-  - "API Reference": "api.md"
+#   - "API Reference": "api.md"
 
 theme:
   name: material
