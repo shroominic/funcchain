@@ -1,3 +1,4 @@
+<!-- markdownlint-disable MD033 MD046 -->
 # Task Creation with Validated Fields
 
 !!! Example
@@ -51,22 +52,23 @@ if __name__ == "__main__":
 Demo
 
 <div class="termy">
-```python
-User:
-$ cleanup the kitchen
+    ```python
+    User:
+    $ cleanup the kitchen
 
-task=Task
-name='cleanup',
-difficulty=30,
-keywords=['kitchen', 'cleanup']
+    task=Task
+    name='cleanup',
+    difficulty=30,
+    keywords=['kitchen', 'cleanup']
+    ```
 
-```
 </div>
 
-##Instructions
+## Instructions
 
 !!! Step-by-Step
     **Necessary Imports**
+
     ```python
     from funcchain import chain, settings
     from pydantic import BaseModel, field_validator

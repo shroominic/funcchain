@@ -1,3 +1,4 @@
+<!-- markdownlint-disable MD033 MD046 -->
 # Introduction
 
 [![Version](https://badge.fury.io/py/funcchain.svg)](https://badge.fury.io/py/funcchain)

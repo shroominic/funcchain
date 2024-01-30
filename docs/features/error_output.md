@@ -1,3 +1,4 @@
+<!-- markdownlint-disable MD033 MD046 -->
 # Example of raising an error
 
 !!! Example

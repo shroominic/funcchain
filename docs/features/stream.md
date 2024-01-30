@@ -1,3 +1,4 @@
+<!-- markdownlint-disable MD033 MD046 -->
 # Streaming with Funcchain
 
 !!! Example

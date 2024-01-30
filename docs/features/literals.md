@@ -1,3 +1,4 @@
+<!-- markdownlint-disable MD033 MD046 -->
 # Literal Type Enforcement in Funcchain
 
 !!! Example

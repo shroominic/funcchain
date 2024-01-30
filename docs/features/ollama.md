@@ -1,3 +1,4 @@
+<!-- markdownlint-disable MD033 MD046 -->
 # Different LLMs with funcchain EASY TO USE
 
 !!! Example
@@ -57,6 +58,7 @@ if __name__ == "__main__":
 </div>
 
 ## Instructions
+
 !!! Step-by-Step
 
     **Necessary Imports**

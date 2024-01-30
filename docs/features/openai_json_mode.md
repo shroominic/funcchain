@@ -1,3 +1,4 @@
+<!-- markdownlint-disable MD033 MD046 -->
 # JSON structured Output using Funcchain with OenAI
 
 !!! Example

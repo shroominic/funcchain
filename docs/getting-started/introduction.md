@@ -1,3 +1,6 @@
+<!-- markdownlint-disable MD033 MD046 -->
+# Introduction
+
 [![Version](https://badge.fury.io/py/funcchain.svg)](https://badge.fury.io/py/funcchain)
 [![tests](https://github.com/shroominic/funcchain/actions/workflows/code-check.yml/badge.svg)](https://github.com/shroominic/funcchain/actions/workflows/code-check.yml)
 ![PyVersion](https://img.shields.io/pypi/pyversions/funcchain)
@@ -13,21 +16,6 @@
     ```
 
 </div>
-
-!!! Useful: Langsmith integration
-
-    Add those lines to .env and funcchain will use langsmith tracing.
-
-    ```bash
-    LANGCHAIN_TRACING_V2=true
-    LANGCHAIN_API_KEY="ls__api_key"
-    LANGCHAIN_PROJECT="PROJECT_NAME"
-    ```
-
-    Langsmith is used to understand what happens under the hood of your LLM generations.
-    When multiple LLM calls are used for an output they can be logged for debugging.
-
-## Introduction
 
 `funcchain` is the _most pythonic_ way of writing cognitive systems. Leveraging pydantic models as output schemas combined with langchain in the backend allows for a seamless integration of llms into your apps.
 It works perfect with OpenAI Functions and soon with other models using JSONFormer.
@@ -340,8 +328,6 @@ for obj in result.objects:
     Its important that the fields defined earlier are mentioned here with the prompt
     `Analyse the image and extract its`...
 
-## Demo
-
 <div class="termy">
     ```
     print(analyse_image(image: Image.Image))
@@ -395,8 +381,7 @@ print(poem.analysis)
     ```python
     from pydantic import BaseModel, Field
     from funcchain import chain, settings
-
-```
+    ```
 
     **Choose and enjoy**
     ```python
@@ -435,18 +420,20 @@ print(poem.analysis)
     print(poem.analysis)
     ```
 
-# Demo
-
-<div class="termy">
-    ```
-    poem = analyze("I really like when my dog does a trick!")
-
-    $ ..................
-
-    Add demo
-
-    ```
 </div>
+
+!!! Useful: Langsmith integration
+
+    Add those lines to .env and funcchain will use langsmith tracing.
+
+    ```bash
+    LANGCHAIN_TRACING_V2=true
+    LANGCHAIN_API_KEY="ls__api_key"
+    LANGCHAIN_PROJECT="PROJECT_NAME"
+    ```
+
+    Langsmith is used to understand what happens under the hood of your LLM generations.
+    When multiple LLM calls are used for an output they can be logged for debugging.
 
 ## Features
 

@@ -1,4 +1,5 @@
-## Decision Making with Enums and Funcchain
+<!-- markdownlint-disable MD033 MD046 -->
+# Decision Making with Enums and Funcchain
 
 !!! Example
     See [enums.py](https://github.com/shroominic/funcchain/blob/main/examples/enums.py)

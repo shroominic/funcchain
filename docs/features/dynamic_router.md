@@ -1,3 +1,4 @@
+<!-- markdownlint-disable MD033 MD046 -->
 # Dynamic Chat Router with Funcchain
 
 !!! Example
@@ -18,8 +19,6 @@ from typing import Any, Callable, TypedDict
 
 from funcchain.syntax.executable import compile_runnable
 from pydantic import BaseModel, Field
-
-# Dynamic Router Definition:
 
 
 class Route(TypedDict):
@@ -63,9 +62,6 @@ class DynamicChatRouter(BaseModel):
         return self.routes[selected_route]["handler"](user_query, **kwargs)
 
 
-# Example Usage:
-
-
 def handle_pdf_requests(user_query: str) -> str:
     return "Handling PDF requests with user query: " + user_query
 
@@ -99,11 +95,11 @@ router = DynamicChatRouter(
 router.invoke_route("Can you summarize this csv?")
 ```
 
-Demo
+## Demo
 
 <div class="termy">
 ```python
-User:
+Input:
 $ Can you summarize this csv?
 $ ...............
 Handling CSV requests with user query: Can you summarize this csv?
@@ -115,7 +111,8 @@ Handling CSV requests with user query: Can you summarize this csv?
 !!! Step-by-Step
 
     **Nececary imports**
-    ```
+
+    ```python
     from enum import Enum
     from typing import Any, Callable, TypedDict
 
