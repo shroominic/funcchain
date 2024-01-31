@@ -1,11 +1,25 @@
-IMPORTANT NOW:
-[ ] - improve docs  (8h)
+V0.2:
+[ ] - write docs  (8h)
 
-TODO:
+V0.2.1
+[ ] - pygmalion grammar support
+
+V0.3:
+
+[ ] - outlines as (optional) backend for guided generation (mostly json-schemas)
+
+[ ] - dspy integration for autotuning prompts
+
+[ ] - pydantic model streaming  (6h)
 
 [ ] - enable union type without function calling  (6h)
 
-[ ] - pydantic model streaming  (6h)
+[ ] - enable Error type for non union calls  (4h)
+
+[ ] - convert langchain tools to funcchain agent/router  (8h)
+
+
+V0.4+:
 
 [ ] - cookbooks folder with jupyter notebook tutorials  (8h)
 
@@ -22,11 +36,7 @@ TODO:
         # So anything that is additional can be compressed to fit in the context but when other things that are important are not compressed.
         # Optionally you can define how to compress and where to leave the gaps (default in the middle with [...])
 
-[ ] - enable Error type for non union calls  (4h)
-
 [ ] - LLMCompiler written in funcchain example  (30h)
-
-[ ] - convert langchain tools to funcchain agent/router  (8h)
 
 [ ] - vscode extension for custom syntax highlighting  (30h)
 
