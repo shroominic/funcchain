@@ -49,7 +49,7 @@ Demo
 !!! Step-by-Step
 
     **Necessary Imports**
-    
+
     ```python
     from typing import Literal
     from funcchain import chain
@@ -85,7 +85,7 @@ Demo
     **Execute the Ranking System**
 
     This block is used to execute the ranking function and print the results when the script is run directly.
-    
+
     ```python
     rank = rank_output("The quick brown fox jumps over the lazy dog.")
     print(rank)
