@@ -12,19 +12,14 @@
 
 <pre><code id="codeblock">
 ```python
-from funcchain import chain, settings
+from funcchain import chain
 from pydantic import BaseModel
-
-settings.console_stream = True
 
 class FruitSalad(BaseModel):
     bananas: int = 0
     apples: int = 0
 
-class Result(BaseModel):
-    sum: int
-
-def sum_fruits(fruit_salad: FruitSalad) -> Result:
+def sum_fruits(fruit_salad: FruitSalad) -> int:
     """
     Sum the number of fruits in a fruit salad.
     """
@@ -36,55 +31,46 @@ if __name__ == "__main__":
 ```
 </code></pre>
 
-Demo
-
-<div class="termy">
-```python
-fruit_salad = FruitSalad(bananas=3, apples=5)
-assert sum_fruits(fruit_salad) == 8
-```
-</div>
-
 Instructions
 !!! Step-by-Step
 
     **Necessary Imports**
+
     `funcchain` for chaining functionality, and `pydantic` for the data models.
+    
     ```python
     from funcchain import chain, settings
     from pydantic import BaseModel
     ```
 
     **Defining the Data Models**
-    We define two Pydantic models: `FruitSalad` with integer fields for the number of bananas and apples, and `Result`, which will hold the sum of the fruits.
+    
+    We define two Pydantic models: `FruitSalad` with integer fields for the number of bananas and apples.
     Of course feel free to change those classes according to your needs but use of `pydantic` is required.
+    
     ```python
     class FruitSalad(BaseModel):
         bananas: int = 0
         apples: int = 0
-
-    class Result(BaseModel):
-        sum: int
     ```
 
-
-
     **Summing Function**
-    The `sum_fruits` function is intended to take a `FruitSalad` object and use `chain()` for solving this task with an LLM. The result is returned as a `Result` object.
+    
+    The `sum_fruits` function is intended to take a `FruitSalad` object and use `chain()` for solving this task with an LLM. The result is returned then returned as integer.
+    
     ```python
-    def sum_fruits(fruit_salad: FruitSalad) -> Result:
+    def sum_fruits(fruit_salad: FruitSalad) -> int:
         """
         Sum the number of fruits in a fruit salad.
         """
         return chain()
     ```
 
-
     **Execution Block**
+    
     ```python
-    if __name__ == "__main__":
-        fruit_salad = FruitSalad(bananas=3, apples=5)
-        assert sum_fruits(fruit_salad) == 8
+    fruit_salad = FruitSalad(bananas=3, apples=5)
+    assert sum_fruits(fruit_salad) == 8
     ```
 
     In the primary execution section of the script, we instantiate a `FruitSalad` object with predefined quantities of bananas and apples. We then verify that the `sum_fruits` function accurately calculates the total count of fruits, which should be 8 in this case.
