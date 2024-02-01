@@ -30,12 +30,10 @@ print(recipe.ingredients)
 !!! Step-by-Step
 
     ```python
-    # define your output shape
     class Recipe(BaseModel):
         ingredients: list[str]
         instructions: list[str]
         duration: int
-
     ```
 
     A Recipe class is defined, inheriting from BaseModel (pydantic library). This class
@@ -44,12 +42,11 @@ print(recipe.ingredients)
     representing the duration
 
     ```python
-    # write prompts utilising all native python features
     def generate_recipe(topic: str) -> Recipe:
         """
         Generate a recipe for a given topic.
         """
-        return chain() # <- this is doing all the magic
+        return chain()
     ```
     In this example the `generate_recipe` function takes a topic string and returns a `Recipe` instance for that topic.
     # Understanding chain() Functionality
@@ -58,12 +55,10 @@ print(recipe.ingredients)
 
     The `chain()` function is the core component of funcchain. It takes the docstring, input arguments and return type of the function and compiles everything into a langchain runnable . It then executes the prompt with your input arguments if you call the function and returns the parsed result.
 
-    # Get your response
+    # Print your response
     ```python
-    # generate llm response
     recipe = generate_recipe("christmas dinner")
 
-    # recipe is automatically converted as pydantic model
     print(recipe.ingredients)
     ```
 
