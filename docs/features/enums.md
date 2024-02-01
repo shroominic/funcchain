@@ -32,8 +32,7 @@ def make_decision(question: str) -> Decision:
     """
     return chain()
 
-if __name__ == "__main__":
-    print(make_decision("Do you like apples?"))
+print(make_decision("Do you like apples?"))
 ```
 </code></pre>
 
@@ -41,10 +40,9 @@ if __name__ == "__main__":
 
 <div class="termy">
     ```terminal
-    User:
-    $ Are apples red?
-    $ ...............
-    Decision(answer=<Answer.yes: 'yes'>)
+    $ make_decision("Do you like apples?")
+
+    answer=<Answer.yes: 'yes'>
     ```
 </div>
 
@@ -60,6 +58,7 @@ if __name__ == "__main__":
     ```
 
     **Define the Answer Enum**
+
     The Answer enum defines possible answers as 'yes' and 'no', which are the only valid responses for the decision-making system. Experiment by using and describing other enums.
 
     ```python
@@ -67,7 +66,9 @@ if __name__ == "__main__":
         yes = "yes"
         no = "no"
     ```
+
     **Create the Decision Model**
+
     The Decision class uses Pydantic to model a decision, ensuring that the answer is always an instance of the Answer enum.
 
     ```python
@@ -76,6 +77,7 @@ if __name__ == "__main__":
     ```
 
     **Implement the Decision Function**
+
     The make_decision function is where the decision logic will be implemented, using `chain()` to process the question and return a decision.
     When using your own enums you want to edit this accordingly.
 
@@ -88,11 +90,10 @@ if __name__ == "__main__":
     ```
 
     **Run the Decision System**
+
     This block runs the decision-making system, printing out the decision for a given question when the script is executed directly.
 
 
     ```python
-    if __name__ == "__main__":
-        print(make_decision("Do you like apples?"))
-
+    print(make_decision("Do you like apples?"))
     ```
