@@ -24,7 +24,7 @@ class RetryJsonPrimitiveTypeParser(RetryJsonPydanticParser, Generic[M]):
         retry_llm: BaseChatModel | str | None = None,
     ) -> None:
         super().__init__(
-            pydantic_object=create_model("ExtractPrimitiveType", value=(primitive_type, ...)),
+            pydantic_object=create_model("Extract", value=(primitive_type, ...)),
             retry=retry,
             retry_llm=retry_llm,
         )
