@@ -77,7 +77,7 @@ and then added to the prompt.
 <HumanMessage>
     USER:
     full_name='Herbert Geier' email='hello@bert.com'
-    
+
     Create a creative username from the given user.
 </HumanMessage>
 ```
