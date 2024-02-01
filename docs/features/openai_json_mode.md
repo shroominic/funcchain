@@ -37,17 +37,17 @@ Instructions
     **Necessary Imports**
 
     `funcchain` for chaining functionality, and `pydantic` for the data models.
-    
+
     ```python
     from funcchain import chain, settings
     from pydantic import BaseModel
     ```
 
     **Defining the Data Models**
-    
+
     We define two Pydantic models: `FruitSalad` with integer fields for the number of bananas and apples.
     Of course feel free to change those classes according to your needs but use of `pydantic` is required.
-    
+
     ```python
     class FruitSalad(BaseModel):
         bananas: int = 0
@@ -55,9 +55,9 @@ Instructions
     ```
 
     **Summing Function**
-    
+
     The `sum_fruits` function is intended to take a `FruitSalad` object and use `chain()` for solving this task with an LLM. The result is returned then returned as integer.
-    
+
     ```python
     def sum_fruits(fruit_salad: FruitSalad) -> int:
         """
@@ -67,7 +67,7 @@ Instructions
     ```
 
     **Execution Block**
-    
+
     ```python
     fruit_salad = FruitSalad(bananas=3, apples=5)
     assert sum_fruits(fruit_salad) == 8
