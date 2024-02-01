@@ -1,9 +1,8 @@
 # Chain
 
-## chain( ) method
+## `chain()`
 
-explain about chain like in usage.md and show achain and @runnable
-exalain a bit how chain works under the hood
+The chain function abstracts away all the magic happening in the funcchain backend. It extracts the docstring, input arguments and return type of the function and compiles everything into a langchain prompt.
 
 ```python
 from funcchain import chain
@@ -18,9 +17,9 @@ ask("What is the capital of Germany?")
 # => "The capital of Germany is Berlin."
 ```
 
-## achain( ) method
+## `achain()`
 
-Async version of the chain() method.
+Async version of the `chain()` function.
 
 ```python
 import asyncio
@@ -36,10 +35,10 @@ asyncio.run(ask("What is the capital of Germany?"))
 # => "The capital of Germany is Berlin."
 ```
 
-## runnable decorator
+## `@runnable`
 
 The `@runnable` decorator is used to compile a chain function into a langchain runnable object.
-You just write a normal funcchain function using chain() and then decorate it with @runnable.
+You just write a normal funcchain function using chain() and then decorate it with `@runnable`.
 
 ```python
 from funcchain import chain, runnable
