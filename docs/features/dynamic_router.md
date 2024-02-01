@@ -131,7 +131,7 @@ router.invoke_route("Can you summarize this csv?")
     **Implement Route Representation**
 
     Establish a Router class
-    
+
     ```python
     class DynamicChatRouter(BaseModel):
         routes: dict[str, Route]
@@ -147,7 +147,7 @@ router.invoke_route("Can you summarize this csv?")
     ```
 
     **invoke_route(user_query: str, **kwargs: Any) -> Any: **
-    
+
     This method takes a user query and additional keyword arguments. Inside invoke_route, an Enum named RouteChoices is dynamically created with keys corresponding to the route names. This Enum is used to validate the selected route.
 
     ```python
@@ -200,7 +200,7 @@ router.invoke_route("Can you summarize this csv?")
 
     Now you can use the structured output to execute programatically based on a natural language input.
     Establish functions tailored to your needs.
-    
+
     ```python
     def handle_pdf_requests(user_query: str) -> str:
     return "Handling PDF requests with user query: " + user_query
@@ -211,7 +211,7 @@ router.invoke_route("Can you summarize this csv?")
     def handle_default_requests(user_query: str) -> str:
         return "Handling DEFAULT requests with user query: " + user_query
     ```
-    
+
     **Define the routes**
 
     And bind the previous established functions.
@@ -236,7 +236,7 @@ router.invoke_route("Can you summarize this csv?")
     ```
 
     **Get output**
-    
+
     Use the router.invoke_route method to process the user query and obtain the appropriate response.
 
     ```python
