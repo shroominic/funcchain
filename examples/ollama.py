@@ -19,7 +19,7 @@ def analyze(text: str) -> SentimentAnalysis:
 
 if __name__ == "__main__":
     # set global llm
-    settings.llm = "ollama/wizardcoder:34b-python-q3_K_M"
+    settings.llm = "ollama/openchat"
     # log tokens as stream to console
     settings.console_stream = True
 
