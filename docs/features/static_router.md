@@ -49,10 +49,9 @@ class Router(BaseModel):
 def route_query(user_query: str) -> Router:
     return chain()
 
-if __name__ == "__main__":
-    user_query = input("Enter your query: ")
-    routed_chain = route_query(user_query)
-    routed_chain.invoke_route(user_query)
+user_query = input("Enter your query: ")
+routed_chain = route_query(user_query)
+routed_chain.invoke_route(user_query)
 ```
 </code></pre>
 
@@ -61,11 +60,10 @@ Demo
 <div class="termy">
 
     ```python
-    User:
-    $ Enter your query: I need to process a CSV file
+    Enter your query:
+    $ I need to process a CSV file
 
     Handling CSV requests with user query: I need to process a CSV file
-
     ```
 </div>
 
@@ -84,7 +82,9 @@ Demo
     ```
 
     **Define Route Handlers**
+
     These functions are the specific handlers for different types of user queries.
+
     ```python
     def handle_pdf_requests(user_query: str) -> None:
         print("Handling PDF requests with user query: ", user_query)
@@ -97,6 +97,7 @@ Demo
     ```
 
     **Create RouteChoices Enum and Router Model**
+
     RouteChoices is an Enum that defines the possible routes. Router is a Pydantic model that selects and invokes the appropriate handler based on the route.
     
     ```python
@@ -119,6 +120,7 @@ Demo
     ```
 
     **Implement Routing Logic**
+
     The route_query function is intended to determine the best route for a given user query using the `chain()` function.
     
     ```python
@@ -127,6 +129,7 @@ Demo
     ```
 
     **Execute the Routing System**
+    
     This block runs the routing system, asking the user for a query and then processing it through the defined routing logic.
     
     ```python
