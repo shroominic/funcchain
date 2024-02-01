@@ -82,7 +82,7 @@ Demo
     **Implement the Extraction Function**
 
     The `extract_user_info` function is intended to process the input text and return either a User object with extracted information or an Error if the information is not sufficient.
-    
+
     ```python
     def extract_user_info(text: str) -> User | Error:
         """
