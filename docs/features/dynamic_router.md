@@ -98,12 +98,10 @@ router.invoke_route("Can you summarize this csv?")
 ## Demo
 
 <div class="termy">
-```python
-Input:
-$ Can you summarize this csv?
-$ ...............
-Handling CSV requests with user query: Can you summarize this csv?
-```
+    ```python
+    $ router.invoke_route("Can you summarize this csv?")
+    Handling CSV requests with user query: Can you summarize this csv?
+    ```
 </div>
 
 ## Instructions
@@ -121,62 +119,69 @@ Handling CSV requests with user query: Can you summarize this csv?
     ```
 
     **Define Route Type**
+
     ```python
     class Route(TypedDict):
-    handler: Callable
-    description: str
+        handler: Callable
+        description: str
     ```
 
     Create a `TypedDict` to define the structure of a route with a handler function and a description. Just leave this unchanged if not intentionally experimenting.
 
     **Implement Route Representation**
+
     Establish a Router class
+    
     ```python
     class DynamicChatRouter(BaseModel):
-    routes: dict[str, Route]
+        routes: dict[str, Route]
     ```
 
     **_routes_repr():**
+
     Returns a string representation of all routes and their descriptions, used to help the language model understand the available routes.
 
     ```python
     def _routes_repr(self) -> str:
-    return "\n".join([f"{route_name}: {route['description']}" for route_name, route in self.routes.items()])
+        return "\n".join([f"{route_name}: {route['description']}" for route_name, route in self.routes.items()])
     ```
 
     **invoke_route(user_query: str, **kwargs: Any) -> Any: **
+    
     This method takes a user query and additional keyword arguments. Inside invoke_route, an Enum named RouteChoices is dynamically created with keys corresponding to the route names. This Enum is used to validate the selected route.
+
     ```python
     def invoke_route(self, user_query: str, /, **kwargs: Any) -> Any:
-    RouteChoices = Enum(  # type: ignore
-        "RouteChoices",
-        {r: r for r in self.routes.keys()},
-        type=str,
-    )
+        RouteChoices = Enum(  # type: ignore
+            "RouteChoices",
+            {r: r for r in self.routes.keys()},
+            type=str,
+        )
     ```
 
     **Compile the Route Selection Logic**
+
     The `RouterModel` class in this example is used for defining the expected output structure that the `compile_runnable` function will use to determine the best route for a given user query.
 
 
     ```python
     class RouterModel(BaseModel):
-    selector: RouteChoices = Field(
-        default="default",
-        description="Enum of the available routes.",
-    )
+        selector: RouteChoices = Field(
+            default="default",
+            description="Enum of the available routes.",
+        )
 
     route_query = compile_runnable(
-    instruction="Given the user query select the best query handler for it.",
-    input_args=["user_query", "query_handlers"],
-    output_type=RouterModel,
+        instruction="Given the user query select the best query handler for it.",
+        input_args=["user_query", "query_handlers"],
+        output_type=RouterModel,
     )
 
     selected_route = route_query.invoke(
-    input={
-        "user_query": user_query,
-        "query_handlers": self._routes_repr(),
-    }
+        input={
+            "user_query": user_query,
+            "query_handlers": self._routes_repr(),
+        }
     ).selector
     assert isinstance(selected_route, str)
 
@@ -195,19 +200,20 @@ Handling CSV requests with user query: Can you summarize this csv?
 
     Now you can use the structured output to execute programatically based on a natural language input.
     Establish functions tailored to your needs.
+    
     ```python
     def handle_pdf_requests(user_query: str) -> str:
     return "Handling PDF requests with user query: " + user_query
 
-
     def handle_csv_requests(user_query: str) -> str:
         return "Handling CSV requests with user query: " + user_query
-
 
     def handle_default_requests(user_query: str) -> str:
         return "Handling DEFAULT requests with user query: " + user_query
     ```
+    
     **Define the routes**
+
     And bind the previous established functions.
 
     ```python
@@ -230,6 +236,7 @@ Handling CSV requests with user query: Can you summarize this csv?
     ```
 
     **Get output**
+    
     Use the router.invoke_route method to process the user query and obtain the appropriate response.
 
     ```python
