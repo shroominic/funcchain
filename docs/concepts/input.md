@@ -97,6 +97,10 @@ def create_username(user: User) -> str:
     return chain()
 ```
 
+## Images
+
+todo: write
+
 ## Other Types
 
 More special types are coming soon.
