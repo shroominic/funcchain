@@ -8,7 +8,6 @@
     Most importantly we will be able to raise an error thats programmatically usable.
     You can adapt this for your own usage.
 
-
     The main functionality is to take a string of text and attempt to extract user information, such as name and email, and return a User object. If the information is insufficient, an Error is returned instead.
 
 ## Full Code Example
@@ -29,9 +28,11 @@ def extract_user_info(text: str) -> User | Error:
     """
     return chain()
 
-if __name__ == "__main__":
-    print(extract_user_info("hey"))  # returns Error
-    print(extract_user_info("I'm John and my mail is john@gmail.com"))  # returns a User object
+print(extract_user_info("hey"))
+# => returns Error
+
+print(extract_user_info("I'm John and my mail is john@gmail.com"))
+# => returns a User object
 
 ```
 </code></pre>
@@ -40,17 +41,19 @@ Demo
 
 <div class="termy">
     ```python
-    $ print(extract_user_info("hey"))
+    $ extract_user_info("hey")
 
-    Error: Insufficient information to extract user details.
+    Error(
+        title='Invalid Input',
+        description='The input text does not contain user information.'
+    )
 
-    User:
-    $ print(extract_user_info("I'm John and my mail is john@gmail.com"))
+    $ extract_user_info("I'm John and my mail is john@gmail.com")
 
-    I'm John and my mail is john@gmail.com
-    User(name='John', email='john@gmail.com')
-
-    //update example
+    User(
+        name='John',
+        email='john@gmail.com'
+    )
     ```
 
 </div>
@@ -60,22 +63,26 @@ Demo
 !!! Step-by-Step
 
     **Necessary Imports**
+
     ```python
     from funcchain import BaseModel, Error, chain
     from rich import print
     ```
 
     **Define the User Model**
+
     ```python
     class User(BaseModel):
-     name: str
-     email: str | None
+        name: str
+        email: str | None
     ```
     The User class is a Pydantic model that defines the structure of the user information to be extracted, with fields for `name` and an email.
     Change the fields to experiment and alignment with your project.
 
     **Implement the Extraction Function**
+
     The `extract_user_info` function is intended to process the input text and return either a User object with extracted information or an Error if the information is not sufficient.
+    
     ```python
     def extract_user_info(text: str) -> User | Error:
         """
@@ -88,9 +95,13 @@ Demo
 
 
     **Run the Extraction System**
+
     This conditional block is used to execute the extraction function and print the results when the script is run directly.
+
     ```python
-    if __name__ == "__main__":
-     print(extract_user_info("hey"))  # returns Error
-     print(extract_user_info("I'm John and my mail is john@gmail.com"))  # returns a User object
+    print(extract_user_info("hey"))
+    # => returns Error
+
+    print(extract_user_info("I'm John and my mail is john@gmail.com"))
+    # => returns a User object
     ```
