@@ -5,7 +5,7 @@
     See [ollama.py](https://github.com/shroominic/funcchain/blob/main/examples/ollama.py)
     Also see supported [MODELS.md](https://github.com/shroominic/funcchain/blob/main/MODELS.md)
 
-    In this example, we will use the funcchain library to perform sentiment analysis on a piece of text. This showcases how funcchain can seamlessly utilize different Language Models (LLMs), such as ollama, without many unnececary code changes..
+    In this example, we will use the funcchain library to perform sentiment analysis on a piece of text. This showcases how funcchain can seamlessly utilize different Language Models (LLMs) from ollama, without many unnececary code changes..
 
     This is particularly useful for developers looking to integrate different models in a single application or just experimenting with different models.
 
@@ -15,7 +15,6 @@
 ```python
 from funcchain import chain, settings
 from pydantic import BaseModel, Field
-from rich import print
 
 # define your model
 class SentimentAnalysis(BaseModel):
@@ -31,7 +30,8 @@ def analyze(text: str) -> SentimentAnalysis:
 
 if __name__ == "__main__":
     # set global llm
-    settings.llm = "ollama/wizardcoder:34b-python-q3_K_M"
+    settings.llm = "ollama/openchat"
+
     # log tokens as stream to console
     settings.console_stream = True
 
@@ -49,12 +49,11 @@ if __name__ == "__main__":
     ```
     poem = analyze("I really like when my dog does a trick!")
 
-    $ ..................
+    $ {"analysis": "A dog trick", "sentiment": true}
 
-    Add demo
+    SentimentAnalysis(analysis='A dog trick', sentiment=True)
 
     ```
-
 </div>
 
 ## Instructions
@@ -62,14 +61,15 @@ if __name__ == "__main__":
 !!! Step-by-Step
 
     **Necessary Imports**
+
     ```python
     from funcchain import chain, settings
     from pydantic import BaseModel, Field
-    from rich import print
     ```
 
     **Define the Data Model**
     Here, we define a `SentimentAnalysis` model with a description of the sentiment analysis and a boolean field indicating the sentiment.
+
     ```python
     class SentimentAnalysis(BaseModel):
         analysis: str = Field(description="A description of the analysis")
@@ -77,7 +77,9 @@ if __name__ == "__main__":
     ```
 
     **Create the Analysis Function**
+
     This 'analyze' function takes a string as input and is expected to return a `SentimentAnalysis` object by calling the `chain()` function from the `funcchain` library.
+    
     ```python
     def analyze(text: str) -> SentimentAnalysis:
         """
@@ -87,13 +89,14 @@ if __name__ == "__main__":
     ```
 
     **Execution Configuration**
+    
     In the main block, configure the global settings to set the preferred LLM, enable console streaming, and run the `analyze` function with sample text. The result is printed using the `rich` library.
+    
     ```python
-    if __name__ == "__main__":
-        settings.llm = "ollama/wizardcoder:34b-python-q3_K_M"
-        settings.console_stream = True
-        poem = analyze("I really like when my dog does a trick!")
-        print(poem)
+    settings.llm = "ollama/openchat"
+    settings.console_stream = True
+    poem = analyze("I really like when my dog does a trick!")
+    print(poem)
     ```
 
     !!!Important
