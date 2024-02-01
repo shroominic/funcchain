@@ -1,9 +1,9 @@
 # TODOs for writing the documentation
 
-- [ ] write out all scratched docs .md files
+- [ ] write out all todos in advanced
 
-- [ ] look into other repos for mkdocs inspiration
+- [ ] look more into other repos for mkdocs tricks and inspiration
 
-- [ ] make this file a todo list for contributors
+- [ ] make this file a general todo list + roadmap for contributors
 
-- [ ] add api reference?
+- [ ] maybe rename features to examples
