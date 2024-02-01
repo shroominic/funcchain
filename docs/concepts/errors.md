@@ -6,11 +6,9 @@
 from funcchain import BaseModel, Error, chain
 from rich import print
 
-
 class User(BaseModel):
     name: str
     email: str | None
-
 
 def extract_user_info(text: str) -> User | Error:
     """
