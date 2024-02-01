@@ -79,7 +79,7 @@ if __name__ == "__main__":
     **Create the Analysis Function**
 
     This 'analyze' function takes a string as input and is expected to return a `SentimentAnalysis` object by calling the `chain()` function from the `funcchain` library.
-    
+
     ```python
     def analyze(text: str) -> SentimentAnalysis:
         """
@@ -89,9 +89,9 @@ if __name__ == "__main__":
     ```
 
     **Execution Configuration**
-    
-    In the main block, configure the global settings to set the preferred LLM, enable console streaming, and run the `analyze` function with sample text. The result is printed using the `rich` library.
-    
+
+    In the main block, configure the global settings to set the preferred LLM, enable console streaming, and run the `analyze` function with sample text.
+
     ```python
     settings.llm = "ollama/openchat"
     settings.console_stream = True
