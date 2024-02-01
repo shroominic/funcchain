@@ -9,11 +9,7 @@ class FruitSalad(BaseModel):
     apples: int = 0
 
 
-class Result(BaseModel):
-    sum: int
-
-
-def sum_fruits(fruit_salad: FruitSalad) -> Result:
+def sum_fruits(fruit_salad: FruitSalad) -> int:
     """
     Sum the number of fruits in a fruit salad.
     """
