@@ -16,7 +16,6 @@ from funcchain import Image, chain, settings
 from pydantic import BaseModel, Field
 
 settings.llm = "openai/gpt-4-vision-preview"
-# settings.llm = "ollama/bakllava"
 settings.console_stream = True
 
 class AnalysisResult(BaseModel):
@@ -33,29 +32,30 @@ def analyse_image(image: Image) -> AnalysisResult:
     """
     return chain()
 
-if __name__ == "__main__":
-    example_image = Image.from_file("examples/assets/old_chinese_temple.jpg")
+example_image = Image.from_file("examples/assets/old_chinese_temple.jpg")
 
-    result = analyse_image(example_image)
+result = analyse_image(example_image)
 
-    print("Theme:", result.theme)
-    print("Description:", result.description)
-    for obj in result.objects:
-        print("Found this object:", obj)
+print("Theme:", result.theme)
+print("Description:", result.description)
+for obj in result.objects:
+    print("Found this object:", obj)
 ```
 </code></pre>
 
-Demo
+Example Output
 
-<div class="termy">
-```python
-Theme: Ancient Architecture
-Description: An old Chinese temple with intricate designs.
-Found this object: temple
-Found this object: tree
-Found this object: sky
+```txt
+Theme: Traditional Japanese architecture and nature during rainfall
+Description: The image depicts a serene rainy scene with traditional Japanese buildings. The warm glow of lights from the windows contrasts with the cool tones of the rain. A cherry blossom tree in bloom adds a splash of color to the otherwise muted scene. Stone lanterns and stepping stones create a path leading to the building, while hanging lanterns with a skull motif suggest a cultural or festive significance.
+Found this object: traditional Japanese building
+Found this object: cherry blossom tree
+Found this object: rain
+Found this object: stepping stones
+Found this object: stone lantern
+Found this object: hanging lanterns with skull motif
+Found this object: glowing windows
 ```
-</div>
 
 ## Instructions
 
@@ -63,19 +63,23 @@ Found this object: sky
     Oiur goal is the functionality is to analyze an image and extract its theme, a description, and a list of objects found within it.
 
     **Necessary Imports**
+
     ```python
     from funcchain import Image, chain, settings
     from pydantic import BaseModel, Field
     ```
 
     **Configure Settings**
+
     The settings are configured to use a specific language model capable of image analysis and to enable console streaming for immediate output.
+
     ```python
     settings.llm = "openai/gpt-4-vision-preview"
     settings.console_stream = True
     ```
 
     **Define the AnalysisResult Model**
+
     The AnalysisResult class models the expected output of the image analysis, including the theme, description, and objects detected in the image.
 
     ```python
@@ -86,6 +90,7 @@ Found this object: sky
     ```
 
     **Implement the Image Analysis Function**
+
     The analyse_image function is designed to take an Image object and use the chain function to process the image and return an AnalysisResult object for later usage (here printing).
 
     ```python
@@ -94,14 +99,14 @@ Found this object: sky
     ```
 
     **Execute the Analysis**
+
     This block runs the image analysis on an example image and prints the results when the script is executed directly.
 
     ```python
-    if __name__ == "__main__":
-        example_image = Image.from_file("examples/assets/old_chinese_temple.jpg")
-        result = analyse_image(example_image)
-        print("Theme:", result.theme)
-        print("Description:", result.description)
-        for obj in result.objects:
-            print("Found this object:", obj)
+    example_image = Image.from_file("examples/assets/old_chinese_temple.jpg")
+    result = analyse_image(example_image)
+    print("Theme:", result.theme)
+    print("Description:", result.description)
+    for obj in result.objects:
+        print("Found this object:", obj)
     ```
