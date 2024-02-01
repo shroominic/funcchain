@@ -70,7 +70,7 @@ Demo
     ```
 
     **Execute the Streaming Generation**
-    
+
     This block uses the stream_to context manager to print the output of the story generation function as it is being streamed.
     This is how you stream the story while it is being generated.
 
