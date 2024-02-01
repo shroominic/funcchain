@@ -73,7 +73,7 @@ Demo
     We will implement a script with the functionality to take a user query, determine the type of request (PDF, CSV, or default), and invoke the appropriate handler function.
 
     **Necessary Imports**
-    
+
     ```python
     from enum import Enum
     from typing import Any
@@ -99,7 +99,7 @@ Demo
     **Create RouteChoices Enum and Router Model**
 
     RouteChoices is an Enum that defines the possible routes. Router is a Pydantic model that selects and invokes the appropriate handler based on the route.
-    
+
     ```python
     class RouteChoices(str, Enum):
         pdf = "pdf"
@@ -122,16 +122,16 @@ Demo
     **Implement Routing Logic**
 
     The route_query function is intended to determine the best route for a given user query using the `chain()` function.
-    
+
     ```python
     def route_query(user_query: str) -> Router:
         return chain()
     ```
 
     **Execute the Routing System**
-    
+
     This block runs the routing system, asking the user for a query and then processing it through the defined routing logic.
-    
+
     ```python
     user_query = input("Enter your query: ")
     routed_chain = route_query(user_query)
