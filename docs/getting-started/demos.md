@@ -111,7 +111,7 @@ print(recipe.ingredients)
 
     The Field descriptions serve as prompts for the language model to understand the data structure.
     Additionally you can include a docstring for each model class to provide further information to the LLM.
-    
+
     !!! Important
         Everything including class names, argument names, doc string and field descriptions are part of the prompt and can be optimised using prompting techniques.
 
