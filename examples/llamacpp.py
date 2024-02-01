@@ -19,7 +19,7 @@ def analyze(text: str) -> SentimentAnalysis:
 
 if __name__ == "__main__":
     # set global llm
-    settings.llm = "llamacpp/nous-hermes-2-solar-10.7b"
+    settings.llm = "llamacpp/openchat-3.5-0106:Q3_K_M"
     # log tokens as stream to console
     settings.console_stream = True
 
