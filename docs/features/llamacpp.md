@@ -80,7 +80,7 @@ print(poem)
     **Create the Analysis Function**
 
     This 'analyze' function takes a string as input and is expected to return a `SentimentAnalysis` object by calling the `chain()` function from the `funcchain` library.
-    
+
     ```python
     def analyze(text: str) -> SentimentAnalysis:
         """
@@ -90,9 +90,9 @@ print(poem)
     ```
 
     **Execution Configuration**
-    
+
     In the main block, configure the global settings to set the preferred LLM, enable console streaming, and run the `analyze` function with sample text.
-    
+
     ```python
     # set global llm
     settings.llm = "llamacpp/openchat-3.5-0106:Q3_K_M"
