@@ -6,7 +6,6 @@ from funcchain import achain, settings
 from pydantic import BaseModel
 
 settings.temperature = 1
-settings.llm = "openai/gpt-3.5-turbo-1106"
 
 
 async def generate_answer(question: str) -> str:
@@ -46,3 +45,5 @@ if __name__ == "__main__":
     answer = _await(expert_answer(question))
 
     print(answer)
+
+    assert isinstance(answer, str)
