@@ -86,6 +86,7 @@ print(recipe.ingredients)
     ```
 
     **Data Structures and Model Definitions**
+
     ```python
     # define nested models
     class Item(BaseModel):
@@ -100,7 +101,6 @@ print(recipe.ingredients)
     class TodoList(BaseModel):
         todos: list[Item]
         urgency: int = Field(description="The urgency of all tasks (1-10)")
-
     ```
 
     In this example, we create a more complex data structure with nested models.
@@ -117,6 +117,7 @@ print(recipe.ingredients)
 
 
     **Union types**
+
     ```python
     # support for union types
     def extract_list(user_input: str) -> TodoList | ShoppingList:
@@ -125,6 +126,7 @@ print(recipe.ingredients)
         """
         return chain()
     ```
+
     The extract_list function uses the chain function to analyze user input and return a structured list:
     In the example:
     - Union Types: It can return either a TodoList or a ShoppingList, depending on the input.
@@ -133,12 +135,9 @@ print(recipe.ingredients)
     For your application this is going to serve as a router to route between your previously defined models.
 
     **Get a list from the user** (here as "lst")
-    ```python
-    # the model will choose the output type automatically
-    lst = extract_list(
-        input("Enter your list: ")
-    )
 
+    ```python
+    lst = extract_list("Complete project report, Prepare for meeting, Respond to emails")
     ```
 
     **Define your custom handlers**
@@ -148,38 +147,29 @@ print(recipe.ingredients)
     It utilizes pattern matching to determine the type of list and print the corresponding output.
 
     ```python
-    # custom handler based on type
     match lst:
         case ShoppingList(items=items, store=store):
-            print("Here is your Shopping List: ")
+            print("Shopping List: ")
             for item in items:
                 print(f"{item.name}: {item.description}")
             print(f"You need to go to: {store}")
 
         case TodoList(todos=todos, urgency=urgency):
-            print("Here is your Todo List: ")
+            print("Todo List: ")
             for item in todos:
                 print(f"{item.name}: {item.description}")
             print(f"Urgency: {urgency}")
-
     ```
 
 <div class="termy">
     ```
-    lst = extract_list(
-        input("Enter your list: ")
-    )
+    $ extract_list("Complete project report, Prepare for meeting, Respond to emails")
 
-    User:
-    $ Complete project report, Prepare for meeting, Respond to emails;
-    $ if I don't respond I will be fired
-
-    Output:
-    $ ...............
-    Here is your Todo List:
-    Complete your buisness tasks: project report, Prepare for meeting, Respond to emails
-    Urgency: 10
-    //add real output
+    Todo List: 
+    Complete project report: Finish the project report and submit it
+    Prepare for meeting: Gather all necessary materials and information for the meeting
+    Respond to emails: Reply to all pending emails
+    Urgency: 8
     ```
 </div>
 
@@ -227,15 +217,20 @@ for obj in result.objects:
     ```
 
     **Define Model**
+
     set global llm using model identifiers see [MODELS.md](https://github.com/shroominic/funcchain/blob/main/MODELS.md)
+
     ```python
     settings.llm = "openai/gpt-4-vision-preview"
     ```
+
     Funcchains modularity allows for all kinds of models including local models
 
 
     **Analize Image**
+
     Get structured output from an image in our example `theme`, `description` and `objects`
+    
     ```python
     # everything defined is part of the prompt
     class AnalysisResult(BaseModel):
@@ -259,6 +254,7 @@ for obj in result.objects:
         """
         return chain()
     ```
+
     Chain() will handle the image input.
     We here define again the fields from before `theme`, `description` and `objects`
 
@@ -332,39 +328,40 @@ print(poem.analysis)
     ```
 
     **Choose and enjoy**
+
     ```python
-    # auto-download the model from huggingface
     settings.llm = "llamacpp/openchat-3.5-0106:Q3_K_M"
     ```
 
     **Structured output definition**
+
     With an input `str` a description can be added to return a boolean `true` or `false`
+
     ```python
     class SentimentAnalysis(BaseModel):
         analysis: str
         sentiment: bool = Field(description="True for Happy, False for Sad")
     ```
+
     Experiment yourself by adding different descriptions for the true and false case.
 
     **Use `chain()` to analize**
+
     Defines with natural language the analysis
+
     ```python
     def analyze(text: str) -> SentimentAnalysis:
-    """
-    Determines the sentiment of the text.
-    """
-    return chain()
+        """
+        Determines the sentiment of the text.
+        """
+        return chain()
     ```
+
     For your own usage adjust the str. Be precise and reference your classes again.
 
     **Generate and print the output**
     ```python
-    **Use the analyze function and print output**
-
-    # generates using the local model
     poem = analyze("I really like when my dog does a trick!")
-
-    # promised structured output (for local models!)
     print(poem.analysis)
     ```
 
