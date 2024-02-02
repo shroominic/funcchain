@@ -154,23 +154,23 @@ print(poem.analysis)
 
 ## Features
 
-- pythonic
-- easy swap between openai or local models
-- dynamic output types (pydantic models, or primitives)
-- vision llm support
-- langchain_core as backend
-- jinja templating for prompts
-- reliable structured output
-- auto retry parsing
-- langsmith support
-- sync, async, streaming, parallel, fallbacks
-- gguf download from huggingface
-- type hints for all functions and mypy support
-- chat router component
-- composable with langchain LCEL
-- easy error handling
-- enums and literal support
-- custom parsing types
+- 🐍 pythonic
+- 🔀 easy swap between openai or local models
+- 🔄 dynamic output types (pydantic models, or primitives)
+- 👁️ vision llm support
+- 🧠 langchain_core as backend
+- 📝 jinja templating for prompts
+- 🏗️ reliable structured output
+- 🔁 auto retry parsing
+- 🔧 langsmith support
+- 🔄 sync, async, streaming, parallel, fallbacks
+- 📦 gguf download from huggingface
+- ✅ type hints for all functions and mypy support
+- 🗣️ chat router component
+- 🧩 composable with langchain LCEL
+- 🛠️ easy error handling
+- 🚦 enums and literal support
+- 📐 custom parsing types
 
 ## Documentation
 
