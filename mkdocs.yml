@@ -5,21 +5,118 @@ repo_name: shroominic/funcchain
 repo_url: https://github.com/shroominic/funcchain/
 
 nav:
-  - 'Getting Started':
-    - 'Welcome': 'index.md'
-    - 'Installation': 'getting-started/installation.md'
-    - 'Usage': 'getting-started/usage.md'
-  - 'Concepts':
-    - 'Overview': 'overview.md'
-    - 'Chain': 'chain.md'
-    - 'Input Args': 'input.md'
-    - 'Prompt Template': 'prompt.md'
-    - 'Output Parser': 'parser.md'
-    - 'Pydantic Models': 'models.md'
-  - 'Settings': 'settings.md'
-  - 'Examples': 'examples.md'
+  - "Funcchain": "index.md"
+  - "Getting Started":
+      - "Installation": "getting-started/installation.md"
+      - "Usage": "getting-started/usage.md"
+      - "Demos": "getting-started/demos.md"
+      - "Configuration": "getting-started/config.md"
+      - "Models": "getting-started/models.md"
+  - "Concepts":
+      - "Overview": "concepts/overview.md"
+      - "Chain": "concepts/chain.md"
+      - "Input Args": "concepts/input.md"
+      - "Prompting": "concepts/prompting.md"
+      - "Output Parsing": "concepts/parser.md"
+      - "Errors": "concepts/errors.md"
+      - "Langchain": "concepts/langchain.md"
+      - "Pydantic": "concepts/pydantic.md"
+      - "Local Models": "concepts/local-models.md"
+      - "Streaming": "concepts/streaming.md"
+      - "Unions": "concepts/unions.md"
+      - "Vision": "concepts/vision.md"
+  - "Examples":
+      # - "ChatGPT": "features/chat.md"
+      - "Literals": "features/literals.md"
+      - "Retry Parsing": "features/retry_parsing.md"
+      - "Structured vision output": "features/vision.md"
+      - "Enums": "features/enums.md"
+      - "Dynamic Router": "features/dynamic_router.md"
+      - "Streaming Output": "features/stream.md"
+      - "LlamaCpp": "features/llamacpp.md"
+      - "OpenAI JSON Output": "features/openai_json_mode.md"
+      - "Static Router": "features/static_router.md"
+      - "Ollama": "features/ollama.md"
+      - "Error Output": "features/error_output.md"
+  - "Advanced":
+      - "Async": "advanced/async.md"
+      - "Signature": "advanced/signature.md"
+      - "Runnables": "advanced/runnables.md"
+      - "Codebase Scaling": "advanced/codebase-scaling.md"
+      - "Customization": "advanced/customization.md"
+      - "Stream Parsing": "advanced/stream-parsing.md"
+      - "Custom Parsers": "advanced/custom-parser-types.md"
+  - "Contributing":
+      - "Contributing": "contributing/dev-setup.md"
+      - "Codebase Structure": "contributing/codebase-structure.md"
+      # - "Code of Conduct": "contributing/code-of-conduct.md"
+      - "Contributors": "contributing/contributors.md"
+      - "Security": "contributing/security.md"
+      - "Roadmap": "contributing/roadmap.md"
+      - "License": "contributing/license.md"
+  - "Changelog": "changelog.md"
+#   - "API Reference": "api.md"
 
 theme:
   name: material
   palette:
     scheme: slate
+
+# Extensions
+markdown_extensions:
+  - abbr
+  - admonition
+  - pymdownx.details
+  - attr_list
+  - def_list
+  - footnotes
+  - md_in_html
+  - toc:
+      permalink: true
+  - pymdownx.arithmatex:
+      generic: true
+  - pymdownx.betterem:
+      smart_enable: all
+  - pymdownx.caret
+  - pymdownx.details
+  - pymdownx.emoji:
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - pymdownx.keys
+  - pymdownx.magiclink:
+      normalize_issue_symbols: true
+      repo_url_shorthand: true
+      user: shroominic
+      repo: funcchain
+  - pymdownx.mark
+  - pymdownx.smartsymbols
+  - pymdownx.snippets:
+      auto_append:
+        - includes/mkdocs.md
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+  - pymdownx.tabbed:
+      alternate_style: true
+      combine_header_slug: true
+      slugify: !!python/object/apply:pymdownx.slugs.slugify
+        kwds:
+          case: lower
+  - pymdownx.tasklist:
+      custom_checkbox: true
+  - pymdownx.tilde
+
+extra_css:
+  - css/termynal.css
+  - css/custom.css
+
+extra_javascript:
+  - js/termynal.js
+  - js/custom.js

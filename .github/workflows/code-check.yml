@@ -6,21 +6,21 @@ jobs:
   pre-commit:
     strategy:
       matrix:
-        python-version: ['3.10', '3.11', '3.12']
+        python-version: ["3.10", "3.11"]
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
-    - uses: eifinger/setup-rye@v1
-      with:
-        enable-cache: true
-        cache-prefix: 'venv-funcchain'
-    - name: pin version
-      run: rye pin ${{ matrix.python-version }}
-    - name: Sync rye
-      run: rye sync
-    - name: Run pre-commit
-      run: rye run pre-commit run --all-files
-    - name: Run tests
-      env:
-        OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-      run: rye run pytest -m "not skip_on_actions"
+      - uses: actions/checkout@v2
+      - uses: eifinger/setup-rye@v1
+        with:
+          enable-cache: true
+          cache-prefix: "venv-funcchain"
+      - name: pin version
+        run: rye pin ${{ matrix.python-version }}
+      - name: Sync rye
+        run: rye sync
+      - name: Run pre-commit
+        run: rye run pre-commit run --all-files
+      - name: Run tests
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+        run: rye run pytest -m "not skip_on_actions"

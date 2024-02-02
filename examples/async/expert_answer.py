@@ -2,12 +2,10 @@ from asyncio import gather
 from asyncio import run as _await
 from random import shuffle
 
+from funcchain import achain, settings
 from pydantic import BaseModel
 
-from funcchain import achain, settings
-
 settings.temperature = 1
-settings.llm = "openai/gpt-3.5-turbo-1106"
 
 
 async def generate_answer(question: str) -> str:
@@ -33,14 +31,10 @@ async def expert_answer(question: str) -> str:
     # Shuffle the answers to ensure randomness
     enum_answers = list(enumerate(answers))
     shuffle(enum_answers)
-    ranked_answers = await gather(
-        *(rank_answers(question, enum_answers) for _ in range(3))
-    )
+    ranked_answers = await gather(*(rank_answers(question, enum_answers) for _ in range(3)))
     highest_ranked_answer = max(
         ranked_answers,
-        key=lambda x: sum(
-            1 for ans in ranked_answers if ans.selected_answer == x.selected_answer
-        ),
+        key=lambda x: sum(1 for ans in ranked_answers if ans.selected_answer == x.selected_answer),
     ).selected_answer
     return answers[highest_ranked_answer]
 
@@ -51,3 +45,5 @@ if __name__ == "__main__":
     answer = _await(expert_answer(question))
 
     print(answer)
+
+    assert isinstance(answer, str)

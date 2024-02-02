@@ -1,9 +1,9 @@
-from PIL import Image
+from funcchain import Image, chain, settings
 from pydantic import BaseModel, Field
 
-from funcchain import chain, settings
-
 settings.llm = "openai/gpt-4-vision-preview"
+# settings.llm = "ollama/bakllava"
+settings.console_stream = True
 
 
 class AnalysisResult(BaseModel):
@@ -14,7 +14,7 @@ class AnalysisResult(BaseModel):
     objects: list[str] = Field(description="A list of objects found in the image")
 
 
-def analyse_image(image: Image.Image) -> AnalysisResult:
+def analyse_image(image: Image) -> AnalysisResult:
     """
     Analyse the image and extract its
     theme, description and objects.
@@ -23,11 +23,9 @@ def analyse_image(image: Image.Image) -> AnalysisResult:
 
 
 if __name__ == "__main__":
-    example_image = Image.open("examples/assets/old_chinese_temple.jpg")
-    from funcchain.streaming import stream_to
+    example_image = Image.from_file("examples/assets/old_chinese_temple.jpg")
 
-    with stream_to(print):
-        result = analyse_image(example_image)
+    result = analyse_image(example_image)
 
     print("Theme:", result.theme)
     print("Description:", result.description)

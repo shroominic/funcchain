@@ -1,9 +1,8 @@
+from funcchain import chain, settings
 from pydantic import BaseModel, field_validator
 
-from funcchain import chain, settings
-from funcchain.streaming import stream_to
-
-settings.llm = "gguf/dolphin-2.5-mixtral-8x7b:Q3_K_M"
+# settings.llm = "ollama/openchat"
+settings.console_stream = True
 
 
 class Task(BaseModel):
@@ -33,6 +32,5 @@ def gather_infos(user_description: str) -> Task:
 
 
 if __name__ == "__main__":
-    with stream_to(print):
-        task = gather_infos("cleanup the kitchen")
+    task = gather_infos("cleanup the kitchen")
     print(f"{task=}")

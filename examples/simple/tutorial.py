@@ -1,7 +1,6 @@
-from pydantic import BaseModel, Field, validator
-
 # %%
 from funcchain import chain
+from pydantic import BaseModel, Field, validator
 
 
 # %%

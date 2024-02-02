@@ -1,8 +1,7 @@
 import asyncio
 
-from pydantic import BaseModel
-
 from funcchain import achain, settings
+from pydantic import BaseModel
 
 settings.temperature = 1
 
@@ -31,4 +30,6 @@ if __name__ == "__main__":
 
     for startup in startups:
         print("name:", startup.name)
+        assert isinstance(startup.name, str)
         print("concept:", startup.description)
+        assert isinstance(startup.description, str)

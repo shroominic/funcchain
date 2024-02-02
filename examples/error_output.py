@@ -1,6 +1,5 @@
-from rich import print
-
 from funcchain import BaseModel, Error, chain
+from rich import print
 
 
 class User(BaseModel):
@@ -11,7 +10,7 @@ class User(BaseModel):
 def extract_user_info(text: str) -> User | Error:
     """
     Extract the user information from the given text.
-    If you do not have enough infos, raise.
+    In case you do not have enough infos, raise.
     """
     return chain()
 
@@ -19,6 +18,4 @@ def extract_user_info(text: str) -> User | Error:
 if __name__ == "__main__":
     print(extract_user_info("hey"))  # returns Error
 
-    print(
-        extract_user_info("I'm John and my mail is john@gmail.com")
-    )  # returns a User object
+    print(extract_user_info("I'm John and my mail is john@gmail.com"))  # returns a User object

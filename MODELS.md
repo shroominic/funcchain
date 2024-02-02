@@ -2,10 +2,10 @@
 
 ## LangChain Chat Models
 
-You can set the `settings.llm` with any ChatModel the LangChain library.
+You can set the `settings.llm` with any LangChain ChatModel.
 
 ```python
-from langchain.chat_models import AzureChatOpenAI
+from langchain_openai.chat_models import AzureChatOpenAI
 
 settings.llm = AzureChatOpenAI(...)
 ```
@@ -16,23 +16,28 @@ You can also set the `settings.llm` with a string identifier of a ChatModel incl
 
 ### Schema
 
-`<provider>/<name>:<optional_label>`
+`<provider>/<model_name>:<optional_label>`
 
 ### Providers
 
 - `openai`: OpenAI Chat Models
-- `gguf`: Huggingface GGUF Models from TheBloke using LlamaCpp
-- `local` | `thebloke` | `huggingface`: alias for `gguf`
+- `llamacpp`: Run local models directly using llamacpp (alias: `thebloke`, `gguf`)
+- `ollama`: Run local models through Ollama (wrapper for llamacpp)
+- `azure`: Azure Chat Models
+- `anthropic`: Anthropic Chat Models
+- `google`: Google Chat Models
 
 ### Examples
 
-- `openai/gpt-3.5-turbo`: Classic ChatGPT
-- `gguf/deepseek-llm-7b-chat`: DeepSeek LLM 7B Chat
-- `gguf/OpenHermes-2.5-7B`: OpenHermes 2.5
-- `TheBloke/deepseek-llm-7B-chat-GGUF:Q3_K_M`: (eg thebloke huggingface identifier)
-- `local/neural-chat-7B-v3-1`: Neural Chat 7B (local as alias for gguf)
+- `openai/gpt-3.5-turbo`: ChatGPT Classic
+- `openai/gpt-4-1106-preview`: GPT-4-Turbo
+- `ollama/openchat`: OpenChat3.5-1210
+- `ollama/openhermes2.5-mistral`: OpenHermes 2.5
+- `llamacpp/openchat-3.5-1210`: OpenChat3.5-1210
+- `TheBloke/Nous-Hermes-2-SOLAR-10.7B-GGUF`: alias for `llamacpp/...`
+- `TheBloke/openchat-3.5-0106-GGUF:Q3_K_L`: with Q label
 
 ### additional notes
 
-Checkout the file `src/funcchain/utils/model_defaults.py` for the code that parses the string identifier.
+Checkout the file `src/funcchain/model/defaults.py` for the code that parses the string identifier.
 Feel free to create a PR to add more models to the defaults. Or tell me how wrong I am and create a better system.

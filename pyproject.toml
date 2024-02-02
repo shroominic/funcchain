@@ -1,22 +1,28 @@
 [project]
 name = "funcchain"
-version = "0.2.0-alpha.1"
+version = "0.2.0"
 description = "🔖 write prompts as python functions"
-authors = [
-    { name = "Shroominic", email = "contact@shroominic.com" }
-]
+authors = [{ name = "Shroominic", email = "contact@shroominic.com" }]
 dependencies = [
-    "langchain>=0.0.347",
-    "pydantic-settings>=2.1.0",
+    "langchain_openai>=0.0.3",
+    "pydantic-settings>=2",
     "docstring-parser>=0.15",
-    "rich>=13.7.0",
-    "jinja2>=3.1.2",
-    "pillow>=10.1.0",
+    "rich>=13",
+    "jinja2>=3",
 ]
 license = "MIT"
 readme = "README.md"
 requires-python = ">= 3.10, <3.13"
-keywords = ["funcchain", "ai", "llm", "langchain", "pydantic", "pythonic", "cognitive systems", "agent framework"]
+keywords = [
+    "funcchain",
+    "ai",
+    "llm",
+    "langchain",
+    "pydantic",
+    "pythonic",
+    "cognitive systems",
+    "agent framework",
+]
 classifiers = [
     "License :: OSI Approved :: MIT License",
     "Programming Language :: Python :: 3.10",
@@ -36,30 +42,30 @@ build-backend = "hatchling.build"
 [tool.rye]
 managed = true
 dev-dependencies = [
+    "funcchain[all]",
     "ruff",
     "mypy",
     "isort",
     "pytest",
     "ipython",
     "pre-commit",
-    "funcchain[all]",
+    "types-PyYAML>=6",
     "mkdocs-material>=9.4",
-    "beautifulsoup4>=4.12",
-    "python-dotenv>=1",
 ]
 
 [project.optional-dependencies]
-local = [
-    "llama-cpp-python>=0.2.20",
-    "huggingface_hub>=0.19.4",
-]
-openai = [
-    "openai>=1.3.4",
-    "tiktoken>=0.5.1",
-]
+openai = ["langchain_openai"]
+ollama = ["langchain_community"]
+llamacpp = ["llama-cpp-python>=0.2.32", "huggingface_hub>=0.20"]
+pillow = ["pillow"]
+example-extras = ["langchain>=0.1", "faiss-cpu>=1.7.4", "beautifulsoup4>=4.12"]
 all = [
-    "funcchain[local]",
+    "funcchain[pillow]",
     "funcchain[openai]",
+    "funcchain[ollama]",
+    "funcchain[llamacpp]",
+    "funcchain[example-extras]",
+    "langchain",
 ]
 
 [tool.hatch.metadata]
@@ -85,3 +91,7 @@ ignore_missing_imports = true
 disallow_untyped_defs = true
 disallow_untyped_calls = true
 disallow_incomplete_defs = true
+
+[tool.ruff]
+select = ["E", "F", "I"]
+line-length = 120
