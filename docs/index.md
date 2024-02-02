@@ -6,6 +6,7 @@
 ![Downloads](https://img.shields.io/pypi/dm/funcchain)
 [![Discord](https://img.shields.io/discord/1192334452110659664?label=discord)](https://discord.gg/TrwWWMXdtR)
 ![PyVersion](https://img.shields.io/pypi/pyversions/funcchain)
+[![Twitter Follow](https://img.shields.io/twitter/follow/shroominic?style=social)](https://x.com/shroominic)
 
 `funcchain` is the _most pythonic_ way of writing cognitive systems. Leveraging pydantic models as output schemas combined with langchain in the backend allows for a seamless integration of llms into your apps.
 It utilizes perfect with OpenAI Functions or LlamaCpp grammars (json-schema-mode) for efficient structured output.
