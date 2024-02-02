@@ -1551,6 +1551,19 @@ This will convert your function into a runnable that can be used in LCEL so you 
 </span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="c1">#    A sip of love, in every swirl</span>
 </span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="c1">#    In Japanese tea, love&#39;s essence twirls</span>
 </span></code></pre></div>
+<!-- markdownlint-disable MD033 MD046 -->
+
+<div class="admonition useful">
+<p class="admonition-title">Useful</p>
+<p>For seeing whats going on inside the LLM you should try the Langsmith integration:
+Add those lines to .env and funcchain will use langsmith tracing.</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="nv">LANGCHAIN_TRACING_V2</span><span class="o">=</span><span class="nb">true</span>
+</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="nv">LANGCHAIN_API_KEY</span><span class="o">=</span><span class="s2">&quot;ls__api_key&quot;</span>
+</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="nv">LANGCHAIN_PROJECT</span><span class="o">=</span><span class="s2">&quot;PROJECT_NAME&quot;</span>
+</span></code></pre></div>
+<p>Langsmith is used to understand what happens under the hood of your LLM generations.
+When multiple LLM calls are used for an output they can be logged for debugging.</p>
+</div>
 
 
 

@@ -1518,7 +1518,7 @@ Meaning it will turn your function into usable LLM input.</p>
 <div class="language-python highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="kn">from</span> <span class="nn">pydantic</span> <span class="kn">import</span> <span class="n">BaseModel</span><span class="p">,</span> <span class="n">Field</span>
 </span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="kn">from</span> <span class="nn">funcchain</span> <span class="kn">import</span> <span class="n">chain</span>
 </span></code></pre></div>
-<p><strong>Data Structures and Model Definitions</strong>
+<p><strong>Data Structures and Model Definitions</strong></p>
 <div class="language-python highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="c1"># define nested models</span>
 </span><span id="__span-6-2"><a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="k">class</span> <span class="nc">Item</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
 </span><span id="__span-6-3"><a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s2">&quot;Name of the item&quot;</span><span class="p">)</span>
@@ -1532,7 +1532,7 @@ Meaning it will turn your function into usable LLM input.</p>
 </span><span id="__span-6-11"><a id="__codelineno-6-11" name="__codelineno-6-11" href="#__codelineno-6-11"></a><span class="k">class</span> <span class="nc">TodoList</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
 </span><span id="__span-6-12"><a id="__codelineno-6-12" name="__codelineno-6-12" href="#__codelineno-6-12"></a>    <span class="n">todos</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Item</span><span class="p">]</span>
 </span><span id="__span-6-13"><a id="__codelineno-6-13" name="__codelineno-6-13" href="#__codelineno-6-13"></a>    <span class="n">urgency</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s2">&quot;The urgency of all tasks (1-10)&quot;</span><span class="p">)</span>
-</span></code></pre></div></p>
+</span></code></pre></div>
 <p>In this example, we create a more complex data structure with nested models.
 The Item model defines the attributes of a single item, such as its name, description, and keywords.
 ShoppingList and TodoList models define the attributes of a shopping list and a todo list, utilizing the Item model as a nested model.</p>
@@ -1543,7 +1543,7 @@ Additionally you can include a docstring for each model class to provide further
 <p class="admonition-title">Important</p>
 <p>Everything including class names, argument names, doc string and field descriptions are part of the prompt and can be optimised using prompting techniques.</p>
 </div>
-<p><strong>Union types</strong>
+<p><strong>Union types</strong></p>
 <div class="language-python highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="c1"># support for union types</span>
 </span><span id="__span-7-2"><a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="k">def</span> <span class="nf">extract_list</span><span class="p">(</span><span class="n">user_input</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">TodoList</span> <span class="o">|</span> <span class="n">ShoppingList</span><span class="p">:</span>
 </span><span id="__span-7-3"><a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
@@ -1551,51 +1551,40 @@ Additionally you can include a docstring for each model class to provide further
 </span><span id="__span-7-5"><a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a><span class="sd">    &quot;&quot;&quot;</span>
 </span><span id="__span-7-6"><a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a>    <span class="k">return</span> <span class="n">chain</span><span class="p">()</span>
 </span></code></pre></div>
-The extract_list function uses the chain function to analyze user input and return a structured list:
+<p>The extract_list function uses the chain function to analyze user input and return a structured list:
 In the example:
 - Union Types: It can return either a TodoList or a ShoppingList, depending on the input.
 - Usage of chain: chain simplifies the process, deciding the type of list to return.</p>
 <p>For your application this is going to serve as a router to route between your previously defined models.</p>
-<p><strong>Get a list from the user</strong> (here as "lst")
-<div class="language-python highlight"><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="c1"># the model will choose the output type automatically</span>
-</span><span id="__span-8-2"><a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="n">lst</span> <span class="o">=</span> <span class="n">extract_list</span><span class="p">(</span>
-</span><span id="__span-8-3"><a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a>    <span class="nb">input</span><span class="p">(</span><span class="s2">&quot;Enter your list: &quot;</span><span class="p">)</span>
-</span><span id="__span-8-4"><a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a><span class="p">)</span>
-</span></code></pre></div></p>
+<p><strong>Get a list from the user</strong> (here as "lst")</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="n">lst</span> <span class="o">=</span> <span class="n">extract_list</span><span class="p">(</span><span class="s2">&quot;Complete project report, Prepare for meeting, Respond to emails&quot;</span><span class="p">)</span>
+</span></code></pre></div>
 <p><strong>Define your custom handlers</strong></p>
 <p>And now its time to define what happens with the result.
 You can then use the lst (list) variable to access the attributes of the list.
 It utilizes pattern matching to determine the type of list and print the corresponding output.</p>
-<div class="language-python highlight"><pre><span></span><code><span id="__span-9-1"><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="c1"># custom handler based on type</span>
-</span><span id="__span-9-2"><a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="k">match</span> <span class="n">lst</span><span class="p">:</span>
-</span><span id="__span-9-3"><a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a>    <span class="k">case</span> <span class="n">ShoppingList</span><span class="p">(</span><span class="n">items</span><span class="o">=</span><span class="n">items</span><span class="p">,</span> <span class="n">store</span><span class="o">=</span><span class="n">store</span><span class="p">):</span>
-</span><span id="__span-9-4"><a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a>        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Here is your Shopping List: &quot;</span><span class="p">)</span>
-</span><span id="__span-9-5"><a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a>        <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">items</span><span class="p">:</span>
-</span><span id="__span-9-6"><a id="__codelineno-9-6" name="__codelineno-9-6" href="#__codelineno-9-6"></a>            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">item</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">item</span><span class="o">.</span><span class="n">description</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-</span><span id="__span-9-7"><a id="__codelineno-9-7" name="__codelineno-9-7" href="#__codelineno-9-7"></a>        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;You need to go to: </span><span class="si">{</span><span class="n">store</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-</span><span id="__span-9-8"><a id="__codelineno-9-8" name="__codelineno-9-8" href="#__codelineno-9-8"></a>
-</span><span id="__span-9-9"><a id="__codelineno-9-9" name="__codelineno-9-9" href="#__codelineno-9-9"></a>    <span class="k">case</span> <span class="n">TodoList</span><span class="p">(</span><span class="n">todos</span><span class="o">=</span><span class="n">todos</span><span class="p">,</span> <span class="n">urgency</span><span class="o">=</span><span class="n">urgency</span><span class="p">):</span>
-</span><span id="__span-9-10"><a id="__codelineno-9-10" name="__codelineno-9-10" href="#__codelineno-9-10"></a>        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Here is your Todo List: &quot;</span><span class="p">)</span>
-</span><span id="__span-9-11"><a id="__codelineno-9-11" name="__codelineno-9-11" href="#__codelineno-9-11"></a>        <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">todos</span><span class="p">:</span>
-</span><span id="__span-9-12"><a id="__codelineno-9-12" name="__codelineno-9-12" href="#__codelineno-9-12"></a>            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">item</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">item</span><span class="o">.</span><span class="n">description</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-</span><span id="__span-9-13"><a id="__codelineno-9-13" name="__codelineno-9-13" href="#__codelineno-9-13"></a>        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Urgency: </span><span class="si">{</span><span class="n">urgency</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-9-1"><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="k">match</span> <span class="n">lst</span><span class="p">:</span>
+</span><span id="__span-9-2"><a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a>    <span class="k">case</span> <span class="n">ShoppingList</span><span class="p">(</span><span class="n">items</span><span class="o">=</span><span class="n">items</span><span class="p">,</span> <span class="n">store</span><span class="o">=</span><span class="n">store</span><span class="p">):</span>
+</span><span id="__span-9-3"><a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a>        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Shopping List: &quot;</span><span class="p">)</span>
+</span><span id="__span-9-4"><a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a>        <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">items</span><span class="p">:</span>
+</span><span id="__span-9-5"><a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a>            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">item</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">item</span><span class="o">.</span><span class="n">description</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</span><span id="__span-9-6"><a id="__codelineno-9-6" name="__codelineno-9-6" href="#__codelineno-9-6"></a>        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;You need to go to: </span><span class="si">{</span><span class="n">store</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</span><span id="__span-9-7"><a id="__codelineno-9-7" name="__codelineno-9-7" href="#__codelineno-9-7"></a>
+</span><span id="__span-9-8"><a id="__codelineno-9-8" name="__codelineno-9-8" href="#__codelineno-9-8"></a>    <span class="k">case</span> <span class="n">TodoList</span><span class="p">(</span><span class="n">todos</span><span class="o">=</span><span class="n">todos</span><span class="p">,</span> <span class="n">urgency</span><span class="o">=</span><span class="n">urgency</span><span class="p">):</span>
+</span><span id="__span-9-9"><a id="__codelineno-9-9" name="__codelineno-9-9" href="#__codelineno-9-9"></a>        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Todo List: &quot;</span><span class="p">)</span>
+</span><span id="__span-9-10"><a id="__codelineno-9-10" name="__codelineno-9-10" href="#__codelineno-9-10"></a>        <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">todos</span><span class="p">:</span>
+</span><span id="__span-9-11"><a id="__codelineno-9-11" name="__codelineno-9-11" href="#__codelineno-9-11"></a>            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">item</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">item</span><span class="o">.</span><span class="n">description</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</span><span id="__span-9-12"><a id="__codelineno-9-12" name="__codelineno-9-12" href="#__codelineno-9-12"></a>        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Urgency: </span><span class="si">{</span><span class="n">urgency</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 </span></code></pre></div>
 </div>
 <div class="termy">
-    <div class="language-text highlight"><pre><span></span><code><span id="__span-10-1"><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>lst = extract_list(
-</span><span id="__span-10-2"><a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a>    input(&quot;Enter your list: &quot;)
-</span><span id="__span-10-3"><a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a>)
-</span><span id="__span-10-4"><a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a>
-</span><span id="__span-10-5"><a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a>User:
-</span><span id="__span-10-6"><a id="__codelineno-10-6" name="__codelineno-10-6" href="#__codelineno-10-6"></a>$ Complete project report, Prepare for meeting, Respond to emails;
-</span><span id="__span-10-7"><a id="__codelineno-10-7" name="__codelineno-10-7" href="#__codelineno-10-7"></a>$ if I don&#39;t respond I will be fired
-</span><span id="__span-10-8"><a id="__codelineno-10-8" name="__codelineno-10-8" href="#__codelineno-10-8"></a>
-</span><span id="__span-10-9"><a id="__codelineno-10-9" name="__codelineno-10-9" href="#__codelineno-10-9"></a>Output:
-</span><span id="__span-10-10"><a id="__codelineno-10-10" name="__codelineno-10-10" href="#__codelineno-10-10"></a>$ ...............
-</span><span id="__span-10-11"><a id="__codelineno-10-11" name="__codelineno-10-11" href="#__codelineno-10-11"></a>Here is your Todo List:
-</span><span id="__span-10-12"><a id="__codelineno-10-12" name="__codelineno-10-12" href="#__codelineno-10-12"></a>Complete your buisness tasks: project report, Prepare for meeting, Respond to emails
-</span><span id="__span-10-13"><a id="__codelineno-10-13" name="__codelineno-10-13" href="#__codelineno-10-13"></a>Urgency: 10
-</span><span id="__span-10-14"><a id="__codelineno-10-14" name="__codelineno-10-14" href="#__codelineno-10-14"></a>//add real output
+    <div class="language-text highlight"><pre><span></span><code><span id="__span-10-1"><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>$ extract_list(&quot;Complete project report, Prepare for meeting, Respond to emails&quot;)
+</span><span id="__span-10-2"><a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a>
+</span><span id="__span-10-3"><a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a>Todo List:
+</span><span id="__span-10-4"><a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a>Complete project report: Finish the project report and submit it
+</span><span id="__span-10-5"><a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a>Prepare for meeting: Gather all necessary materials and information for the meeting
+</span><span id="__span-10-6"><a id="__codelineno-10-6" name="__codelineno-10-6" href="#__codelineno-10-6"></a>Respond to emails: Reply to all pending emails
+</span><span id="__span-10-7"><a id="__codelineno-10-7" name="__codelineno-10-7" href="#__codelineno-10-7"></a>Urgency: 8
 </span></code></pre></div>
 </div>
 
@@ -1637,14 +1626,14 @@ It utilizes pattern matching to determine the type of list and print the corresp
 </span><span id="__span-12-2"><a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a><span class="kn">from</span> <span class="nn">pydantic</span> <span class="kn">import</span> <span class="n">BaseModel</span><span class="p">,</span> <span class="n">Field</span>
 </span><span id="__span-12-3"><a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a><span class="kn">from</span> <span class="nn">funcchain</span> <span class="kn">import</span> <span class="n">chain</span><span class="p">,</span> <span class="n">settings</span>
 </span></code></pre></div>
-<p><strong>Define Model</strong>
-set global llm using model identifiers see <a href="https://github.com/shroominic/funcchain/blob/main/MODELS.md">MODELS.md</a>
+<p><strong>Define Model</strong></p>
+<p>set global llm using model identifiers see <a href="https://github.com/shroominic/funcchain/blob/main/MODELS.md">MODELS.md</a></p>
 <div class="language-python highlight"><pre><span></span><code><span id="__span-13-1"><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="n">settings</span><span class="o">.</span><span class="n">llm</span> <span class="o">=</span> <span class="s2">&quot;openai/gpt-4-vision-preview&quot;</span>
 </span></code></pre></div>
-Funcchains modularity allows for all kinds of models including local models</p>
-<p><strong>Analize Image</strong>
-Get structured output from an image in our example <code>theme</code>, <code>description</code> and <code>objects</code>
-<div class="language-python highlight"><pre><span></span><code><span id="__span-14-1"><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a><span class="c1"># everything defined is part of the prompt</span>
+<p>Funcchains modularity allows for all kinds of models including local models</p>
+<p><strong>Analize Image</strong></p>
+<p>Get structured output from an image in our example <code>theme</code>, <code>description</code> and <code>objects</code></p>
+<p><div class="language-python highlight"><pre><span></span><code><span id="__span-14-1"><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a><span class="c1"># everything defined is part of the prompt</span>
 </span><span id="__span-14-2"><a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a><span class="k">class</span> <span class="nc">AnalysisResult</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
 </span><span id="__span-14-3"><a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;The result of an image analysis.&quot;&quot;&quot;</span>
 </span><span id="__span-14-4"><a id="__codelineno-14-4" name="__codelineno-14-4" href="#__codelineno-14-4"></a>
@@ -1655,7 +1644,7 @@ Get structured output from an image in our example <code>theme</code>, <code>des
 Adjsut the fields as needed. Play around with the example, feel free to experiment.
 You can customize the analysis by modifying the fields of the <code>AnalysisResult</code> model.</p>
 <p><strong>Function to start the analysis</strong></p>
-<p><div class="language-python highlight"><pre><span></span><code><span id="__span-15-1"><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a><span class="c1"># easy use of images as input with structured output</span>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-15-1"><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a><span class="c1"># easy use of images as input with structured output</span>
 </span><span id="__span-15-2"><a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a><span class="k">def</span> <span class="nf">analyse_image</span><span class="p">(</span><span class="n">image</span><span class="p">:</span> <span class="n">Image</span><span class="o">.</span><span class="n">Image</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">AnalysisResult</span><span class="p">:</span>
 </span><span id="__span-15-3"><a id="__codelineno-15-3" name="__codelineno-15-3" href="#__codelineno-15-3"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="__span-15-4"><a id="__codelineno-15-4" name="__codelineno-15-4" href="#__codelineno-15-4"></a><span class="sd">    Analyse the image and extract its</span>
@@ -1663,7 +1652,7 @@ You can customize the analysis by modifying the fields of the <code>AnalysisResu
 </span><span id="__span-15-6"><a id="__codelineno-15-6" name="__codelineno-15-6" href="#__codelineno-15-6"></a><span class="sd">    &quot;&quot;&quot;</span>
 </span><span id="__span-15-7"><a id="__codelineno-15-7" name="__codelineno-15-7" href="#__codelineno-15-7"></a>    <span class="k">return</span> <span class="n">chain</span><span class="p">()</span>
 </span></code></pre></div>
-Chain() will handle the image input.
+<p>Chain() will handle the image input.
 We here define again the fields from before <code>theme</code>, <code>description</code> and <code>objects</code></p>
 <p>give an image as input <code>image: Image.Image</code></p>
 <p>Its important that the fields defined earlier are mentioned here with the prompt
@@ -1725,34 +1714,28 @@ Start heating up your device.</p>
 <div class="language-python highlight"><pre><span></span><code><span id="__span-18-1"><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a><span class="kn">from</span> <span class="nn">pydantic</span> <span class="kn">import</span> <span class="n">BaseModel</span><span class="p">,</span> <span class="n">Field</span>
 </span><span id="__span-18-2"><a id="__codelineno-18-2" name="__codelineno-18-2" href="#__codelineno-18-2"></a><span class="kn">from</span> <span class="nn">funcchain</span> <span class="kn">import</span> <span class="n">chain</span><span class="p">,</span> <span class="n">settings</span>
 </span></code></pre></div>
-<p><strong>Choose and enjoy</strong>
-<div class="language-python highlight"><pre><span></span><code><span id="__span-19-1"><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a><span class="c1"># auto-download the model from huggingface</span>
-</span><span id="__span-19-2"><a id="__codelineno-19-2" name="__codelineno-19-2" href="#__codelineno-19-2"></a><span class="n">settings</span><span class="o">.</span><span class="n">llm</span> <span class="o">=</span> <span class="s2">&quot;llamacpp/openchat-3.5-0106:Q3_K_M&quot;</span>
-</span></code></pre></div></p>
-<p><strong>Structured output definition</strong>
-With an input <code>str</code> a description can be added to return a boolean <code>true</code> or <code>false</code>
+<p><strong>Choose and enjoy</strong></p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-19-1"><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a><span class="n">settings</span><span class="o">.</span><span class="n">llm</span> <span class="o">=</span> <span class="s2">&quot;llamacpp/openchat-3.5-0106:Q3_K_M&quot;</span>
+</span></code></pre></div>
+<p><strong>Structured output definition</strong></p>
+<p>With an input <code>str</code> a description can be added to return a boolean <code>true</code> or <code>false</code></p>
 <div class="language-python highlight"><pre><span></span><code><span id="__span-20-1"><a id="__codelineno-20-1" name="__codelineno-20-1" href="#__codelineno-20-1"></a><span class="k">class</span> <span class="nc">SentimentAnalysis</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
 </span><span id="__span-20-2"><a id="__codelineno-20-2" name="__codelineno-20-2" href="#__codelineno-20-2"></a>    <span class="n">analysis</span><span class="p">:</span> <span class="nb">str</span>
 </span><span id="__span-20-3"><a id="__codelineno-20-3" name="__codelineno-20-3" href="#__codelineno-20-3"></a>    <span class="n">sentiment</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s2">&quot;True for Happy, False for Sad&quot;</span><span class="p">)</span>
 </span></code></pre></div>
-Experiment yourself by adding different descriptions for the true and false case.</p>
-<p><strong>Use <code>chain()</code> to analize</strong>
-Defines with natural language the analysis
+<p>Experiment yourself by adding different descriptions for the true and false case.</p>
+<p><strong>Use <code>chain()</code> to analize</strong></p>
+<p>Defines with natural language the analysis</p>
 <div class="language-python highlight"><pre><span></span><code><span id="__span-21-1"><a id="__codelineno-21-1" name="__codelineno-21-1" href="#__codelineno-21-1"></a><span class="k">def</span> <span class="nf">analyze</span><span class="p">(</span><span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">SentimentAnalysis</span><span class="p">:</span>
-</span><span id="__span-21-2"><a id="__codelineno-21-2" name="__codelineno-21-2" href="#__codelineno-21-2"></a><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="__span-21-3"><a id="__codelineno-21-3" name="__codelineno-21-3" href="#__codelineno-21-3"></a><span class="sd">Determines the sentiment of the text.</span>
-</span><span id="__span-21-4"><a id="__codelineno-21-4" name="__codelineno-21-4" href="#__codelineno-21-4"></a><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="__span-21-5"><a id="__codelineno-21-5" name="__codelineno-21-5" href="#__codelineno-21-5"></a><span class="k">return</span> <span class="n">chain</span><span class="p">()</span>
+</span><span id="__span-21-2"><a id="__codelineno-21-2" name="__codelineno-21-2" href="#__codelineno-21-2"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="__span-21-3"><a id="__codelineno-21-3" name="__codelineno-21-3" href="#__codelineno-21-3"></a><span class="sd">    Determines the sentiment of the text.</span>
+</span><span id="__span-21-4"><a id="__codelineno-21-4" name="__codelineno-21-4" href="#__codelineno-21-4"></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="__span-21-5"><a id="__codelineno-21-5" name="__codelineno-21-5" href="#__codelineno-21-5"></a>    <span class="k">return</span> <span class="n">chain</span><span class="p">()</span>
 </span></code></pre></div>
-For your own usage adjust the str. Be precise and reference your classes again.</p>
+<p>For your own usage adjust the str. Be precise and reference your classes again.</p>
 <p><strong>Generate and print the output</strong>
-<div class="language-python highlight"><pre><span></span><code><span id="__span-22-1"><a id="__codelineno-22-1" name="__codelineno-22-1" href="#__codelineno-22-1"></a><span class="o">**</span><span class="n">Use</span> <span class="n">the</span> <span class="n">analyze</span> <span class="n">function</span> <span class="ow">and</span> <span class="nb">print</span> <span class="n">output</span><span class="o">**</span>
-</span><span id="__span-22-2"><a id="__codelineno-22-2" name="__codelineno-22-2" href="#__codelineno-22-2"></a>
-</span><span id="__span-22-3"><a id="__codelineno-22-3" name="__codelineno-22-3" href="#__codelineno-22-3"></a><span class="c1"># generates using the local model</span>
-</span><span id="__span-22-4"><a id="__codelineno-22-4" name="__codelineno-22-4" href="#__codelineno-22-4"></a><span class="n">poem</span> <span class="o">=</span> <span class="n">analyze</span><span class="p">(</span><span class="s2">&quot;I really like when my dog does a trick!&quot;</span><span class="p">)</span>
-</span><span id="__span-22-5"><a id="__codelineno-22-5" name="__codelineno-22-5" href="#__codelineno-22-5"></a>
-</span><span id="__span-22-6"><a id="__codelineno-22-6" name="__codelineno-22-6" href="#__codelineno-22-6"></a><span class="c1"># promised structured output (for local models!)</span>
-</span><span id="__span-22-7"><a id="__codelineno-22-7" name="__codelineno-22-7" href="#__codelineno-22-7"></a><span class="nb">print</span><span class="p">(</span><span class="n">poem</span><span class="o">.</span><span class="n">analysis</span><span class="p">)</span>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-22-1"><a id="__codelineno-22-1" name="__codelineno-22-1" href="#__codelineno-22-1"></a><span class="n">poem</span> <span class="o">=</span> <span class="n">analyze</span><span class="p">(</span><span class="s2">&quot;I really like when my dog does a trick!&quot;</span><span class="p">)</span>
+</span><span id="__span-22-2"><a id="__codelineno-22-2" name="__codelineno-22-2" href="#__codelineno-22-2"></a><span class="nb">print</span><span class="p">(</span><span class="n">poem</span><span class="o">.</span><span class="n">analysis</span><span class="p">)</span>
 </span></code></pre></div></p>
 </div>
 <div class="admonition useful">
