@@ -10,22 +10,28 @@
         <meta name="author" content="Shroominic">
       
       
+        <link rel="canonical" href="https://shroominic.github.io/funcchain/concepts/langchain/">
       
       
+        <link rel="prev" href="../errors/">
       
-      <link rel="icon" href="/funcchain/assets/images/favicon.png">
+      
+        <link rel="next" href="../pydantic/">
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
       <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.5.5">
     
     
       
-        <title>Funcchain - Docs</title>
+        <title>Langchain - Funcchain - Docs</title>
       
     
     
-      <link rel="stylesheet" href="/funcchain/assets/stylesheets/main.50c56a3b.min.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/main.50c56a3b.min.css">
       
         
-        <link rel="stylesheet" href="/funcchain/assets/stylesheets/palette.06af60db.min.css">
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.06af60db.min.css">
       
       
 
@@ -44,11 +50,11 @@
       
     
     
-      <link rel="stylesheet" href="/funcchain/css/termynal.css">
+      <link rel="stylesheet" href="../../css/termynal.css">
     
-      <link rel="stylesheet" href="/funcchain/css/custom.css">
+      <link rel="stylesheet" href="../../css/custom.css">
     
-    <script>__md_scope=new URL("/funcchain/",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
       
 
@@ -71,6 +77,11 @@
     <label class="md-overlay" for="__drawer"></label>
     <div data-md-component="skip">
       
+        
+        <a href="#langchain" class="md-skip">
+          Skip to content
+        </a>
+      
     </div>
     <div data-md-component="announce">
       
@@ -83,7 +94,7 @@
 
 <header class="md-header md-header--shadow" data-md-component="header">
   <nav class="md-header__inner md-grid" aria-label="Header">
-    <a href="/funcchain/." title="Funcchain - Docs" class="md-header__button md-logo" aria-label="Funcchain - Docs" data-md-component="logo">
+    <a href="../.." title="Funcchain - Docs" class="md-header__button md-logo" aria-label="Funcchain - Docs" data-md-component="logo">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
@@ -103,7 +114,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              
+              Langchain
             
           </span>
         </div>
@@ -190,7 +201,7 @@
 
 <nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
   <label class="md-nav__title" for="__drawer">
-    <a href="/funcchain/." title="Funcchain - Docs" class="md-nav__button md-logo" aria-label="Funcchain - Docs" data-md-component="logo">
+    <a href="../.." title="Funcchain - Docs" class="md-nav__button md-logo" aria-label="Funcchain - Docs" data-md-component="logo">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
@@ -220,7 +231,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/funcchain/." class="md-nav__link">
+      <a href="../.." class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -277,7 +288,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/funcchain/getting-started/installation/" class="md-nav__link">
+      <a href="../../getting-started/installation/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -298,7 +309,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/funcchain/getting-started/usage/" class="md-nav__link">
+      <a href="../../getting-started/usage/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -319,7 +330,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/funcchain/getting-started/demos/" class="md-nav__link">
+      <a href="../../getting-started/demos/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -340,7 +351,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/funcchain/getting-started/config/" class="md-nav__link">
+      <a href="../../getting-started/config/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -361,7 +372,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/funcchain/getting-started/models/" class="md-nav__link">
+      <a href="../../getting-started/models/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -386,19 +397,21 @@
       
   
   
+    
   
   
+  
     
     
     
     
     
-    <li class="md-nav__item md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
       
         
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
         
           
           <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
@@ -412,7 +425,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
           <label class="md-nav__title" for="__nav_3">
             <span class="md-nav__icon md-icon"></span>
             Concepts
@@ -426,7 +439,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/funcchain/concepts/overview/" class="md-nav__link">
+      <a href="../overview/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -447,7 +460,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/funcchain/concepts/chain/" class="md-nav__link">
+      <a href="../chain/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -468,7 +481,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/funcchain/concepts/input/" class="md-nav__link">
+      <a href="../input/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -489,7 +502,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/funcchain/concepts/prompting/" class="md-nav__link">
+      <a href="../prompting/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -510,7 +523,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/funcchain/concepts/parser/" class="md-nav__link">
+      <a href="../parser/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -531,7 +544,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/funcchain/concepts/errors/" class="md-nav__link">
+      <a href="../errors/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -549,10 +562,30 @@
                 
   
   
+    
   
   
-    <li class="md-nav__item">
-      <a href="/funcchain/concepts/langchain/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    Langchain
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         
   
   <span class="md-ellipsis">
@@ -561,6 +594,62 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#what-is-langchain" class="md-nav__link">
+    <span class="md-ellipsis">
+      What is LangChain?
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#why-building-on-top-of-it" class="md-nav__link">
+    <span class="md-ellipsis">
+      Why building on top of it?
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#compatibility" class="md-nav__link">
+    <span class="md-ellipsis">
+      Compatibility
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#lcel-example-rag" class="md-nav__link">
+    <span class="md-ellipsis">
+      LCEL Example (RAG)
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -573,7 +662,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/funcchain/concepts/pydantic/" class="md-nav__link">
+      <a href="../pydantic/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -594,7 +683,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/funcchain/concepts/local-models/" class="md-nav__link">
+      <a href="../local-models/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -615,7 +704,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/funcchain/concepts/streaming/" class="md-nav__link">
+      <a href="../streaming/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -636,7 +725,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/funcchain/concepts/unions/" class="md-nav__link">
+      <a href="../unions/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -657,7 +746,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/funcchain/concepts/vision/" class="md-nav__link">
+      <a href="../vision/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -722,7 +811,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/funcchain/features/literals/" class="md-nav__link">
+      <a href="../../features/literals/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -743,7 +832,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/funcchain/features/retry_parsing/" class="md-nav__link">
+      <a href="../../features/retry_parsing/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -764,7 +853,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/funcchain/features/vision/" class="md-nav__link">
+      <a href="../../features/vision/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -785,7 +874,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/funcchain/features/enums/" class="md-nav__link">
+      <a href="../../features/enums/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -806,7 +895,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/funcchain/features/dynamic_router/" class="md-nav__link">
+      <a href="../../features/dynamic_router/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -827,7 +916,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/funcchain/features/stream/" class="md-nav__link">
+      <a href="../../features/stream/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -848,7 +937,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/funcchain/features/llamacpp/" class="md-nav__link">
+      <a href="../../features/llamacpp/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -869,7 +958,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/funcchain/features/openai_json_mode/" class="md-nav__link">
+      <a href="../../features/openai_json_mode/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -890,7 +979,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/funcchain/features/static_router/" class="md-nav__link">
+      <a href="../../features/static_router/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -911,7 +1000,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/funcchain/features/ollama/" class="md-nav__link">
+      <a href="../../features/ollama/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -932,7 +1021,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/funcchain/features/error_output/" class="md-nav__link">
+      <a href="../../features/error_output/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -997,7 +1086,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/funcchain/advanced/async/" class="md-nav__link">
+      <a href="../../advanced/async/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1018,7 +1107,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/funcchain/advanced/signature/" class="md-nav__link">
+      <a href="../../advanced/signature/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1039,7 +1128,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/funcchain/advanced/runnables/" class="md-nav__link">
+      <a href="../../advanced/runnables/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1060,7 +1149,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/funcchain/advanced/codebase-scaling/" class="md-nav__link">
+      <a href="../../advanced/codebase-scaling/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1081,7 +1170,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/funcchain/advanced/customization/" class="md-nav__link">
+      <a href="../../advanced/customization/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1102,7 +1191,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/funcchain/advanced/stream-parsing/" class="md-nav__link">
+      <a href="../../advanced/stream-parsing/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1123,7 +1212,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/funcchain/advanced/custom-parser-types/" class="md-nav__link">
+      <a href="../../advanced/custom-parser-types/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1188,7 +1277,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/funcchain/contributing/dev-setup/" class="md-nav__link">
+      <a href="../../contributing/dev-setup/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1209,7 +1298,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/funcchain/contributing/codebase-structure/" class="md-nav__link">
+      <a href="../../contributing/codebase-structure/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1230,7 +1319,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/funcchain/contributing/contributors/" class="md-nav__link">
+      <a href="../../contributing/contributors/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1251,7 +1340,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/funcchain/contributing/security/" class="md-nav__link">
+      <a href="../../contributing/security/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1272,7 +1361,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/funcchain/contributing/roadmap/" class="md-nav__link">
+      <a href="../../contributing/roadmap/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1293,7 +1382,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/funcchain/contributing/license/" class="md-nav__link">
+      <a href="../../contributing/license/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1321,7 +1410,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/funcchain/changelog/" class="md-nav__link">
+      <a href="../../changelog/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1351,6 +1440,52 @@
   
   
   
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#what-is-langchain" class="md-nav__link">
+    <span class="md-ellipsis">
+      What is LangChain?
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#why-building-on-top-of-it" class="md-nav__link">
+    <span class="md-ellipsis">
+      Why building on top of it?
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#compatibility" class="md-nav__link">
+    <span class="md-ellipsis">
+      Compatibility
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#lcel-example-rag" class="md-nav__link">
+    <span class="md-ellipsis">
+      LCEL Example (RAG)
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
   
 </nav>
                   </div>
@@ -1362,8 +1497,73 @@
             <div class="md-content" data-md-component="content">
               <article class="md-content__inner md-typeset">
                 
-  <h1>404 - Not found</h1>
+                  
 
+  
+  
+
+
+<h1 id="langchain">LangChain<a class="headerlink" href="#langchain" title="Permanent link">&para;</a></h1>
+<h2 id="what-is-langchain">What is LangChain?<a class="headerlink" href="#what-is-langchain" title="Permanent link">&para;</a></h2>
+<p><a href="https://python.langchain.com/docs/get_started/introduction">LangChain</a> is the most advanced library for building applications using large language models.
+Funcchain is built on top of <code>langchain_core</code> which inculdes <a href="https://python.langchain.com/docs/expression_language/get_started">LangChain Expression Language (LCEL)</a> and alot more powerful core abstractions for building cognitive architectures.</p>
+<h2 id="why-building-on-top-of-it">Why building on top of it?<a class="headerlink" href="#why-building-on-top-of-it" title="Permanent link">&para;</a></h2>
+<p>We have been looking into alot of different libraries and wanted to start a llm framework from scratch.
+But langchain already provides all of the fundamental abstractions we need to use and it is the most advanced library we have found so far.</p>
+<h2 id="compatibility">Compatibility<a class="headerlink" href="#compatibility" title="Permanent link">&para;</a></h2>
+<p>Funcchain is compatible with all langchain chat models, memory stores and runnables.
+It's using langchain output parsers and the templating system.
+On the other hand langchain is compatible with funcchain by using the <code>@runnable</code> decorator.
+This will convert your function into a runnable that can be used in LCEL so you can build your own complex cognitive architectures.</p>
+<h2 id="lcel-example-rag">LCEL Example (RAG)<a class="headerlink" href="#lcel-example-rag" title="Permanent link">&para;</a></h2>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="kn">from</span> <span class="nn">funcchain</span> <span class="kn">import</span> <span class="n">chain</span><span class="p">,</span> <span class="n">runnable</span>
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="kn">from</span> <span class="nn">langchain_community.vectorstores.faiss</span> <span class="kn">import</span> <span class="n">FAISS</span>
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="kn">from</span> <span class="nn">langchain_core.runnables</span> <span class="kn">import</span> <span class="n">Runnable</span><span class="p">,</span> <span class="n">RunnablePassthrough</span>
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="kn">from</span> <span class="nn">langchain_openai.embeddings</span> <span class="kn">import</span> <span class="n">OpenAIEmbeddings</span>
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>
+</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="nd">@runnable</span>
+</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="k">def</span> <span class="nf">generate_poem</span><span class="p">(</span><span class="n">topic</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">context</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="sd">    Generate a poem about the topic with the given context.</span>
+</span><span id="__span-0-10"><a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="__span-0-11"><a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>    <span class="k">return</span> <span class="n">chain</span><span class="p">()</span>
+</span><span id="__span-0-12"><a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>
+</span><span id="__span-0-13"><a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a><span class="n">vectorstore</span> <span class="o">=</span> <span class="n">FAISS</span><span class="o">.</span><span class="n">from_texts</span><span class="p">(</span>
+</span><span id="__span-0-14"><a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>    <span class="p">[</span>
+</span><span id="__span-0-15"><a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a>        <span class="s2">&quot;cold showers are good for your immune system&quot;</span><span class="p">,</span>
+</span><span id="__span-0-16"><a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a>        <span class="s2">&quot;i dont like when people are mean to me&quot;</span><span class="p">,</span>
+</span><span id="__span-0-17"><a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a>        <span class="s2">&quot;japanese tea is full of heart warming flavors&quot;</span><span class="p">,</span>
+</span><span id="__span-0-18"><a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a>    <span class="p">],</span>
+</span><span id="__span-0-19"><a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a>    <span class="n">embedding</span><span class="o">=</span><span class="n">OpenAIEmbeddings</span><span class="p">(),</span>
+</span><span id="__span-0-20"><a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a><span class="p">)</span>
+</span><span id="__span-0-21"><a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a><span class="n">retriever</span> <span class="o">=</span> <span class="n">vectorstore</span><span class="o">.</span><span class="n">as_retriever</span><span class="p">(</span><span class="n">search_kwargs</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;k&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">})</span>
+</span><span id="__span-0-22"><a id="__codelineno-0-22" name="__codelineno-0-22" href="#__codelineno-0-22"></a>
+</span><span id="__span-0-23"><a id="__codelineno-0-23" name="__codelineno-0-23" href="#__codelineno-0-23"></a><span class="n">retrieval_chain</span><span class="p">:</span> <span class="n">Runnable</span> <span class="o">=</span> <span class="p">{</span>
+</span><span id="__span-0-24"><a id="__codelineno-0-24" name="__codelineno-0-24" href="#__codelineno-0-24"></a>    <span class="s2">&quot;context&quot;</span><span class="p">:</span> <span class="n">retriever</span><span class="p">,</span>
+</span><span id="__span-0-25"><a id="__codelineno-0-25" name="__codelineno-0-25" href="#__codelineno-0-25"></a>    <span class="s2">&quot;topic&quot;</span><span class="p">:</span> <span class="n">RunnablePassthrough</span><span class="p">(),</span>
+</span><span id="__span-0-26"><a id="__codelineno-0-26" name="__codelineno-0-26" href="#__codelineno-0-26"></a><span class="p">}</span> <span class="o">|</span> <span class="n">generate_poem</span>
+</span><span id="__span-0-27"><a id="__codelineno-0-27" name="__codelineno-0-27" href="#__codelineno-0-27"></a>
+</span><span id="__span-0-28"><a id="__codelineno-0-28" name="__codelineno-0-28" href="#__codelineno-0-28"></a><span class="nb">print</span><span class="p">(</span><span class="n">retrieval_chain</span><span class="o">.</span><span class="n">invoke</span><span class="p">(</span><span class="s2">&quot;love&quot;</span><span class="p">))</span>
+</span></code></pre></div>
+<p>The chain will then retrieve ´japanese tea is full of heart warming flavors` as context since it's the most similar to the topic "love".</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="c1"># =&gt; In a cup of tea, love&#39;s warmth unfurls</span>
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="c1">#    Japanese flavors, heartwarming pearls</span>
+</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="c1">#    A sip of love, in every swirl</span>
+</span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="c1">#    In Japanese tea, love&#39;s essence twirls</span>
+</span></code></pre></div>
+
+
+
+
+
+
+
+
+
+
+
+
+                
               </article>
             </div>
           
@@ -1397,14 +1597,14 @@
     </div>
     
     
-    <script id="__config" type="application/json">{"base": "/funcchain/", "features": [], "search": "/funcchain/assets/javascripts/workers/search.b8dbb3d2.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    <script id="__config" type="application/json">{"base": "../..", "features": [], "search": "../../assets/javascripts/workers/search.b8dbb3d2.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
     
     
-      <script src="/funcchain/assets/javascripts/bundle.c18c5fb9.min.js"></script>
+      <script src="../../assets/javascripts/bundle.c18c5fb9.min.js"></script>
       
-        <script src="/funcchain/js/termynal.js"></script>
+        <script src="../../js/termynal.js"></script>
       
-        <script src="/funcchain/js/custom.js"></script>
+        <script src="../../js/custom.js"></script>
       
     
   </body>

@@ -10,22 +10,28 @@
         <meta name="author" content="Shroominic">
       
       
+        <link rel="canonical" href="https://shroominic.github.io/funcchain/concepts/parser/">
       
       
+        <link rel="prev" href="../prompting/">
       
-      <link rel="icon" href="/funcchain/assets/images/favicon.png">
+      
+        <link rel="next" href="../errors/">
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
       <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.5.5">
     
     
       
-        <title>Funcchain - Docs</title>
+        <title>Output Parsing - Funcchain - Docs</title>
       
     
     
-      <link rel="stylesheet" href="/funcchain/assets/stylesheets/main.50c56a3b.min.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/main.50c56a3b.min.css">
       
         
-        <link rel="stylesheet" href="/funcchain/assets/stylesheets/palette.06af60db.min.css">
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.06af60db.min.css">
       
       
 
@@ -44,11 +50,11 @@
       
     
     
-      <link rel="stylesheet" href="/funcchain/css/termynal.css">
+      <link rel="stylesheet" href="../../css/termynal.css">
     
-      <link rel="stylesheet" href="/funcchain/css/custom.css">
+      <link rel="stylesheet" href="../../css/custom.css">
     
-    <script>__md_scope=new URL("/funcchain/",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
       
 
@@ -71,6 +77,11 @@
     <label class="md-overlay" for="__drawer"></label>
     <div data-md-component="skip">
       
+        
+        <a href="#output-parser" class="md-skip">
+          Skip to content
+        </a>
+      
     </div>
     <div data-md-component="announce">
       
@@ -83,7 +94,7 @@
 
 <header class="md-header md-header--shadow" data-md-component="header">
   <nav class="md-header__inner md-grid" aria-label="Header">
-    <a href="/funcchain/." title="Funcchain - Docs" class="md-header__button md-logo" aria-label="Funcchain - Docs" data-md-component="logo">
+    <a href="../.." title="Funcchain - Docs" class="md-header__button md-logo" aria-label="Funcchain - Docs" data-md-component="logo">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
@@ -103,7 +114,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              
+              Output Parsing
             
           </span>
         </div>
@@ -190,7 +201,7 @@
 
 <nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
   <label class="md-nav__title" for="__drawer">
-    <a href="/funcchain/." title="Funcchain - Docs" class="md-nav__button md-logo" aria-label="Funcchain - Docs" data-md-component="logo">
+    <a href="../.." title="Funcchain - Docs" class="md-nav__button md-logo" aria-label="Funcchain - Docs" data-md-component="logo">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
@@ -220,7 +231,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/funcchain/." class="md-nav__link">
+      <a href="../.." class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -277,7 +288,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/funcchain/getting-started/installation/" class="md-nav__link">
+      <a href="../../getting-started/installation/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -298,7 +309,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/funcchain/getting-started/usage/" class="md-nav__link">
+      <a href="../../getting-started/usage/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -319,7 +330,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/funcchain/getting-started/demos/" class="md-nav__link">
+      <a href="../../getting-started/demos/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -340,7 +351,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/funcchain/getting-started/config/" class="md-nav__link">
+      <a href="../../getting-started/config/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -361,7 +372,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/funcchain/getting-started/models/" class="md-nav__link">
+      <a href="../../getting-started/models/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -386,19 +397,21 @@
       
   
   
+    
   
   
+  
     
     
     
     
     
-    <li class="md-nav__item md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
       
         
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
         
           
           <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
@@ -412,7 +425,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
           <label class="md-nav__title" for="__nav_3">
             <span class="md-nav__icon md-icon"></span>
             Concepts
@@ -426,7 +439,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/funcchain/concepts/overview/" class="md-nav__link">
+      <a href="../overview/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -447,7 +460,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/funcchain/concepts/chain/" class="md-nav__link">
+      <a href="../chain/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -468,7 +481,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/funcchain/concepts/input/" class="md-nav__link">
+      <a href="../input/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -489,7 +502,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/funcchain/concepts/prompting/" class="md-nav__link">
+      <a href="../prompting/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -507,10 +520,30 @@
                 
   
   
+    
   
   
-    <li class="md-nav__item">
-      <a href="/funcchain/concepts/parser/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    Output Parsing
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         
   
   <span class="md-ellipsis">
@@ -519,6 +552,80 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#output-type-hints" class="md-nav__link">
+    <span class="md-ellipsis">
+      Output Type Hints
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#strings" class="md-nav__link">
+    <span class="md-ellipsis">
+      Strings
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pydantic-models" class="md-nav__link">
+    <span class="md-ellipsis">
+      Pydantic Models
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#primitive-types" class="md-nav__link">
+    <span class="md-ellipsis">
+      Primitive Types
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#union-types" class="md-nav__link">
+    <span class="md-ellipsis">
+      Union Types
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#streaming" class="md-nav__link">
+    <span class="md-ellipsis">
+      Streaming
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -531,7 +638,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/funcchain/concepts/errors/" class="md-nav__link">
+      <a href="../errors/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -552,7 +659,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/funcchain/concepts/langchain/" class="md-nav__link">
+      <a href="../langchain/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -573,7 +680,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/funcchain/concepts/pydantic/" class="md-nav__link">
+      <a href="../pydantic/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -594,7 +701,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/funcchain/concepts/local-models/" class="md-nav__link">
+      <a href="../local-models/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -615,7 +722,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/funcchain/concepts/streaming/" class="md-nav__link">
+      <a href="../streaming/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -636,7 +743,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/funcchain/concepts/unions/" class="md-nav__link">
+      <a href="../unions/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -657,7 +764,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/funcchain/concepts/vision/" class="md-nav__link">
+      <a href="../vision/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -722,7 +829,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/funcchain/features/literals/" class="md-nav__link">
+      <a href="../../features/literals/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -743,7 +850,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/funcchain/features/retry_parsing/" class="md-nav__link">
+      <a href="../../features/retry_parsing/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -764,7 +871,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/funcchain/features/vision/" class="md-nav__link">
+      <a href="../../features/vision/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -785,7 +892,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/funcchain/features/enums/" class="md-nav__link">
+      <a href="../../features/enums/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -806,7 +913,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/funcchain/features/dynamic_router/" class="md-nav__link">
+      <a href="../../features/dynamic_router/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -827,7 +934,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/funcchain/features/stream/" class="md-nav__link">
+      <a href="../../features/stream/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -848,7 +955,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/funcchain/features/llamacpp/" class="md-nav__link">
+      <a href="../../features/llamacpp/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -869,7 +976,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/funcchain/features/openai_json_mode/" class="md-nav__link">
+      <a href="../../features/openai_json_mode/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -890,7 +997,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/funcchain/features/static_router/" class="md-nav__link">
+      <a href="../../features/static_router/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -911,7 +1018,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/funcchain/features/ollama/" class="md-nav__link">
+      <a href="../../features/ollama/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -932,7 +1039,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/funcchain/features/error_output/" class="md-nav__link">
+      <a href="../../features/error_output/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -997,7 +1104,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/funcchain/advanced/async/" class="md-nav__link">
+      <a href="../../advanced/async/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1018,7 +1125,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/funcchain/advanced/signature/" class="md-nav__link">
+      <a href="../../advanced/signature/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1039,7 +1146,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/funcchain/advanced/runnables/" class="md-nav__link">
+      <a href="../../advanced/runnables/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1060,7 +1167,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/funcchain/advanced/codebase-scaling/" class="md-nav__link">
+      <a href="../../advanced/codebase-scaling/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1081,7 +1188,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/funcchain/advanced/customization/" class="md-nav__link">
+      <a href="../../advanced/customization/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1102,7 +1209,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/funcchain/advanced/stream-parsing/" class="md-nav__link">
+      <a href="../../advanced/stream-parsing/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1123,7 +1230,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/funcchain/advanced/custom-parser-types/" class="md-nav__link">
+      <a href="../../advanced/custom-parser-types/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1188,7 +1295,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/funcchain/contributing/dev-setup/" class="md-nav__link">
+      <a href="../../contributing/dev-setup/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1209,7 +1316,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/funcchain/contributing/codebase-structure/" class="md-nav__link">
+      <a href="../../contributing/codebase-structure/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1230,7 +1337,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/funcchain/contributing/contributors/" class="md-nav__link">
+      <a href="../../contributing/contributors/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1251,7 +1358,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/funcchain/contributing/security/" class="md-nav__link">
+      <a href="../../contributing/security/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1272,7 +1379,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/funcchain/contributing/roadmap/" class="md-nav__link">
+      <a href="../../contributing/roadmap/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1293,7 +1400,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/funcchain/contributing/license/" class="md-nav__link">
+      <a href="../../contributing/license/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1321,7 +1428,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/funcchain/changelog/" class="md-nav__link">
+      <a href="../../changelog/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1351,6 +1458,70 @@
   
   
   
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#output-type-hints" class="md-nav__link">
+    <span class="md-ellipsis">
+      Output Type Hints
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#strings" class="md-nav__link">
+    <span class="md-ellipsis">
+      Strings
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pydantic-models" class="md-nav__link">
+    <span class="md-ellipsis">
+      Pydantic Models
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#primitive-types" class="md-nav__link">
+    <span class="md-ellipsis">
+      Primitive Types
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#union-types" class="md-nav__link">
+    <span class="md-ellipsis">
+      Union Types
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#streaming" class="md-nav__link">
+    <span class="md-ellipsis">
+      Streaming
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
   
 </nav>
                   </div>
@@ -1362,8 +1533,108 @@
             <div class="md-content" data-md-component="content">
               <article class="md-content__inner md-typeset">
                 
-  <h1>404 - Not found</h1>
+                  
 
+  
+  
+
+
+<h1 id="output-parser">Output Parser<a class="headerlink" href="#output-parser" title="Permanent link">&para;</a></h1>
+<h2 id="output-type-hints">Output Type Hints<a class="headerlink" href="#output-type-hints" title="Permanent link">&para;</a></h2>
+<p>Funcchain recognises the output type hint you put on your function to automatically attach
+a fitting output parser to the end of your chain. This makes it really to code because you just use normal python typing syntax and funcchain handles everything for your.</p>
+<h2 id="strings">Strings<a class="headerlink" href="#strings" title="Permanent link">&para;</a></h2>
+<p>The simplest output type is a string.
+The output parser will return the content of the AI response just as it is.</p>
+<h2 id="pydantic-models">Pydantic Models<a class="headerlink" href="#pydantic-models" title="Permanent link">&para;</a></h2>
+<p>To force the model to respond in a certain way you can use pydantic models.
+This gives your alot of flexibility and control over the output because you can define the exact types of your fields and even add custom validation logic. Everything of your defined model will be part of the prompt including model_name, class_docstring, field_names, field_types and field_descriptions.
+This gives you alot of room for prompt engineering and optimisation.</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="kn">from</span> <span class="nn">funcchain</span> <span class="kn">import</span> <span class="n">chain</span>
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="kn">from</span> <span class="nn">pydantic</span> <span class="kn">import</span> <span class="n">BaseModel</span><span class="p">,</span> <span class="n">Field</span>
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="k">class</span> <span class="nc">GroceryList</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>    <span class="n">recipie</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s2">&quot;Goal of what to cook with all items.&quot;</span><span class="p">)</span>
+</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>    <span class="n">items</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s2">&quot;Items to buy&quot;</span><span class="p">)</span>
+</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>
+</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="k">def</span> <span class="nf">create_grocerylist</span><span class="p">(</span><span class="n">customer_request</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">GroceryList</span>
+</span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="__span-0-10"><a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="sd">    Come up with a grocery list based on what the customer wants.</span>
+</span><span id="__span-0-11"><a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="__span-0-12"><a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>    <span class="k">return</span> <span class="n">chain</span><span class="p">()</span>
+</span></code></pre></div>
+<p>When calling this function with
+e.g. <code>create_grocerylist("I want a cheap, protein rich and vegan meal.")</code>
+the model is then forced to respond using the model as a json_schema
+and the unterlying conversation would look like the following:</p>
+<div class="language-html highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="p">&lt;</span><span class="nt">HumanMessage</span><span class="p">&gt;</span>
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>    CUSTOMER_REQUEST:
+</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>    I want a cheap, protein rich and vegan meal.
+</span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>
+</span><span id="__span-1-5"><a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>    Come up with a grocery list based on what the customer wants.
+</span><span id="__span-1-6"><a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="p">&lt;/</span><span class="nt">HumanMessage</span><span class="p">&gt;</span>
+</span><span id="__span-1-7"><a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>
+</span><span id="__span-1-8"><a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="p">&lt;</span><span class="nt">AIMessage</span><span class="p">&gt;</span>
+</span><span id="__span-1-9"><a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a>    {
+</span><span id="__span-1-10"><a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a>        &quot;recipie&quot;: &quot;lentil soup&quot;
+</span><span id="__span-1-11"><a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a>        &quot;items&quot; [
+</span><span id="__span-1-12"><a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a>            &quot;todo&quot;,
+</span><span id="__span-1-13"><a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a>            &quot;insert&quot;,
+</span><span id="__span-1-14"><a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a>            &quot;ingredients&quot;
+</span><span id="__span-1-15"><a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a>        ]
+</span><span id="__span-1-16"><a id="__codelineno-1-16" name="__codelineno-1-16" href="#__codelineno-1-16"></a>    }
+</span><span id="__span-1-17"><a id="__codelineno-1-17" name="__codelineno-1-17" href="#__codelineno-1-17"></a><span class="p">&lt;/</span><span class="nt">AIMessage</span><span class="p">&gt;</span>
+</span></code></pre></div>
+<p>This json is then automatically validated and parsed into the pydantic model.
+When a validation fails the model automatically recieves the error as followup message and tries again.</p>
+<h2 id="primitive-types">Primitive Types<a class="headerlink" href="#primitive-types" title="Permanent link">&para;</a></h2>
+<p>You can also use other primitive types like int, float, bool, list, Literals, Enums, etc. </br>
+Funcchain will then create a temporary pydantic model with the type as a single field and use that as the output parser.</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="k">def</span> <span class="nf">create_grocerylist</span><span class="p">(</span><span class="n">customer_request</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="sd">    Come up with a grocery list based on what the customer wants.</span>
+</span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="__span-2-5"><a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>    <span class="k">return</span> <span class="n">chain</span><span class="p">()</span>
+</span></code></pre></div>
+<p>This time when calling this function with
+e.g. <code>create_grocerylist("I want a cheap, protein rich and vegan meal.")</code>
+funcchain automatically creates a temporary pydantic model in the background like this:</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="k">class</span> <span class="nc">Extract</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>    <span class="n">value</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+</span></code></pre></div>
+<p>The model then understands the desired shape and will output like here:</p>
+<div class="language-html highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="p">&lt;</span><span class="nt">AIMessage</span><span class="p">&gt;</span>
+</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>    {
+</span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>        &quot;value&quot;: [
+</span><span id="__span-4-4"><a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a>            &quot;todo&quot;,
+</span><span id="__span-4-5"><a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a>            &quot;insert&quot;,
+</span><span id="__span-4-6"><a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a>            &quot;ingredients&quot;
+</span><span id="__span-4-7"><a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a>        ]
+</span><span id="__span-4-8"><a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a>    }
+</span><span id="__span-4-9"><a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a><span class="p">&lt;/</span><span class="nt">AIMessage</span><span class="p">&gt;</span>
+</span></code></pre></div>
+<h2 id="union-types">Union Types<a class="headerlink" href="#union-types" title="Permanent link">&para;</a></h2>
+<p>You can also use mupliple PydanticModels at once as the output type using Unions.
+The LLM will then select one of the models that fits best your inputs.
+Checkout the seperate page for <a href="../unions/">UnionTypes</a> for more info.</p>
+<h2 id="streaming">Streaming<a class="headerlink" href="#streaming" title="Permanent link">&para;</a></h2>
+<p>You can stream everything with a <code>str</code> output type.</p>
+<p>Since pydantic models need to be fully constructed before they can be returned, you can't use them for streaming.
+There is one approach to stream pydantic models but it works only if all fields are Optional, which is not the case for most models and they still come field by field.</p>
+<p>This is not implemented yet but will be added in the future.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
               </article>
             </div>
           
@@ -1397,14 +1668,14 @@
     </div>
     
     
-    <script id="__config" type="application/json">{"base": "/funcchain/", "features": [], "search": "/funcchain/assets/javascripts/workers/search.b8dbb3d2.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    <script id="__config" type="application/json">{"base": "../..", "features": [], "search": "../../assets/javascripts/workers/search.b8dbb3d2.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
     
     
-      <script src="/funcchain/assets/javascripts/bundle.c18c5fb9.min.js"></script>
+      <script src="../../assets/javascripts/bundle.c18c5fb9.min.js"></script>
       
-        <script src="/funcchain/js/termynal.js"></script>
+        <script src="../../js/termynal.js"></script>
       
-        <script src="/funcchain/js/custom.js"></script>
+        <script src="../../js/custom.js"></script>
       
     
   </body>
