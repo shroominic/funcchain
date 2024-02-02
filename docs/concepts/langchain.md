@@ -58,3 +58,18 @@ The chain will then retrieve ´japanese tea is full of heart warming flavors` as
 #    A sip of love, in every swirl
 #    In Japanese tea, love's essence twirls
 ```
+
+<!-- markdownlint-disable MD033 MD046 -->
+
+!!! Useful
+    For seeing whats going on inside the LLM you should try the Langsmith integration:
+    Add those lines to .env and funcchain will use langsmith tracing.
+
+    ```bash
+    LANGCHAIN_TRACING_V2=true
+    LANGCHAIN_API_KEY="ls__api_key"
+    LANGCHAIN_PROJECT="PROJECT_NAME"
+    ```
+
+    Langsmith is used to understand what happens under the hood of your LLM generations.
+    When multiple LLM calls are used for an output they can be logged for debugging.
