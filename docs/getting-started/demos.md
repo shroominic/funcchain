@@ -165,7 +165,7 @@ print(recipe.ingredients)
     ```
     $ extract_list("Complete project report, Prepare for meeting, Respond to emails")
 
-    Todo List: 
+    Todo List:
     Complete project report: Finish the project report and submit it
     Prepare for meeting: Gather all necessary materials and information for the meeting
     Respond to emails: Reply to all pending emails
@@ -230,7 +230,7 @@ for obj in result.objects:
     **Analize Image**
 
     Get structured output from an image in our example `theme`, `description` and `objects`
-    
+
     ```python
     # everything defined is part of the prompt
     class AnalysisResult(BaseModel):
