@@ -33,26 +33,22 @@ def get_gguf_model(
     if (p := model_path / f"{name.lower()}.{label}.gguf").exists():
         return p
 
-    # check if available on huggingface
-    try:
-        # check local cache
+    repo_id = f"TheBloke/{name}-GGUF"
+    filename = f"{name.lower()}.{label}.gguf"
 
-        input(
-            f"Do you want to download this model from huggingface.co/TheBloke/{name}-GGUF ?\n"
-            "Press enter to continue."
-        )
+    try:
+        # todo make setting to turn prints off
         print("\033c")
-        print("Downloading model from huggingface...")
+        print("Downloading model from huggingface... (Ctrl+C to cancel)")
         p = hf_hub_download(
-            repo_id=f"TheBloke/{name}-GGUF",
-            filename=f"{name.lower()}.{label}.gguf",
+            repo_id,
+            filename,
             local_dir=model_path,
             local_dir_use_symlinks=True,
         )
         print("\033c")
         return Path(p)
-    except Exception as e:
-        print(e)
+    except Exception:
         raise ValueError(f"ModelNotFound: {name}.{label}")
 
 
