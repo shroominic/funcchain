@@ -8,7 +8,7 @@ This can enhance the user experience by already showing part of the response but
 If you want to stream all the tokens generated quickly to your console output,
 you can use the `settings.console_stream = True` setting.
 
-## `strem_to()` wrapper
+## `stream_to()` wrapper
 
 For streaming with non runnable funcchains you can wrap the LLM generation call into the `stream_to()` context manager. This would look like this:
 
