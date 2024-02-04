@@ -19,7 +19,7 @@ def analyze(text: str) -> SentimentAnalysis:
 
 if __name__ == "__main__":
     # set global llm
-    settings.llm = "llamacpp/Nous-Hermes-2-SOLAR-10.7B"
+    settings.llm = "llamacpp/nous-hermes-2-solar-10.7B"
     # log tokens as stream to console
     settings.console_stream = True
 

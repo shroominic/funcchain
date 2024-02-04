@@ -31,6 +31,5 @@ def gather_infos(user_description: str) -> Task:
     return chain()
 
 
-if __name__ == "__main__":
-    task = gather_infos("cleanup the kitchen")
-    print(f"{task=}")
+task = gather_infos("cleanup the kitchen")
+print(f"{task=}")
