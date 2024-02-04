@@ -683,9 +683,9 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#strem_to-wrapper" class="md-nav__link">
+  <a href="#stream_to-wrapper" class="md-nav__link">
     <span class="md-ellipsis">
-      strem_to() wrapper
+      stream_to() wrapper
     </span>
   </a>
   
@@ -802,32 +802,11 @@
   
   
     <li class="md-nav__item">
-      <a href="../../features/literals/" class="md-nav__link">
+      <a href="../../features/enums/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
-    Literals
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../features/retry_parsing/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    Retry Parsing
+    Enums
   </span>
   
 
@@ -865,11 +844,11 @@
   
   
     <li class="md-nav__item">
-      <a href="../../features/enums/" class="md-nav__link">
+      <a href="../../features/error_output/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
-    Enums
+    Error Output
   </span>
   
 
@@ -886,11 +865,11 @@
   
   
     <li class="md-nav__item">
-      <a href="../../features/dynamic_router/" class="md-nav__link">
+      <a href="../../features/retry_parsing/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
-    Dynamic Router
+    Retry Parsing
   </span>
   
 
@@ -907,53 +886,11 @@
   
   
     <li class="md-nav__item">
-      <a href="../../features/stream/" class="md-nav__link">
+      <a href="../../features/literals/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
-    Streaming Output
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../features/llamacpp/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    LlamaCpp
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../features/openai_json_mode/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    OpenAI JSON Output
+    Literals
   </span>
   
 
@@ -991,6 +928,48 @@
   
   
     <li class="md-nav__item">
+      <a href="../../features/dynamic_router/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Dynamic Router
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/llamacpp/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    LlamaCpp
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../features/ollama/" class="md-nav__link">
         
   
@@ -1012,11 +991,32 @@
   
   
     <li class="md-nav__item">
-      <a href="../../features/error_output/" class="md-nav__link">
+      <a href="../../features/openai_json_mode/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
-    Error Output
+    OpenAI JSON Output
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/stream/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Streaming Output
   </span>
   
 
@@ -1450,9 +1450,9 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#strem_to-wrapper" class="md-nav__link">
+  <a href="#stream_to-wrapper" class="md-nav__link">
     <span class="md-ellipsis">
-      strem_to() wrapper
+      stream_to() wrapper
     </span>
   </a>
   
@@ -1491,7 +1491,7 @@ This can enhance the user experience by already showing part of the response but
 <h2 id="console-log-streaming">Console Log Streaming<a class="headerlink" href="#console-log-streaming" title="Permanent link">&para;</a></h2>
 <p>If you want to stream all the tokens generated quickly to your console output,
 you can use the <code>settings.console_stream = True</code> setting.</p>
-<h2 id="strem_to-wrapper"><code>strem_to()</code> wrapper<a class="headerlink" href="#strem_to-wrapper" title="Permanent link">&para;</a></h2>
+<h2 id="stream_to-wrapper"><code>stream_to()</code> wrapper<a class="headerlink" href="#stream_to-wrapper" title="Permanent link">&para;</a></h2>
 <p>For streaming with non runnable funcchains you can wrap the LLM generation call into the <code>stream_to()</code> context manager. This would look like this:</p>
 <div class="language-python highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="k">def</span> <span class="nf">summarize</span><span class="p">(</span><span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
 </span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Summarize the text.&quot;&quot;&quot;</span>
