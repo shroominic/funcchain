@@ -41,6 +41,7 @@ class FuncchainSettings(BaseSettings):
     context_lenght: int = 8196
     n_gpu_layers: int = 50
     keep_loaded: bool = False
+    repeat_penalty: float = 1.0
     local_models_path: str = "./.models"
 
     def model_kwargs(self) -> dict:
@@ -64,6 +65,7 @@ class FuncchainSettings(BaseSettings):
             "n_ctx": self.context_lenght,
             "use_mlock": self.keep_loaded,
             "n_gpu_layers": self.n_gpu_layers,
+            "repeat_penalty": self.repeat_penalty,
         }
 
 
