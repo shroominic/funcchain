@@ -42,6 +42,8 @@ def chain(
 
     # todo maybe this should be done in the prompt processor?
     system = system or settings.system_prompt
+    if system:
+        context = [SystemMessage(content=system)] + context
     instruction = instruction or from_docstring()
 
     # temp image handling
@@ -90,6 +92,8 @@ async def achain(
 
     # todo maybe this should be done in the prompt processor?
     system = system or settings.system_prompt
+    if system:
+        context = [SystemMessage(content=system)] + context
     instruction = instruction or from_docstring()
 
     # temp image handling
