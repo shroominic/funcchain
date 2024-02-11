@@ -1,13 +1,13 @@
 from types import FunctionType
 from typing import Callable, Optional, TypeVar, Union, overload
 
-from langchain_core.language_models import BaseChatModel
 from langchain_core.runnables import Runnable
 
 from ..backend.compiler import compile_chain
 from ..backend.meta_inspect import gather_signature
 from ..backend.settings import SettingsOverride, create_local_settings
 from ..schema.signature import Signature
+from ..schema.types import UniversalChatModel
 
 OutputT = TypeVar("OutputT")
 
@@ -22,7 +22,7 @@ def runnable(
 @overload
 def runnable(
     *,
-    llm: BaseChatModel | str | None = None,
+    llm: UniversalChatModel = None,
     settings: SettingsOverride = {},
     auto_tune: bool = False,
 ) -> Callable[[Callable], Runnable[dict[str, str], OutputT]]:
@@ -32,7 +32,7 @@ def runnable(
 def runnable(
     f: Optional[Callable[..., OutputT]] = None,
     *,
-    llm: BaseChatModel | str | None = None,
+    llm: UniversalChatModel = None,
     settings: SettingsOverride = {},
     auto_tune: bool = False,
 ) -> Union[Callable, Runnable]:

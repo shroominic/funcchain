@@ -4,10 +4,11 @@ from typing import Type, TypeVar
 
 import yaml  # type: ignore
 from langchain_core.exceptions import OutputParserException
-from langchain_core.language_models import BaseChatModel
 from langchain_core.output_parsers import BaseOutputParser
 from langchain_core.runnables import Runnable
 from pydantic import BaseModel, ValidationError
+
+from ..schema.types import UniversalChatModel
 
 M = TypeVar("M", bound=BaseModel)
 
@@ -19,7 +20,7 @@ class RetryJsonPydanticParser(BaseOutputParser[M]):
     """The pydantic model to parse."""
 
     retry: int
-    retry_llm: BaseChatModel | str | None = None
+    retry_llm: UniversalChatModel = None
 
     def parse(self, text: str) -> M:
         try:

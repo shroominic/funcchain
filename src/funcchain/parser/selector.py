@@ -1,19 +1,19 @@
 from enum import Enum
 from typing import Literal, get_origin
 
-from langchain_core.language_models import BaseChatModel
 from langchain_core.output_parsers import BaseGenerationOutputParser, BaseOutputParser, StrOutputParser
 from pydantic import BaseModel
 
 from ..parser.json_schema import RetryJsonPydanticParser, RetryJsonPydanticUnionParser
 from ..parser.primitive_types import RetryJsonPrimitiveTypeParser
+from ..schema.types import UniversalChatModel
 from ..syntax.output_types import ParserBaseModel
 
 
 def parser_for(
     output_types: list[type],
     retry: int,
-    llm: BaseChatModel | str | None = None,
+    llm: UniversalChatModel = None,
 ) -> BaseOutputParser | BaseGenerationOutputParser:
     """
     Get the parser from the type annotation of the parent caller function.

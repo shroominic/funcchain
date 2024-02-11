@@ -2,7 +2,6 @@ from typing import Any, TypeVar
 
 from langchain_core.callbacks.base import Callbacks
 from langchain_core.chat_history import BaseChatMessageHistory
-from langchain_core.language_models import BaseChatModel
 from langchain_core.messages import BaseMessage, SystemMessage
 from langchain_core.runnables import Runnable
 
@@ -16,6 +15,7 @@ from ..backend.meta_inspect import (
 )
 from ..backend.settings import SettingsOverride, create_local_settings
 from ..schema.signature import Signature
+from ..schema.types import UniversalChatModel
 from ..utils.memory import ChatMessageHistory
 from .input_types import Image
 
@@ -129,7 +129,7 @@ def compile_runnable(
     output_types: list[type[ChainOut]],
     input_args: list[str] = [],
     context: list = [],
-    llm: BaseChatModel | str | None = None,
+    llm: UniversalChatModel = None,
     system: str = "",
     settings_override: SettingsOverride = {},
 ) -> Runnable[dict[str, str], ChainOut]:
