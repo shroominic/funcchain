@@ -5,13 +5,22 @@ from funcchain import chain
 
 def classify(
     text: str,
-) -> Literal["energetic", "sad", "flirty", "neural"]:
+) -> Literal["happy", "sad", "flirty"]:
     """
-    Classify the text.
+    Classify the text as happy, sad, flirty, or neural.
     """
     return chain()
 
 
-print(
-    classify("Hello my name is Jeff."),
-)
+if __name__ == "__main__":
+    r = classify("Hey :)")
+    print(r)
+    assert r == "happy"
+
+    r = classify("Hey :(")
+    print(r)
+    assert r == "sad"
+
+    r = classify("Hey ;)")
+    print(r)
+    assert r == "flirty"

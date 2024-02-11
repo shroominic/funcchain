@@ -1,13 +1,13 @@
 import copy
-from typing import Type, TypeVar
+from typing import Generic, Type, TypeVar
 
 from langchain_core.exceptions import OutputParserException
-from langchain_core.language_models import BaseChatModel
 from langchain_core.output_parsers import BaseGenerationOutputParser
 from langchain_core.outputs import ChatGeneration, Generation
 from langchain_core.runnables import Runnable
 from pydantic import BaseModel, ValidationError
 
+from ..schema.types import UniversalChatModel
 from ..syntax.output_types import CodeBlock as CodeBlock
 from ..utils.msg_tools import msg_to_str
 
@@ -18,7 +18,7 @@ class RetryOpenAIFunctionPydanticParser(BaseGenerationOutputParser[M]):
     pydantic_schema: Type[M]
     args_only: bool = False
     retry: int
-    retry_llm: BaseChatModel | str | None = None
+    retry_llm: UniversalChatModel = None
 
     def parse_result(self, result: list[Generation], *, partial: bool = False) -> M:
         try:
@@ -69,7 +69,7 @@ class RetryOpenAIFunctionPydanticUnionParser(BaseGenerationOutputParser[M]):
     output_types: list[type[M]]
     args_only: bool = False
     retry: int
-    retry_llm: BaseChatModel | str | None = None
+    retry_llm: UniversalChatModel = None
 
     def parse_result(self, result: list[Generation], *, partial: bool = False) -> M:
         try:
@@ -142,3 +142,13 @@ class RetryOpenAIFunctionPydanticUnionParser(BaseGenerationOutputParser[M]):
             llm=self.retry_llm,
             settings_override={"retry_parse": self.retry - 1},
         )
+
+
+class RetryOpenAIFunctionPrimitiveTypeParser(RetryOpenAIFunctionPydanticParser, Generic[M]):
+    """
+    Parse primitve types by wrapping them in a PydanticModel and parsing them.
+    Examples: int, float, bool, list[str], dict[str, int], Literal["a", "b", "c"], etc.
+    """
+
+    def parse_result(self, result: list[Generation], *, partial: bool = False) -> M:
+        return super().parse_result(result, partial=partial).value

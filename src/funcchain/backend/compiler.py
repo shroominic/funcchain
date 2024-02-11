@@ -11,7 +11,11 @@ from pydantic import BaseModel
 from ..model.abilities import is_openai_function_model, is_vision_model
 from ..model.defaults import univeral_model_selector
 from ..parser.json_schema import RetryJsonPydanticParser
-from ..parser.openai_functions import RetryOpenAIFunctionPydanticParser, RetryOpenAIFunctionPydanticUnionParser
+from ..parser.openai_functions import (
+    RetryOpenAIFunctionPrimitiveTypeParser,
+    RetryOpenAIFunctionPydanticParser,
+    RetryOpenAIFunctionPydanticUnionParser,
+)
 from ..parser.primitive_types import RetryJsonPrimitiveTypeParser
 from ..parser.schema_converter import pydantic_to_grammar
 from ..parser.selector import parser_for
@@ -75,6 +79,7 @@ def patch_openai_function_to_pydantic(
     llm: BaseChatModel,
     output_type: type[BaseModel],
     input_kwargs: dict[str, str],
+    primitive_type: bool = False,
 ) -> tuple[BaseChatModel, BaseGenerationOutputParser]:
     input_kwargs["format_instructions"] = f"Extract to {output_type.__name__}."
     functions = pydantic_to_functions(output_type)
@@ -82,7 +87,9 @@ def patch_openai_function_to_pydantic(
     _llm = llm
     llm = llm.bind(**functions)  # type: ignore
 
-    return llm, RetryOpenAIFunctionPydanticParser(pydantic_schema=output_type, retry=3, retry_llm=_llm)
+    if not primitive_type:
+        return llm, RetryOpenAIFunctionPydanticParser(pydantic_schema=output_type, retry=3, retry_llm=_llm)
+    return llm, RetryOpenAIFunctionPrimitiveTypeParser(pydantic_schema=output_type, retry=3, retry_llm=_llm)
 
 
 def create_chain(
@@ -183,11 +190,20 @@ def create_chain(
         if isinstance(parser, RetryJsonPydanticParser) or isinstance(parser, RetryJsonPrimitiveTypeParser):
             output_type = parser.pydantic_object
             if issubclass(output_type, BaseModel) and not issubclass(output_type, ParserBaseModel):
+                # openai json streaming
                 if settings.streaming and hasattr(llm, "model_kwargs"):
                     llm.model_kwargs = {"response_format": {"type": "json_object"}}
+                # primitive types
+                elif isinstance(parser, RetryJsonPrimitiveTypeParser):
+                    llm, parser = patch_openai_function_to_pydantic(llm, output_type, input_kwargs, primitive_type=True)
+                # pydantic types
                 else:
                     assert isinstance(parser, RetryJsonPydanticParser)
                     llm, parser = patch_openai_function_to_pydantic(llm, output_type, input_kwargs)
+            # custom parsers
+            elif issubclass(output_type, ParserBaseModel):
+                # todo maybe add custom openai function parsing
+                ...
 
     assert parser is not None
     return chat_prompt | llm | parser

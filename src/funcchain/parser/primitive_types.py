@@ -3,9 +3,9 @@ Primitive Types Parser
 """
 from typing import Generic, TypeVar
 
-from langchain_core.language_models import BaseChatModel
 from pydantic import BaseModel, create_model
 
+from ..schema.types import UniversalChatModel
 from .json_schema import RetryJsonPydanticParser
 
 M = TypeVar("M", bound=BaseModel)
@@ -21,7 +21,7 @@ class RetryJsonPrimitiveTypeParser(RetryJsonPydanticParser, Generic[M]):
         self,
         primitive_type: type,
         retry: int = 1,
-        retry_llm: BaseChatModel | str | None = None,
+        retry_llm: UniversalChatModel = None,
     ) -> None:
         super().__init__(
             pydantic_object=create_model("Extract", value=(primitive_type, ...)),
@@ -30,4 +30,10 @@ class RetryJsonPrimitiveTypeParser(RetryJsonPydanticParser, Generic[M]):
         )
 
     def parse(self, text: str) -> M:
+        print("text", text)
+        print("super().parse(text)", super().parse(text))
         return super().parse(text).value
+
+    def get_format_instructions(self) -> str:
+        """TODO: override with optimized version"""
+        return super().get_format_instructions()
