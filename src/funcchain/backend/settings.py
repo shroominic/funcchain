@@ -62,7 +62,7 @@ class FuncchainSettings(BaseSettings):
 
     def ollama_kwargs(self) -> dict:
         return {
-            "base_url": self.ollama_base_url
+            "base_url": self.ollama_base_url,
         }
 
     def llamacpp_kwargs(self) -> dict:
