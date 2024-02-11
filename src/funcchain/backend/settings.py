@@ -27,11 +27,12 @@ class FuncchainSettings(BaseSettings):
     retry_parse: int = 3
     retry_parse_sleep: float = 0.1
 
-    # KEYS
+    # KEYS / URLS
     openai_api_key: Optional[str] = None
     azure_api_key: Optional[str] = None
     anthropic_api_key: Optional[str] = None
     google_api_key: Optional[str] = None
+    ollama_base_url: str = "http://localhost:11434"
 
     # MODEL KWARGS
     verbose: bool = False
@@ -60,7 +61,9 @@ class FuncchainSettings(BaseSettings):
         }
 
     def ollama_kwargs(self) -> dict:
-        return {}
+        return {
+            "base_url": self.ollama_base_url
+        }
 
     def llamacpp_kwargs(self) -> dict:
         return {
