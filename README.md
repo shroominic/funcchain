@@ -15,7 +15,7 @@ pip install funcchain
 ## Introduction
 
 `funcchain` is the *most pythonic* way of writing cognitive systems. Leveraging pydantic models as output schemas combined with langchain in the backend allows for a seamless integration of llms into your apps.
-It utilizes perfect with OpenAI Functions or LlamaCpp grammars (json-schema-mode) for efficient structured output.
+It utilizes OpenAI Functions or LlamaCpp grammars (json-schema-mode) for efficient structured output.
 In the backend it compiles the funcchain syntax into langchain runnables so you can easily invoke, stream or batch process your pipelines.
 
 [![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/ricklamers/funcchain-demo)
