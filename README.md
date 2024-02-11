@@ -112,7 +112,7 @@ class AnalysisResult(BaseModel):
     objects: list[str] = Field(description="A list of objects found in the image")
 
 # easy use of images as input with structured output
-def analyse_image(image: Image.Image) -> AnalysisResult:
+def analyse_image(image: Image) -> AnalysisResult:
     """
     Analyse the image and extract its
     theme, description and objects.
