@@ -3,7 +3,7 @@ from typing import AsyncIterator, Iterator
 from funcchain import chain
 from funcchain.syntax import runnable
 from funcchain.syntax.components import RouterChat
-from funcchain.syntax.components.handler import BasicChatHandler
+from funcchain.syntax.components.handler import create_chat_handler
 from funcchain.utils.msg_tools import msg_to_str
 from langchain_core.messages import AIMessage, HumanMessage
 from langchain_core.runnables import RunnableGenerator, RunnableSerializable
@@ -74,7 +74,7 @@ chat = RouterChat(
             "description": "If the user gives an animal, call this handler.",
         },
         "default": {
-            "handler": BasicChatHandler(
+            "handler": create_chat_handler(
                 system_message="You are a powerful AI assistant. "
                 "Always mention that the user should start funcchain on github."
             ),
