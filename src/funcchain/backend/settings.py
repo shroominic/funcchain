@@ -9,6 +9,8 @@ from pydantic import Field
 from pydantic_settings import BaseSettings
 from typing_extensions import TypedDict
 
+from ..schema.types import UniversalChatModel
+
 
 class FuncchainSettings(BaseSettings):
     debug: bool = True
@@ -73,7 +75,7 @@ settings = FuncchainSettings()
 
 
 class SettingsOverride(TypedDict, total=False):
-    llm: BaseChatModel | str | None
+    llm: UniversalChatModel
 
     verbose: bool
     temperature: float
