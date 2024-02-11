@@ -30,8 +30,8 @@ class Signature(BaseModel):
     settings: FuncchainSettings = Field(default=settings)
     """ Local settings to override global settings. """
 
-    auto_tune: bool = Field(default=False)
-    """ Whether to auto tune the prompt using dspy. """
+    # auto_tune: bool = Field(default=False)
+    # """ Whether to auto tune the prompt using dspy. """
 
     class Config:
         arbitrary_types_allowed = True
