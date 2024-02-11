@@ -155,7 +155,7 @@ def univeral_model_selector(
         except Exception as e:
             print(e)
 
-    model_kwargs.pop("model_name")
+    model_kwargs.pop("model_name", None)
 
     if settings.openai_api_key:
         from langchain_openai.chat_models import ChatOpenAI
