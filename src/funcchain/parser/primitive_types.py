@@ -30,8 +30,6 @@ class RetryJsonPrimitiveTypeParser(RetryJsonPydanticParser, Generic[M]):
         )
 
     def parse(self, text: str) -> M:
-        print("text", text)
-        print("super().parse(text)", super().parse(text))
         return super().parse(text).value
 
     def get_format_instructions(self) -> str:
