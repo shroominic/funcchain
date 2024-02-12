@@ -94,6 +94,9 @@ def univeral_model_selector(
     Raises:
     - ModelNotFoundError, when the model is not found.
     """
+    if not isinstance(settings.llm, str) and settings.llm is not None:
+        return settings.llm
+
     model_name = settings.llm if isinstance(settings.llm, str) else ""
     model_kwargs.update(settings.model_kwargs())
 
@@ -156,9 +159,6 @@ def univeral_model_selector(
             print(e)
 
     model_kwargs.pop("model_name", None)
-
-    if settings.llm:
-        raise ValueError(f"{settings.llm} is unsupported.")
 
     if settings.openai_api_key:
         from langchain_openai.chat_models import ChatOpenAI
