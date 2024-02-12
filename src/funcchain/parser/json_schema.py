@@ -65,7 +65,7 @@ class RetryJsonPydanticParser(BaseOutputParser[M]):
         return (
             "Please respond with a json result matching the following schema:"
             f"\n\n```schema\n{schema_str}\n```\n"
-            "Do not repeat the schema. Only respond with the result."
+            "Do not repeat the schema. Only respond with the resulting json object."
         )
 
     @property
