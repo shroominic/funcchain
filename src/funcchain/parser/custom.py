@@ -7,8 +7,6 @@ from langchain_core.output_parsers import BaseLLMOutputParser, BaseOutputParser
 from pydantic import BaseModel, ValidationError
 from typing_extensions import Self
 
-from ..syntax.output_types import CodeBlock as CodeBlock
-
 
 class ParserBaseModel(BaseModel):
     @classmethod
