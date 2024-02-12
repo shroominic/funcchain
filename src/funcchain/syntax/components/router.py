@@ -62,7 +62,7 @@ class RouterChat(Runnable[HumanMessage, AIMessage]):
             runnables={name: run["handler"] for name, run in self.routes.items()},
         )  # maybe add auto conversion of strings to AI Messages/Chunks
 
-    def _selector(self) -> Runnable[dict[str, str], Any]:
+    def _selector(self) -> Runnable[dict[str, Any], Any]:
         RouteChoices = Enum(  # type: ignore
             "RouteChoices",
             {r: r for r in self.routes.keys()},

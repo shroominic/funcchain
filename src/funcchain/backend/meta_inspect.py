@@ -1,6 +1,6 @@
 from inspect import FrameInfo, currentframe, getouterframes
 from types import FunctionType, UnionType
-from typing import Optional
+from typing import Any, Optional
 
 FUNC_DEPTH = 4
 
@@ -53,7 +53,7 @@ def get_output_types(f: Optional[FunctionType] = None) -> list[type]:
         raise ValueError("The funcchain must have a return type annotation")
 
 
-def kwargs_from_parent() -> dict[str, str]:
+def kwargs_from_parent() -> dict[str, Any]:
     """
     Get the kwargs from the parent function.
     """

@@ -45,7 +45,7 @@ def create_union_chain(
     context: list[BaseMessage],
     llm: BaseChatModel,
     input_kwargs: dict[str, Any],
-) -> Runnable[dict[str, str], Any]:
+) -> Runnable[dict[str, Any], Any]:
     """
     Compile a langchain runnable chain from the funcchain syntax.
     """
@@ -78,7 +78,7 @@ def create_union_chain(
 def patch_openai_function_to_pydantic(
     llm: BaseChatModel,
     output_type: type[BaseModel],
-    input_kwargs: dict[str, str],
+    input_kwargs: dict[str, Any],
     primitive_type: bool = False,
 ) -> tuple[BaseChatModel, BaseGenerationOutputParser]:
     input_kwargs["format_instructions"] = f"Extract to {output_type.__name__}."
@@ -101,7 +101,7 @@ def create_chain(
     settings: FuncchainSettings,
     input_args: list[tuple[str, type]],
     temp_images: list[Image] = [],
-) -> Runnable[dict[str, str], ChainOutput]:
+) -> Runnable[dict[str, Any], ChainOutput]:
     """
     Compile a langchain runnable chain from the funcchain syntax.
     """
@@ -209,7 +209,7 @@ def create_chain(
     return chat_prompt | llm | parser
 
 
-def compile_chain(signature: Signature, temp_images: list[Image] = []) -> Runnable[dict[str, str], ChainOutput]:
+def compile_chain(signature: Signature, temp_images: list[Image] = []) -> Runnable[dict[str, Any], ChainOutput]:
     """
     Compile a signature to a runnable chain.
     """
@@ -236,7 +236,7 @@ def compile_chain(signature: Signature, temp_images: list[Image] = []) -> Runnab
 def _add_format_instructions(
     parser: BaseOutputParser,
     instruction: str,
-    input_kwargs: dict[str, str],
+    input_kwargs: dict[str, Any],
 ) -> tuple[str, str | None]:
     """
     Add parsing format instructions

@@ -1,5 +1,5 @@
 from types import FunctionType
-from typing import Callable, Optional, TypeVar, Union, overload
+from typing import Any, Callable, Optional, TypeVar, Union, overload
 
 from langchain_core.runnables import Runnable
 
@@ -15,7 +15,7 @@ OutputT = TypeVar("OutputT")
 @overload
 def runnable(
     f: Callable[..., OutputT],
-) -> Runnable[dict[str, str], OutputT]:
+) -> Runnable[dict[str, Any], OutputT]:
     ...
 
 
@@ -25,7 +25,7 @@ def runnable(
     llm: UniversalChatModel = None,
     settings: SettingsOverride = {},
     auto_tune: bool = False,
-) -> Callable[[Callable], Runnable[dict[str, str], OutputT]]:
+) -> Callable[[Callable], Runnable[dict[str, Any], OutputT]]:
     ...
 
 

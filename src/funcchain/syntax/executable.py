@@ -110,7 +110,7 @@ async def achain(
         history=context,
         settings=settings,
     )
-    chain: Runnable[dict[str, str], Any] = compile_chain(sig, temp_images)
+    chain: Runnable[dict[str, Any], Any] = compile_chain(sig, temp_images)
     result = await chain.ainvoke(input_kwargs, {"run_name": get_parent_frame(2).function, "callbacks": callbacks})
 
     if memory and isinstance(result, str):
@@ -132,7 +132,7 @@ def compile_runnable(
     llm: UniversalChatModel = None,
     system: str = "",
     settings_override: SettingsOverride = {},
-) -> Runnable[dict[str, str], ChainOut]:
+) -> Runnable[dict[str, Any], ChainOut]:
     """
     On the fly compilation of the funcchain syntax.
     """
