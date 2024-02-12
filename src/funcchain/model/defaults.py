@@ -157,6 +157,9 @@ def univeral_model_selector(
 
     model_kwargs.pop("model_name", None)
 
+    if settings.llm:
+        raise ValueError(f"{settings.llm} is unsupported.")
+
     if settings.openai_api_key:
         from langchain_openai.chat_models import ChatOpenAI
 
