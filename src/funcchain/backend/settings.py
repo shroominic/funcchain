@@ -16,7 +16,7 @@ class FuncchainSettings(BaseSettings):
     debug: bool = True
 
     llm: BaseChatModel | str = Field(
-        default="openai/gpt-3.5-turbo-1106",
+        default="openai/gpt-3.5-turbo",
         validate_default=False,
     )
 
@@ -28,10 +28,10 @@ class FuncchainSettings(BaseSettings):
     retry_parse_sleep: float = 0.1
 
     # LANGSMITH
-    langchain_project: str = "funcchain"
-    langchain_tracing_v2: str = "true"
-    langchain_api_key: str = ""
-    # todo: make langsmith load from here and not the .env
+    # langchain_project: str = "funcchain"
+    # langchain_tracing_v2: str = "true"
+    # langchain_api_key: str = ""
+    # # todo: make langsmith load from here and not the .env
 
     # PROVIDERS
     openai_api_key: Optional[str] = None
@@ -81,6 +81,7 @@ class FuncchainSettings(BaseSettings):
 
     class Config:
         env_file = ".env"
+        extra = "ignore"
 
 
 settings = FuncchainSettings()
