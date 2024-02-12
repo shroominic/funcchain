@@ -1,20 +1,16 @@
-V0.2.1
-
-[ ] - improve chat handlers
-
-[ ] - fix primitive types using openai
-
-[ ] - ollama remote url
-
-[ ] - small fixes
-
-
 V0.2.2
+[ ] - support for primitive dict types
+
+[ ] - improved local model info
+
+[ ] - fix in output type selector
+
+[ ] -
+
+V0.2.3
 [ ] - fix memory workflow
 
 [ ] - pygmalion grammar support
-
-[ ] - fix dict as type
 
 [ ] -
 
