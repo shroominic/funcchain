@@ -1,12 +1,44 @@
 import json
+import re
 from typing import Type, TypeVar
 
 from langchain_core.exceptions import OutputParserException
-from langchain_core.output_parsers import BaseOutputParser
-from pydantic import ValidationError
+from langchain_core.output_parsers import BaseLLMOutputParser, BaseOutputParser
+from pydantic import BaseModel, ValidationError
+from typing_extensions import Self
 
 from ..syntax.output_types import CodeBlock as CodeBlock
-from ..syntax.output_types import ParserBaseModel
+
+
+class ParserBaseModel(BaseModel):
+    @classmethod
+    def output_parser(cls) -> BaseLLMOutputParser[Self]:
+        from ..parser.custom import CustomPydanticOutputParser
+
+        return CustomPydanticOutputParser(pydantic_object=cls)
+
+    @classmethod
+    def parse(cls, text: str) -> Self:
+        """Override for custom parsing."""
+        match = re.search(r"\{.*\}", text.strip(), re.MULTILINE | re.IGNORECASE | re.DOTALL)
+        json_str = ""
+        if match:
+            json_str = match.group()
+        json_object = json.loads(json_str, strict=False)
+        return cls.model_validate(json_object)
+
+    @staticmethod
+    def format_instructions() -> str:
+        return (
+            "Please respond with a json result matching the following schema:"
+            "\n\n```schema\n{schema}\n```\n"
+            "Do not repeat the schema. Only respond with the result."
+        )
+
+    @staticmethod
+    def custom_grammar() -> str | None:
+        return None
+
 
 P = TypeVar("P", bound=ParserBaseModel)
 
