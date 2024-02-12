@@ -134,7 +134,7 @@ def univeral_model_selector(
                     model_kwargs.pop("model_name")
                     name, label = name.split(":") if ":" in name else (name, "latest")
                     model_path = get_gguf_model(name, label, settings).as_posix()
-                    print("Using model:", model_path)
+                    print("\033[90m" f"using {model_path}" "\033[0m")
                     model_kwargs.update(settings.llamacpp_kwargs())
                     return ChatLlamaCpp(
                         model_path=model_path,
