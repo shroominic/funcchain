@@ -27,7 +27,13 @@ class FuncchainSettings(BaseSettings):
     retry_parse: int = 3
     retry_parse_sleep: float = 0.1
 
-    # KEYS / URLS
+    # LANGSMITH
+    langchain_project: str = "funcchain"
+    langchain_tracing_v2: str = "true"
+    langchain_api_key: str = ""
+    # todo: make langsmith load from here and not the .env
+
+    # PROVIDERS
     openai_api_key: Optional[str] = None
     azure_api_key: Optional[str] = None
     anthropic_api_key: Optional[str] = None
@@ -72,6 +78,9 @@ class FuncchainSettings(BaseSettings):
             "n_gpu_layers": self.n_gpu_layers,
             "repeat_penalty": self.repeat_penalty,
         }
+
+    class Config:
+        env_file = ".env"
 
 
 settings = FuncchainSettings()
