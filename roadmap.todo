@@ -1,18 +1,15 @@
-V0.2.2
-[ ] - support for primitive dict types
-
-[ ] - improved local model info
-
-[ ] - fix in output type selector
-
-[ ] -
-
 V0.2.3
+
+[ ] - fix .env loading with settings
+
+[ ] - fix input dict type
+
+V0.2.4
 [ ] - fix memory workflow
 
 [ ] - pygmalion grammar support
 
-[ ] -
+[ ] - togetherai model
 
 
 V0.3:
