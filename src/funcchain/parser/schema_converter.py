@@ -100,6 +100,16 @@ class SchemaConverter:
 
             return self._add_rule(rule_name, rule)
 
+        elif schema_type == "object":
+            self._rules["number"] = '("-"? ([0-9] | [1-9] [0-9]*)) ("." [0-9]+)? ([eE] [-+]? [0-9]+)? space'
+            # todo self._rules["array"]
+            # todo arbitrary nested objects
+            self._rules["generic"] = 'string | number | "true" | "false" | "null"'
+            return self._add_rule(
+                rule_name,
+                '"{" space (' 'string ":" space generic' '( "," space string ":" space generic )*' ')? "}" space',
+            )
+
         elif schema_type == "array" and "items" in schema:
             # TODO `prefixItems` keyword
             item_rule_name = self.visit(schema["items"], f'{name}{"-" if name else ""}item')
