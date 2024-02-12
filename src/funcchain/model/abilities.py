@@ -38,7 +38,7 @@ def gather_llm_type(llm: BaseChatModel, func_check: bool = True) -> str:
             return "function_model"
         try:
             if func_check:
-                llm.predict_messages(
+                llm.invoke(
                     [
                         SystemMessage(content=("This is a test message to see " "if the model can run functions.")),
                         HumanMessage(content="Hello!"),
