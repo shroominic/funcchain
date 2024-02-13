@@ -25,7 +25,7 @@ def runnable(
     llm: UniversalChatModel = None,
     settings: SettingsOverride = {},
     auto_tune: bool = False,
-) -> Callable[[Callable], Runnable[dict[str, Any], OutputT]]:
+) -> Callable[[Callable], Runnable]:
     ...
 
 
@@ -35,20 +35,20 @@ def runnable(
     llm: UniversalChatModel = None,
     settings: SettingsOverride = {},
     auto_tune: bool = False,
-) -> Union[Callable, Runnable]:
+) -> Union[Callable, Runnable[dict[str, Any], OutputT]]:
     """Decorator for funcchain syntax.
     Compiles the function into a runnable.
     """
     if llm:
         settings["llm"] = llm
 
-    def decorator(f: Callable) -> Runnable:
+    def decorator(f: Callable) -> Runnable[dict[str, Any], OutputT]:
         if not isinstance(f, FunctionType):
             raise ValueError("funcchain can only be used on functions")
 
         _signature: dict = gather_signature(f)
         _signature["settings"] = create_local_settings(override=settings)
-        _signature["auto_tune"] = auto_tune
+        # todo _signature["auto_tune"] = auto_tune
 
         sig: Signature = Signature(**_signature)
         return compile_chain(sig)
