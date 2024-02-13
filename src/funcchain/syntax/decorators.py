@@ -24,7 +24,6 @@ def runnable(
     *,
     llm: UniversalChatModel = None,
     settings: SettingsOverride = {},
-    auto_tune: bool = False,
 ) -> Callable[[Callable], Runnable]:
     ...
 
@@ -34,7 +33,6 @@ def runnable(
     *,
     llm: UniversalChatModel = None,
     settings: SettingsOverride = {},
-    auto_tune: bool = False,
 ) -> Union[Callable, Runnable[dict[str, Any], OutputT]]:
     """Decorator for funcchain syntax.
     Compiles the function into a runnable.
