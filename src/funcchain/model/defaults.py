@@ -94,6 +94,9 @@ def univeral_model_selector(
     Raises:
     - ModelNotFoundError, when the model is not found.
     """
+    if not isinstance(settings.llm, str) and settings.llm is not None:
+        return settings.llm
+
     model_name = settings.llm if isinstance(settings.llm, str) else ""
     model_kwargs.update(settings.model_kwargs())
 
