@@ -25,6 +25,7 @@ def get_gguf_model(
     """
     from huggingface_hub import hf_hub_download
 
+    name = name.removeprefix("TheBloke/")
     name = name.removesuffix("-GGUF")
     label = "Q5_K_M" if label == "latest" else label
 
