@@ -1,3 +1,5 @@
+from operator import itemgetter
+
 from funcchain.syntax import chain, runnable
 from langchain_community.vectorstores.faiss import FAISS
 from langchain_core.runnables import Runnable, RunnablePassthrough
@@ -23,8 +25,8 @@ vectorstore = FAISS.from_texts(
 retriever = vectorstore.as_retriever(search_kwargs={"k": 1})
 
 retrieval_chain: Runnable = {
-    "context": retriever,
+    "context": itemgetter("topic") | retriever,
     "topic": RunnablePassthrough(),
 } | generate_poem
 
-print(retrieval_chain.invoke("love"))
+print(retrieval_chain.invoke({"topic": "love"}))
