@@ -14,7 +14,7 @@ class Signature(BaseModel):
     instruction: str
     """ Prompt instruction to the language model. """
 
-    input_args: list[tuple[str, type]] = Field(default_factory=list)
+    input_args: list[tuple[str, Any]] = Field(default_factory=list)
     """ List of input arguments for the prompt template. """
 
     output_types: list[Any]
