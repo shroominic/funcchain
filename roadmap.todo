@@ -1,8 +1,4 @@
-V0.3.0
-[ ] - dependencies like in fastapi using lcel
-
-
-V0.3.todo
+V0.3.1
 [ ] - fix memory workflow
 
 [ ] - pygmalion grammar support
