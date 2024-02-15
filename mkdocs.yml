@@ -25,6 +25,7 @@ nav:
       - "Streaming": "concepts/streaming.md"
       - "Unions": "concepts/unions.md"
       - "Vision": "concepts/vision.md"
+      - "Dependencies": "concepts/dependencies.md"
   - "Examples":
       - "Enums": "features/enums.md"
       - "Structured vision output": "features/vision.md"
