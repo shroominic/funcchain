@@ -1,12 +1,18 @@
+
 # funcchain
 
+<!-- markdownlint-disable MD033 -->
 [![Version](https://badge.fury.io/py/funcchain.svg)](https://badge.fury.io/py/funcchain)
 [![tests](https://github.com/shroominic/funcchain/actions/workflows/code-check.yml/badge.svg)](https://github.com/shroominic/funcchain/actions/workflows/code-check.yml)
 ![PyVersion](https://img.shields.io/pypi/pyversions/funcchain)
+![License](https://img.shields.io/github/license/shroominic/funcchain)
 ![Downloads](https://img.shields.io/pypi/dm/funcchain)
 [![Discord](https://img.shields.io/discord/1192334452110659664?label=discord)](https://discord.gg/TrwWWMXdtR)
+<img alt="GitHub Contributors" src="https://img.shields.io/github/contributors/shroominic/funcchain" />
+<img alt="GitHub Last Commit" src="https://img.shields.io/github/last-commit/shroominic/funcchain" />
 [![Pydantic v2](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/pydantic/pydantic/main/docs/badge/v2.json)](https://docs.pydantic.dev/latest/contributing/#badges)
 [![Twitter Follow](https://img.shields.io/twitter/follow/shroominic?style=social)](https://x.com/shroominic)
+<!-- <img alt="Repo Size" src="https://img.shields.io/github/repo-size/shroominic/funcchain" /> -->
 
 ```bash
 pip install funcchain
