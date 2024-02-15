@@ -1,4 +1,8 @@
-V0.2.4
+V0.3.0
+[ ] - dependencies like in fastapi using lcel
+
+
+V0.3.todo
 [ ] - fix memory workflow
 
 [ ] - pygmalion grammar support
@@ -6,7 +10,7 @@ V0.2.4
 [ ] - togetherai model
 
 
-V0.3:
+V0.4:
 
 [ ] - outlines as (optional) backend for guided generation (mostly json-schemas)
 
@@ -21,7 +25,7 @@ V0.3:
 [ ] - convert langchain tools to funcchain agent/router  (8h)
 
 
-V0.4+:
+V0.5+:
 
 [ ] - cookbooks folder with jupyter notebook tutorials  (8h)
 
