@@ -4,7 +4,7 @@ from typing import Any
 from langchain_core.language_models import BaseChatModel
 
 from ..backend.settings import FuncchainSettings
-from ..model.patches.llamacpp import ChatLlamaCpp
+from .patches.llamacpp import ChatLlamaCpp
 
 
 def get_gguf_model(
@@ -110,7 +110,7 @@ def univeral_model_selector(
         try:
             match mtype:
                 case "openai":
-                    from langchain_openai.chat_models import ChatOpenAI
+                    from .patches import ChatOpenAI
 
                     model_kwargs.update(settings.openai_kwargs())
                     return ChatOpenAI(**model_kwargs)
@@ -151,7 +151,7 @@ def univeral_model_selector(
 
         try:
             if "gpt-4" in name or "gpt-3.5" in name:
-                from langchain_openai.chat_models import ChatOpenAI
+                from .patches import ChatOpenAI
 
                 model_kwargs.update(settings.openai_kwargs())
                 return ChatOpenAI(**model_kwargs)
@@ -162,13 +162,13 @@ def univeral_model_selector(
     model_kwargs.pop("model_name", None)
 
     if settings.openai_api_key:
-        from langchain_openai.chat_models import ChatOpenAI
+        from .patches import ChatOpenAI
 
         model_kwargs.update(settings.openai_kwargs())
         return ChatOpenAI(**model_kwargs)
 
     if settings.azure_api_key:
-        from langchain_openai.chat_models import AzureChatOpenAI
+        from .patches import AzureChatOpenAI
 
         return AzureChatOpenAI(**model_kwargs)
 
