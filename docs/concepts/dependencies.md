@@ -11,7 +11,7 @@ from typing import Annotated
 from funcchain.syntax import chain, runnable
 from funcchain.syntax.params import Depends
 from langchain_community.vectorstores.faiss import FAISS
-from langchain_openai.embeddings import OpenAIEmbeddings
+from langchain_community.embeddings import OpenAIEmbeddings
 
 retriever = FAISS.from_texts(
     [
