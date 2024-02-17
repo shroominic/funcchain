@@ -23,7 +23,7 @@ This will convert your function into a runnable that can be used in LCEL so you 
 from funcchain import chain, runnable
 from langchain_community.vectorstores.faiss import FAISS
 from langchain_core.runnables import Runnable, RunnablePassthrough
-from langchain_openai.embeddings import OpenAIEmbeddings
+from langchain_community.embeddings import OpenAIEmbeddings
 
 @runnable
 def generate_poem(topic: str, context: str) -> str:
