@@ -3,7 +3,6 @@ from typing import Any
 from langchain_core.chat_history import BaseChatMessageHistory
 from langchain_core.messages import BaseMessage
 from langchain_core.pydantic_v1 import BaseModel, Field
-from rich import print
 
 from ..schema.types import ChatHistoryFactory
 
