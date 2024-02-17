@@ -1,9 +1,9 @@
 from operator import itemgetter
 
 from funcchain.syntax import chain, runnable
+from langchain_community.embeddings import OpenAIEmbeddings
 from langchain_community.vectorstores.faiss import FAISS
 from langchain_core.runnables import Runnable, RunnablePassthrough
-from langchain_openai.embeddings import OpenAIEmbeddings
 
 
 @runnable
