@@ -3,8 +3,8 @@ from typing import Annotated
 
 from funcchain.syntax import chain, runnable
 from funcchain.syntax.params import Depends
+from langchain_community.embeddings import OpenAIEmbeddings
 from langchain_community.vectorstores.faiss import FAISS
-from langchain_openai.embeddings import OpenAIEmbeddings
 
 retriever = FAISS.from_texts(
     [
@@ -21,7 +21,7 @@ retriever = FAISS.from_texts(
 @runnable
 def poem_with_retrieval(
     topic: str,
-    context: Annotated[str, Depends(itemgetter("topic") | retriever)] = "N/A",
+    context: Annotated[str, Depends(itemgetter("topic") | retriever)],
 ) -> str:
     """
     Generate a poem about the topic with the given context.
