@@ -29,7 +29,7 @@ verified_ollama_vision_models = [
 
 
 def gather_llm_type(llm: BaseChatModel, func_check: bool = True) -> str:
-    from langchain_openai.chat_models import ChatOpenAI
+    from .patches import ChatOpenAI
 
     if not isinstance(llm, BaseChatModel):
         return "base_model"
