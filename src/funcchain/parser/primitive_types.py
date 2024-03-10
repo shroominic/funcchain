@@ -1,6 +1,7 @@
 """
 Primitive Types Parser
 """
+
 from typing import Generic, TypeVar
 
 from pydantic import BaseModel, create_model

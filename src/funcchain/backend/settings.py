@@ -2,6 +2,7 @@
 Funcchain Settings:
 Automatically loads environment variables from .env file
 """
+
 from typing import Optional
 
 from langchain_core.language_models import BaseChatModel
