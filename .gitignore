@@ -166,3 +166,4 @@ cython_debug/
 vscext
 .models
 .python-version
+codrvenv
