@@ -36,7 +36,7 @@ def analyse_output(
 result = analyse_output(
     "healthy outpout",
     "Hello World!",
-    settings_override={"llm": "openai/gpt-4-vision-preview"},
+    settings={"llm": "openai/gpt-4-vision-preview"},
 )
 ```
 
