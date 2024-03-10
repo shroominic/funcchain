@@ -4,12 +4,11 @@ version = "0.3.1"
 description = "🔖 write prompts as python functions"
 authors = [{ name = "Shroominic", email = "contact@shroominic.com" }]
 dependencies = [
-    "langchain_core>=0.1",
+    "langchain-core>=0.1",
     "pydantic-settings>=2",
     "docstring-parser>=0.15",
     "jinja2>=3",
-    "openai>=1.12",
-    "tiktoken>=0.6",
+    "langchain-openai>=0.0.8",
 ]
 license = "MIT"
 readme = "README.md"
@@ -56,18 +55,28 @@ dev-dependencies = [
 ]
 
 [project.optional-dependencies]
-openai = ["langchain_openai"]
-ollama = ["langchain_community"]
-llamacpp = ["llama-cpp-python>=0.2.32", "huggingface_hub>=0.20"]
-pillow = ["pillow"]
-example-extras = ["langchain>=0.1", "faiss-cpu>=1.7.4", "beautifulsoup4>=4.12"]
+openai = ["langchain-openai"]
+ollama = ["langchain-community"]
+anthropic = ["langchain-anthropic"]
+google = ["langchain-google-genai"]
+llamacpp = ["llama-cpp-python>=0.2.32", "huggingface-hub>=0.20"]
+image = ["pillow"]
+extras = [
+    "langchain>=0.1",
+    "faiss-cpu>=1.7.4",
+    "beautifulsoup4>=4.12",
+    "unstructured>=0.12.5",
+    "pdf2image>=1.17.0",
+    "pdfminer>=20191125",
+]
 all = [
-    "funcchain[pillow]",
+    "funcchain[image]",
     "funcchain[openai]",
+    "funcchain[google]",
     "funcchain[ollama]",
     "funcchain[llamacpp]",
-    "funcchain[example-extras]",
-    "langchain",
+    "funcchain[anthropic]",
+    "funcchain[extras]",
 ]
 
 [tool.hatch.metadata]

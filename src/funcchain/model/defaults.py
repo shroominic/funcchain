@@ -110,20 +110,22 @@ def univeral_model_selector(
         try:
             match mtype:
                 case "openai":
-                    from .patches import ChatOpenAI
+                    from langchain_openai import ChatOpenAI
 
                     model_kwargs.update(settings.openai_kwargs())
                     return ChatOpenAI(**model_kwargs)
 
                 case "anthropic":
-                    from langchain_community.chat_models import ChatAnthropic
+                    from langchain_anthropic import ChatAnthropic
+
+                    model_kwargs.pop("streaming", None)
 
                     return ChatAnthropic(**model_kwargs)
 
                 case "google":
-                    from langchain_community.chat_models import ChatGooglePalm
+                    from langchain_google_genai import ChatGoogleGenerativeAI
 
-                    return ChatGooglePalm(**model_kwargs)
+                    return ChatGoogleGenerativeAI(**model_kwargs)
 
                 case "ollama":
                     from .patches.ollama import ChatOllama
@@ -151,7 +153,7 @@ def univeral_model_selector(
 
         try:
             if "gpt-4" in name or "gpt-3.5" in name:
-                from .patches import ChatOpenAI
+                from langchain_openai.chat_models import ChatOpenAI
 
                 model_kwargs.update(settings.openai_kwargs())
                 return ChatOpenAI(**model_kwargs)
@@ -162,25 +164,27 @@ def univeral_model_selector(
     model_kwargs.pop("model_name", None)
 
     if settings.openai_api_key:
-        from .patches import ChatOpenAI
+        from langchain_openai import ChatOpenAI
 
         model_kwargs.update(settings.openai_kwargs())
         return ChatOpenAI(**model_kwargs)
 
     if settings.azure_api_key:
-        from .patches import AzureChatOpenAI
+        from langchain_openai import AzureChatOpenAI
 
         return AzureChatOpenAI(**model_kwargs)
 
     if settings.anthropic_api_key:
-        from langchain_community.chat_models import ChatAnthropic
+        from langchain_anthropic import ChatAnthropic
+
+        model_kwargs.pop("streaming", None)
 
         return ChatAnthropic(**model_kwargs)
 
     if settings.google_api_key:
-        from langchain_community.chat_models import ChatGooglePalm
+        from langchain_google_genai import ChatGoogleGenerativeAI
 
-        return ChatGooglePalm(**model_kwargs)
+        return ChatGoogleGenerativeAI(**model_kwargs)
 
     raise ValueError(
         "Could not read llm selector string. Please check "
