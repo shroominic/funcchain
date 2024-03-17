@@ -24,7 +24,7 @@ def runnable(
     *,
     llm: UniversalChatModel = None,
     settings: SettingsOverride = {},
-) -> Callable[[Callable], Runnable]:
+) -> Callable[[Callable[..., OutputT]], Runnable[dict[str, Any], OutputT]]:
     ...
 
 
