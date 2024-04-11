@@ -27,6 +27,7 @@ def chain(
     context: list[BaseMessage] = [],
     memory: BaseChatMessageHistory | None = None,
     settings_override: SettingsOverride = {},
+    llm: UniversalChatModel | None = None,
     **input_kwargs: Any,
 ) -> Any:
     """
@@ -39,6 +40,9 @@ def chain(
 
     memory = memory or ChatMessageHistory()
     input_kwargs.update(kwargs_from_parent())
+
+    if llm:
+        settings_override["llm"] = llm
 
     # todo maybe this should be done in the prompt processor?
     system = system or settings.system_prompt
@@ -77,6 +81,7 @@ async def achain(
     context: list[BaseMessage] = [],
     memory: BaseChatMessageHistory | None = None,
     settings_override: SettingsOverride = {},
+    llm: UniversalChatModel | None = None,
     **input_kwargs: Any,
 ) -> Any:
     """
@@ -89,6 +94,9 @@ async def achain(
 
     memory = memory or ChatMessageHistory()
     input_kwargs.update(kwargs_from_parent())
+
+    if llm:
+        settings_override["llm"] = llm
 
     # todo maybe this should be done in the prompt processor?
     system = system or settings.system_prompt
@@ -136,7 +144,7 @@ def compile_runnable(
     """
     On the fly compilation of the funcchain syntax.
     """
-    if settings_override and llm:
+    if llm:
         settings_override["llm"] = llm
     instruction = "\n" + instruction
     settings = create_local_settings(settings_override)
