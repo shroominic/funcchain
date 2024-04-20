@@ -23,6 +23,9 @@ def create_instruction_prompt(
 ) -> "HumanImageMessagePromptTemplate":
     template_format = _determine_format(instruction)
 
+    if template_format == "jinja2" and "\n{format_instructions}" in instruction:
+        instruction = instruction.replace("\n{format_instructions}", "\n{{ format_instructions }}")
+
     required_f_str_vars = _extract_template_vars(instruction, template_format)
 
     _filter_fstring_vars(input_kwargs)
