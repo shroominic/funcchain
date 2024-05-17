@@ -30,7 +30,14 @@ def create_instruction_prompt(
 
     _filter_fstring_vars(input_kwargs)
 
-    inject_vars = [f"{var.upper()}:\n{{{var}}}\n" for var, _ in input_kwargs.items() if var not in required_f_str_vars]
+    if template_format == "jinja2":
+        inject_vars = [
+            f"{var.upper()}:\n{{{{{var}}}}}\n" for var, _ in input_kwargs.items() if var not in required_f_str_vars
+        ]
+    else:
+        inject_vars = [
+            f"{var.upper()}:\n{{{var}}}\n" for var, _ in input_kwargs.items() if var not in required_f_str_vars
+        ]
 
     added_instruction = "\n".join(inject_vars)
     instruction = added_instruction + instruction
