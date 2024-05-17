@@ -8,8 +8,10 @@ from ..syntax.input_types import Image
 
 if TYPE_CHECKING:
     from PIL.Image import Image as PImage
+    from PIL.Image import open as pil_open
 else:
     PImage = type("PImage")
+    pil_open = lambda x: x  # noqa
 
 
 def image_to_base64_url(image: Image) -> str:
@@ -28,9 +30,7 @@ def pillow_image_to_base64_url(image: PImage) -> str:
 
 
 def base64_url_to_pillow_image(base64_url: str) -> PImage:
-    from PIL.Image import Image as PImage
-
     base64_image = base64_url.split(",")[1]
     image_bytes = b64decode(base64_image)
-    image = PImage.open(BytesIO(image_bytes))
+    image = pil_open(BytesIO(image_bytes))
     return image
