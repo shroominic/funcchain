@@ -8,8 +8,10 @@ from ..utils.msg_tools import msg_images
 
 if TYPE_CHECKING:
     from PIL.Image import Image as PImage
+    from PIL.Image import open as pil_open
 else:
     PImage = type("PImage")
+    pil_open = lambda x: x  # noqa
 
 
 class Image:
@@ -63,10 +65,10 @@ class Image:
         return base64.b64decode(base64_str)
 
     def to_pillow(self) -> PImage:
-        from io import BytesIO  # type: ignore
+        from io import BytesIO
 
         image_bytes = self.to_bytes()
-        return PImage.open(BytesIO(image_bytes))
+        return pil_open(BytesIO(image_bytes))
 
     def to_file(self, path: str) -> None:
         open(path, "wb").write(self.to_bytes())
