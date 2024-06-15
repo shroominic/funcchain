@@ -63,6 +63,7 @@ def default_model_fallback(
     if input("ModelNotFound: Do you want to download a local model instead?").lower().startswith("y"):
         model_kwargs.update(settings.llamacpp_kwargs())
         return ChatLlamaCpp(
+            # todo change to NousResearch/Hermes-2-Pro-Llama-3-8B-GGUF
             model_path=get_gguf_model("neural-chat-7b-v3-1", "Q4_K_M", settings).as_posix(),
             **model_kwargs,
         )
@@ -115,6 +116,13 @@ def univeral_model_selector(
                     model_kwargs.update(settings.openai_kwargs())
                     return ChatOpenAI(**model_kwargs)
 
+                case "azure":
+                    from langchain_openai import AzureChatOpenAI
+
+                    model_kwargs.update(settings.azure_kwargs())
+                    deployment_name = model_kwargs.pop("model_name", None)
+                    return AzureChatOpenAI(azure_deployment=deployment_name, **model_kwargs)
+
                 case "anthropic":
                     from langchain_anthropic import ChatAnthropic
 
@@ -126,6 +134,11 @@ def univeral_model_selector(
                     from langchain_google_genai import ChatGoogleGenerativeAI
 
                     return ChatGoogleGenerativeAI(**model_kwargs)
+
+                case "groq":
+                    from langchain_groq import ChatGroq
+
+                    return ChatGroq(**model_kwargs)
 
                 case "ollama":
                     from .patches.ollama import ChatOllama
@@ -172,7 +185,9 @@ def univeral_model_selector(
     if settings.azure_api_key:
         from langchain_openai import AzureChatOpenAI
 
-        return AzureChatOpenAI(**model_kwargs)
+        model_kwargs.update(settings.azure_kwargs())
+        deployment_name = model_kwargs.pop("model_name", None)
+        return AzureChatOpenAI(azure_deployment=deployment_name, **model_kwargs)
 
     if settings.anthropic_api_key:
         from langchain_anthropic import ChatAnthropic
@@ -185,6 +200,11 @@ def univeral_model_selector(
         from langchain_google_genai import ChatGoogleGenerativeAI
 
         return ChatGoogleGenerativeAI(**model_kwargs)
+
+    if settings.groq_api_key:
+        from langchain_groq import ChatGroq
+
+        return ChatGroq(**model_kwargs)
 
     raise ValueError(
         "Could not read llm selector string. Please check "
