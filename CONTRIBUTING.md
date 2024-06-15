@@ -3,9 +3,8 @@
 To contribute, clone the repo and run:
 
 ```bash
-./dev_setup.sh
+rye sync
 ```
 
-You should not run unstrusted scripts so ask ChatGPT to explain what the contents of this script do!
-
-This will install and setup your development environment using [rye](https://rye-up.com) or pip.
+You need to have rye installed, you can install it [here](https://rye-up.com/install)
+This will install and setup your development environment using [rye](https://rye-up.com).
