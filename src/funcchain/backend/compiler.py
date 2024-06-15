@@ -9,7 +9,7 @@ from langchain_core.output_parsers import BaseGenerationOutputParser, BaseOutput
 from langchain_core.runnables import Runnable, RunnableParallel
 from pydantic import BaseModel
 
-from ..model.abilities import is_openai_function_model, is_vision_model
+from ..model.abilities import is_json_mode_model, is_openai_function_model, is_vision_model
 from ..model.defaults import univeral_model_selector
 from ..parser.json_schema import RetryJsonPydanticParser
 from ..parser.openai_functions import (
@@ -201,6 +201,18 @@ def create_chain(
     # # add formatted instruction to chat history
     # memory.add_message(instruction_prompt.format(**input_kwargs))
 
+    # if len(output_types) == 1:
+    #     output_type: type[BaseModel] = output_types[0]
+    #     try:
+    #         structured_llm = llm.with_structured_output(output_type)
+    #     except NotImplementedError:
+    #         pass
+    # elif len(output_types) > 1:
+    #     # do special union type thing
+    #     pass
+    # else:
+    #     structured_llm = None
+
     _inject_grammar_for_local_models(llm, output_types, parser)
 
     # function model patches
@@ -232,7 +244,16 @@ def create_chain(
             # custom parsers
             elif issubclass(output_type, ParserBaseModel):
                 # todo maybe add custom openai function parsing
-                ...
+                raise NotImplementedError("Custom parsers are not yet supported for function models.")
+
+    if is_json_mode_model(llm):
+        if len(output_types) > 1:
+            # todo implement
+            raise NotImplementedError("Union types are not yet supported for json mode models.")
+        if isinstance(parser, RetryJsonPydanticParser) or isinstance(parser, RetryJsonPrimitiveTypeParser):
+            output_type = parser.pydantic_object
+            assert hasattr(llm, "model_kwargs")
+            llm.model_kwargs = {"response_format": {"type": "json_object"}}
 
     assert parser is not None
     return leading_runnable | chat_prompt | llm | parser
