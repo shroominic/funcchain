@@ -17,7 +17,7 @@ class FuncchainSettings(BaseSettings):
     debug: bool = True
 
     llm: BaseChatModel | str = Field(
-        default="openai/gpt-3.5-turbo",
+        default="openai/gpt-4o",
         validate_default=False,
     )
 
@@ -47,7 +47,10 @@ class FuncchainSettings(BaseSettings):
     streaming: bool = False
     max_tokens: int = 2048
     temperature: float = 0.1
-    api_version: str = "2024-02-01"
+
+    # azure
+    azure_api_version: str = "2024-02-01"
+    azure_endpoint: str = ""
 
     # LLAMACPP KWARGS
     context_lenght: int = 8196
@@ -71,7 +74,9 @@ class FuncchainSettings(BaseSettings):
 
     def azure_kwargs(self) -> dict:
         return {
-            "api_version": self.api_version,
+            "api_key": self.azure_api_key,
+            "openai_api_version": self.azure_api_version,
+            "azure_endpoint": self.azure_endpoint,
         }
 
     def ollama_kwargs(self) -> dict:
