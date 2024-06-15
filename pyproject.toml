@@ -4,11 +4,11 @@ version = "0.3.3"
 description = "🔖 write prompts as python functions"
 authors = [{ name = "Shroominic", email = "contact@shroominic.com" }]
 dependencies = [
-    "langchain-core>=0.1",
+    "langchain-core>=0.2",
     "pydantic-settings>=2",
     "docstring-parser>=0.15",
     "jinja2>=3",
-    "langchain-openai>=0.0.8",
+    "langchain-openai>=0.1",
 ]
 license = "MIT"
 readme = "README.md"
@@ -59,14 +59,15 @@ openai = ["langchain-openai"]
 ollama = ["langchain-community"]
 anthropic = ["langchain-anthropic"]
 google = ["langchain-google-genai"]
-llamacpp = ["llama-cpp-python>=0.2.32", "huggingface-hub>=0.20"]
+groq = ["langchain-groq"]
+llamacpp = ["llama-cpp-python>=0.2", "huggingface-hub>=0.20"]
 image = ["pillow"]
 extras = [
     "langchain>=0.1",
-    "faiss-cpu>=1.7.4",
+    "faiss-cpu>=1.7",
     "beautifulsoup4>=4.12",
-    "unstructured>=0.12.5",
-    "pdf2image>=1.17.0",
+    "unstructured>=0.12",
+    "pdf2image>=1.17",
     "pdfminer>=20191125",
 ]
 all = [
@@ -74,6 +75,7 @@ all = [
     "funcchain[openai]",
     "funcchain[google]",
     "funcchain[ollama]",
+    "funcchain[groq]",
     "funcchain[llamacpp]",
     "funcchain[anthropic]",
     "funcchain[extras]",
