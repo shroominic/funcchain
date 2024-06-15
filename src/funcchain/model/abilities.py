@@ -78,10 +78,13 @@ def gather_llm_type(llm: BaseChatModel, func_check: bool = True) -> str:
             if llm.model in model:
                 return "vision_model"
 
-    from langchain_groq import ChatGroq
+    try:
+        from langchain_groq import ChatGroq
 
-    if isinstance(llm, ChatGroq):
-        return "json_model"
+        if isinstance(llm, ChatGroq):
+            return "json_model"
+    except ImportError:
+        pass
 
     return "chat_model"
 
