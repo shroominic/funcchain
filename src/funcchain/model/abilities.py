@@ -1,16 +1,20 @@
 from langchain_core.language_models import BaseChatModel
 from langchain_core.messages import HumanMessage, SystemMessage
 
-from .patches.ollama import ChatOllama
-
 verified_openai_function_models = [
     "gpt-4",
+    "gpt-4o",
+    "gpt-4o-2024-05-13",
     "gpt-4-0613",
+    "gpt-4-0125-preview",
     "gpt-4-1106-preview",
     "gpt-4-0106-preview",
     "gpt-4-turbo-preview",
     "gpt-4-32k",
     "gpt-4-32k-0613",
+    "gpt-4-turbo",
+    "gpt-4-turbo-2024-04-09",
+    "gpt-4-turbo-preview",
     "gpt-3.5-turbo",
     "gpt-3.5-turbo-0613",
     "gpt-3.5-turbo-1106",
@@ -19,6 +23,10 @@ verified_openai_function_models = [
 ]
 
 verified_openai_vision_models = [
+    "gpt-4o",
+    "gpt-4o-2024-05-13",
+    "gpt-4-turbo",
+    "gpt-4-turbo-2024-04-09",
     "gpt-4-vision-preview",
 ]
 
@@ -63,10 +71,17 @@ def gather_llm_type(llm: BaseChatModel, func_check: bool = True) -> str:
             return "chat_model"
         else:
             return "function_model"
-    elif isinstance(llm, ChatOllama):
+    from .patches.ollama import ChatOllama
+
+    if isinstance(llm, ChatOllama):
         for model in verified_ollama_vision_models:
             if llm.model in model:
                 return "vision_model"
+
+    from langchain_groq import ChatGroq
+
+    if isinstance(llm, ChatGroq):
+        return "json_model"
 
     return "chat_model"
 
@@ -75,6 +90,12 @@ def is_openai_function_model(
     llm: BaseChatModel,
 ) -> bool:
     return gather_llm_type(llm) == "function_model"
+
+
+def is_json_mode_model(
+    llm: BaseChatModel,
+) -> bool:
+    return gather_llm_type(llm, func_check=False) == "json_model"
 
 
 def is_vision_model(
