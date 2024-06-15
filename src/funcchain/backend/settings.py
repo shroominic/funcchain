@@ -39,6 +39,7 @@ class FuncchainSettings(BaseSettings):
     azure_api_key: Optional[str] = None
     anthropic_api_key: Optional[str] = None
     google_api_key: Optional[str] = None
+    groq_api_key: Optional[str] = None
     ollama_base_url: str = "http://localhost:11434"
 
     # MODEL KWARGS
@@ -46,6 +47,7 @@ class FuncchainSettings(BaseSettings):
     streaming: bool = False
     max_tokens: int = 2048
     temperature: float = 0.1
+    api_version: str = "2024-02-01"
 
     # LLAMACPP KWARGS
     context_lenght: int = 8196
@@ -65,6 +67,11 @@ class FuncchainSettings(BaseSettings):
     def openai_kwargs(self) -> dict:
         return {
             "openai_api_key": self.openai_api_key,
+        }
+
+    def azure_kwargs(self) -> dict:
+        return {
+            "api_version": self.api_version,
         }
 
     def ollama_kwargs(self) -> dict:
@@ -102,7 +109,7 @@ class SettingsOverride(TypedDict, total=False):
 
 def create_local_settings(override: Optional[SettingsOverride] = None) -> FuncchainSettings:
     if override:
-        if override["llm"] is None:
+        if override.get("llm") is None:
             override["llm"] = settings.llm
         return settings.model_copy(update=dict(override))
     return settings
