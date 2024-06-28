@@ -33,6 +33,8 @@ def chain(
     """
     Generate response of llm for provided instructions.
     """
+    if llm:
+        settings_override["llm"] = llm
     settings = create_local_settings(settings_override)
     callbacks: Callbacks = None
     output_types = get_output_types()
@@ -40,9 +42,6 @@ def chain(
 
     memory = memory or ChatMessageHistory()
     input_kwargs.update(kwargs_from_parent())
-
-    if llm:
-        settings_override["llm"] = llm
 
     # todo maybe this should be done in the prompt processor?
     system = system or settings.system_prompt
@@ -87,6 +86,8 @@ async def achain(
     """
     Asyncronously generate response of llm for provided instructions.
     """
+    if llm:
+        settings_override["llm"] = llm
     settings = create_local_settings(settings_override)
     callbacks: Callbacks = None
     output_types = get_output_types()
@@ -94,9 +95,6 @@ async def achain(
 
     memory = memory or ChatMessageHistory()
     input_kwargs.update(kwargs_from_parent())
-
-    if llm:
-        settings_override["llm"] = llm
 
     # todo maybe this should be done in the prompt processor?
     system = system or settings.system_prompt
