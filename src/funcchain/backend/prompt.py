@@ -193,7 +193,7 @@ class HumanImageMessagePromptTemplate(BaseStringMessagePromptTemplate):
         """
         prompt = PromptTemplate.from_template(
             template,
-            template_format=template_format,
+            template_format=template_format,  # type: ignore
             partial_variables=partial_variables,
         )
         kwargs["images"] = images

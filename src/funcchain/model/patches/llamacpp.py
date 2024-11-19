@@ -15,9 +15,9 @@ from langchain_core.messages import (
     SystemMessage,
 )
 from langchain_core.outputs import ChatGeneration, ChatGenerationChunk, ChatResult
-from langchain_core.pydantic_v1 import Field, root_validator
 from langchain_core.utils import get_pydantic_field_names
 from langchain_core.utils.utils import build_extra_kwargs
+from pydantic import Field, model_validator
 
 logger = logging.getLogger(__name__)
 
@@ -130,7 +130,7 @@ try:
         verbose: bool = False
         """Print verbose output to stderr."""
 
-        @root_validator()
+        @model_validator(mode="before")
         def validate_environment(cls, values: Dict) -> Dict:
             """Validate that llama-cpp-python library is installed."""
             try:
@@ -187,7 +187,7 @@ try:
                 pass
             return values
 
-        @root_validator(pre=True)
+        @model_validator(mode="before")
         def build_model_kwargs(cls, values: Dict[str, Any]) -> Dict[str, Any]:
             """Build extra kwargs from additional params that were passed in."""
             all_required_field_names = get_pydantic_field_names(cls)

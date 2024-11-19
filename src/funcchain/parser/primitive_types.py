@@ -2,7 +2,7 @@
 Primitive Types Parser
 """
 
-from typing import Generic, TypeVar
+from typing import Any, TypeVar
 
 from pydantic import BaseModel, create_model
 
@@ -12,7 +12,7 @@ from .json_schema import RetryJsonPydanticParser
 M = TypeVar("M", bound=BaseModel)
 
 
-class RetryJsonPrimitiveTypeParser(RetryJsonPydanticParser, Generic[M]):
+class RetryJsonPrimitiveTypeParser(RetryJsonPydanticParser):
     """
     Parse primitve types by wrapping them in a PydanticModel and parsing them.
     Examples: int, float, bool, list[str], dict[str, int], Literal["a", "b", "c"], etc.
@@ -30,7 +30,7 @@ class RetryJsonPrimitiveTypeParser(RetryJsonPydanticParser, Generic[M]):
             retry_llm=retry_llm,
         )
 
-    def parse(self, text: str) -> M:
+    def parse(self, text: str) -> Any:
         return super().parse(text).value
 
     def get_format_instructions(self) -> str:

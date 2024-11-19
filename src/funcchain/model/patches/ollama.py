@@ -3,7 +3,7 @@ from typing import Any, Dict, Optional, Union
 
 import requests  # type: ignore
 from langchain_core.messages import AIMessage, BaseMessage, HumanMessage, SystemMessage
-from langchain_core.pydantic_v1 import validator
+from pydantic import field_validator
 
 try:
     from langchain_community.chat_models import ChatOllama as _ChatOllama
@@ -14,7 +14,7 @@ try:
         The [GBNF](https://github.com/ggerganov/llama.cpp/tree/master/grammars) grammar used to constrain the output.
         """
 
-        @validator("grammar")
+        @field_validator("grammar")
         def _validate_grammar(cls, v: Optional[str]) -> Optional[str]:
             if v is not None and "root ::=" not in v:
                 raise ValueError("Grammar must contain a root rule.")

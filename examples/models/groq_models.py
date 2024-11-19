@@ -18,7 +18,7 @@ def analyze(text: str) -> SentimentAnalysis:
 
 if __name__ == "__main__":
     # set global llm
-    settings.llm = ChatGroq(model="llama3-70b-8192")
+    settings.llm = ChatGroq(model="llama3-70b-8192")  # type: ignore
 
     # run prompt
     result = analyze("I really like when my dog does a trick!")

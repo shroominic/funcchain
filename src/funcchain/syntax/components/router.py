@@ -71,7 +71,7 @@ class RouterChat(Runnable[HumanMessage, AIMessage]):
         from pydantic import BaseModel, Field
 
         class RouterModel(BaseModel):
-            selector: RouteChoices = Field(
+            selector: RouteChoices = Field(  # type: ignore
                 default="default",
                 description="Enum of the available routes.",
             )
@@ -108,8 +108,8 @@ class RouterChat(Runnable[HumanMessage, AIMessage]):
     def _routes_repr(self) -> str:
         return "\n".join([f"{route_name}: {route['description']}" for route_name, route in self.routes.items()])
 
-    def invoke(self, input: HumanMessage, config: RunnableConfig | None = None) -> AIMessage:
-        return self.runnable.invoke(input, config=config)
+    def invoke(self, input: HumanMessage, config: RunnableConfig | None = None, **kwargs: Any | None) -> AIMessage:
+        return self.runnable.invoke(input, config, **kwargs)
 
     async def ainvoke(self, input: HumanMessage, config: RunnableConfig | None = None, **kwargs: Any) -> AIMessage:
         return await self.runnable.ainvoke(input, config, **kwargs)
