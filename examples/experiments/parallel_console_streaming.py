@@ -3,13 +3,14 @@ from contextlib import asynccontextmanager
 from typing import AsyncGenerator
 from uuid import uuid4
 
-from funcchain import achain, settings
-from funcchain.backend.streaming import astream_to
-from funcchain.utils.token_counter import count_tokens
 from rich.console import Console
 from rich.layout import Layout
 from rich.live import Live
 from rich.panel import Panel
+
+from funcchain import achain, settings
+from funcchain.backend.streaming import astream_to
+from funcchain.utils.token_counter import count_tokens
 
 
 class RenderChain:

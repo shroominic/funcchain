@@ -1,8 +1,9 @@
 from enum import Enum
 from typing import Any, Callable, TypedDict
 
-from funcchain.syntax.executable import compile_runnable
 from pydantic import BaseModel, Field
+
+from funcchain.syntax.executable import compile_runnable
 
 # Dynamic Router Definition:
 

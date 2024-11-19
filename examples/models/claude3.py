@@ -1,7 +1,8 @@
 from typing import Annotated
 
-from funcchain import Depends, chain, settings
 from langchain.document_loaders.pdf import PyPDFLoader
+
+from funcchain import Depends, chain, settings
 
 settings.llm = "anthropic/claude-3-opus-20240229"
 

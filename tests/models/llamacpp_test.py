@@ -1,6 +1,7 @@
 import pytest
-from funcchain import Image, chain, settings
 from pydantic import BaseModel, Field
+
+from funcchain import Image, chain, settings
 
 
 class Task(BaseModel):

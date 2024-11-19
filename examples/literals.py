@@ -1,7 +1,8 @@
 from typing import Literal
 
-from funcchain import chain
 from pydantic import BaseModel
+
+from funcchain import chain
 
 
 # just a silly example to schowcase the Literal type

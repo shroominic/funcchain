@@ -1,5 +1,6 @@
-from funcchain import chain, settings
 from pydantic import BaseModel
+
+from funcchain import chain, settings
 
 settings.console_stream = True
 settings.llm = "llamacpp/openchat-3.5-0106:Q3_K_M"

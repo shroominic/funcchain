@@ -2,8 +2,9 @@ from asyncio import gather
 from asyncio import run as _await
 from random import shuffle
 
-from funcchain import achain, settings
 from pydantic import BaseModel
+
+from funcchain import achain, settings
 
 settings.temperature = 1
 

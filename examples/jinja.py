@@ -1,5 +1,6 @@
-from funcchain import chain, settings
 from pydantic import BaseModel
+
+from funcchain import chain, settings
 
 settings.console_stream = True
 

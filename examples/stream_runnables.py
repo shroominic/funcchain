@@ -1,12 +1,13 @@
 from typing import AsyncIterator, Iterator
 
+from langchain_core.messages import AIMessage, HumanMessage
+from langchain_core.runnables import RunnableGenerator, RunnableSerializable
+
 from funcchain import chain
 from funcchain.syntax import runnable
 from funcchain.syntax.components import RouterChat
 from funcchain.syntax.components.handler import create_chat_handler
 from funcchain.utils.msg_tools import msg_to_str
-from langchain_core.messages import AIMessage, HumanMessage
-from langchain_core.runnables import RunnableGenerator, RunnableSerializable
 
 # settings.llm = "ollama/openchat"
 

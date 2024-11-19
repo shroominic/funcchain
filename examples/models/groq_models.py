@@ -1,7 +1,8 @@
-from funcchain import chain, settings
 from langchain_groq import ChatGroq
 from pydantic import BaseModel, Field
 from rich import print
+
+from funcchain import chain, settings
 
 
 class SentimentAnalysis(BaseModel):

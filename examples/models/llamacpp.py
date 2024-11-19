@@ -1,6 +1,7 @@
-from funcchain import chain, settings
 from pydantic import BaseModel, Field
 from rich import print
+
+from funcchain import chain, settings
 
 
 # define your model

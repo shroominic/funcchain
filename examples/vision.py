@@ -1,5 +1,6 @@
-from funcchain import Image, chain, settings
 from pydantic import BaseModel, Field
+
+from funcchain import Image, chain, settings
 
 settings.llm = "openai/gpt-4-vision-preview"
 # settings.llm = "ollama/bakllava"

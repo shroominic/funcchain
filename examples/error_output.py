@@ -1,5 +1,6 @@
-from funcchain import BaseModel, Error, chain
 from rich import print
+
+from funcchain import BaseModel, Error, chain
 
 
 class User(BaseModel):

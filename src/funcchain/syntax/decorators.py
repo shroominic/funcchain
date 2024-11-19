@@ -15,8 +15,7 @@ OutputT = TypeVar("OutputT")
 @overload
 def runnable(
     f: Callable[..., OutputT],
-) -> Runnable[dict[str, Any], OutputT]:
-    ...
+) -> Runnable[dict[str, Any], OutputT]: ...
 
 
 @overload
@@ -24,8 +23,7 @@ def runnable(
     *,
     llm: UniversalChatModel = None,
     settings: SettingsOverride = {},
-) -> Callable[[Callable[..., OutputT]], Runnable[dict[str, Any], OutputT]]:
-    ...
+) -> Callable[[Callable[..., OutputT]], Runnable[dict[str, Any], OutputT]]: ...
 
 
 def runnable(
