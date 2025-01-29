@@ -16,7 +16,7 @@ from ..schema.types import UniversalChatModel
 class FuncchainSettings(BaseSettings):
     debug: bool = True
 
-    llm: BaseChatModel | str = Field(
+    llm: str = Field(
         default="openai/gpt-4o",
         validate_default=False,
     )
